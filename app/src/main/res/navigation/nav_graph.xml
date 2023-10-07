@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/musicsFragment">
+    <fragment
+        android:id="@+id/musicsFragment"
+        android:name="com.kt_media.ui.musics.MusicsFragment"
+        android:label="fragment_musics"
+        tools:layout="@layout/fragment_musics" />
+    <fragment
+        android:id="@+id/videosFragment"
+        android:name="com.kt_media.ui.videos.VideosFragment"
+        android:label="fragment_videos"
+        tools:layout="@layout/fragment_videos" />
+    <fragment
+        android:id="@+id/imagesFragment"
+        android:name="com.kt_media.ui.images.ImagesFragment"
+        android:label="fragment_images"
+        tools:layout="@layout/fragment_images" />
+</navigation>

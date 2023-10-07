@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">KT Media</string>
+    <string name="music">Âm nhạc</string>
+    <string name="video">Video</string>
+    <string name="image">Ảnh</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="login">Đăng nhập</string>
+    <string name="setting">Cài đặt</string>
+    <string name="username">Tài khoản</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="create_account">Tạo tài khoản mới</string>
+    <string name="register">Đăng ký</string>
+    <string name="login_other">Đăng nhập bằng</string>
+    <string name="config_password">Nhập lại mật khẩu</string>
+    <string name="have_an_account">Bạn đã có tài khoản?</string>
+    <string name="notify_invalid">Không được để trống email và password!</string>
+    <string name="notify_config_pass">Mật khẩu không trùng khớp!</string>
+    <string name="notify_account">Email hoặc mật khẩu không đúng!</string>
+    <string name="notify_logout">Bạn có chắc chắn đăng xuất?</string>
+    <string name="back">Quay lại</string>
+    <string name="update_profile"> Sửa thông tin cá nhân</string>
+    <string name="error">Lỗi</string>
+    <string name="web_client_id">619548835218-queap5a8u4apbjvn3f7edrpbtneq78d0.apps.googleusercontent.com</string>
+</resources>
