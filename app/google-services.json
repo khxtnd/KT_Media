@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_number": "447256869470",
-    "firebase_url": "https://kt-media-598f7-default-rtdb.firebaseio.com",
-    "project_id": "kt-media-598f7",
-    "storage_bucket": "kt-media-598f7.appspot.com"
+    "project_number": "439857589040",
+    "firebase_url": "https://kt-media-5bc04-default-rtdb.firebaseio.com",
+    "project_id": "kt-media-5bc04",
+    "storage_bucket": "kt-media-5bc04.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:447256869470:android:f77d7d1409e1ae0ad6d2cf",
+        "mobilesdk_app_id": "1:439857589040:android:504265f1027cc5a28e36f5",
         "android_client_info": {
           "package_name": "com.kt_media"
         }
@@ -16,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyByJwIJJaWJ7aymWTJuomjFK_CIamgEBHQ"
+          "current_key": "AIzaSyC5YiJmJa2sfAriNr7K1VbjSF7QoUXtGWI"
         }
       ],
       "services": {
