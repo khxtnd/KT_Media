@@ -1,60 +1,130 @@
 package com.kt_media.ui.musics
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
+import com.kt_media.databinding.FragmentMusicsBinding
+import com.kt_media.domain.entities.SongArtist
+import com.kt_media.domain.entities.SongCategory
+import com.mymusic.ui.adapters.SongArtistAdapter
+import com.mymusic.ui.adapters.SongCategoryAdapter
+import com.mymusic.ui.base.BaseViewModelFragment
+import com.mymusic.utils.extention.autoCleared
+import com.mymusic.utils.extention.getViewModelV2
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MusicsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MusicsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class MusicsFragment : BaseViewModelFragment<MusicsViewModel,FragmentMusicsBinding>(R.layout.fragment_musics) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override val viewModel by lazy {
+        getViewModelV2(MusicsViewModel::class)
+    }
+
+    private var songCategoryAdapter by autoCleared<SongCategoryAdapter>()
+
+    private var songCategoryList= arrayListOf<SongCategory>()
+
+    private var songArtistAdapter by autoCleared<SongArtistAdapter>()
+
+    private var songArtistList= arrayListOf<SongArtist>()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding=FragmentMusicsBinding.bind(view)
+
+        binding?.btCategoryMf?.setOnClickListener {
+            setupSongCategory()
         }
+        binding?.btArtistMf?.setOnClickListener {
+            setupSongArtist()
+        }
+
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_musics, container, false)
+    override fun onResume() {
+        super.onResume()
+        setupSongCategory()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MusicsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MusicsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun setupSongCategory() {
+        val binding=binding?:return
+        songCategoryAdapter=SongCategoryAdapter()
+        getAllSongCategory()
+        binding.recSongCateMf.adapter=songCategoryAdapter
+        binding.recSongCateMf.layoutManager=GridLayoutManager(requireContext(),2,RecyclerView.VERTICAL,false)
+
+        binding.btCategoryMf.setBackgroundResource(R.drawable.bg_btn_filter)
+        binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white));
+
+        binding.btArtistMf.setBackgroundResource(R.drawable.bg_btn_outline)
+        binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6));
+    }
+
+    private fun getAllSongCategory() {
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("SongCategories")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                songCategoryList.clear()
+
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val songCategory = dataSnapShot.getValue(SongCategory::class.java)
+                    songCategory?.let { songCategoryList.add(it) }
                 }
+                if (songCategoryList.isNotEmpty()) {
+                    songCategoryAdapter!!.submit(songCategoryList)
+
+                }
+
             }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    private fun setupSongArtist() {
+        val binding=binding?:return
+        songArtistAdapter= SongArtistAdapter()
+        getAllSongArtist()
+        binding.recSongCateMf.adapter=songArtistAdapter
+        binding.recSongCateMf.layoutManager=GridLayoutManager(requireContext(),3,RecyclerView.VERTICAL,false)
+        binding.btCategoryMf.setBackgroundResource(R.drawable.bg_btn_outline)
+        binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6));
+
+        binding.btArtistMf.setBackgroundResource(R.drawable.bg_btn_filter)
+        binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white));
+
+    }
+    private fun getAllSongArtist() {
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("SongArtists")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                songArtistList.clear()
+
+                for (dataSnapShot: DataSnapshot in snapshot.children) {
+                    val songArtist= dataSnapShot.getValue(SongArtist::class.java)
+                    songArtist?.let { songArtistList.add(it) }
+                }
+                if (songArtistList.isNotEmpty()) {
+                    songArtistAdapter!!.submit(songArtistList)
+
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
     }
 }

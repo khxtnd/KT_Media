@@ -44,6 +44,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
     implementation("com.google.firebase:firebase-auth-ktx:22.1.2")
     implementation("com.google.firebase:firebase-database-ktx:20.2.2")
     implementation("com.google.firebase:firebase-firestore-ktx:24.8.1")
@@ -58,6 +59,10 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("jp.wasabeef:glide-transformations:4.3.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    implementation("io.insert-koin:koin-core:3.4.1")
+    implementation("io.insert-koin:koin-android:3.4.1")
 
 }

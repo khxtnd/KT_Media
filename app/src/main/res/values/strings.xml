@@ -21,5 +21,6 @@
     <string name="back">Quay lại</string>
     <string name="update_profile"> Sửa thông tin cá nhân</string>
     <string name="error">Lỗi</string>
-    <string name="web_client_id">619548835218-queap5a8u4apbjvn3f7edrpbtneq78d0.apps.googleusercontent.com</string>
+    <string name="artist">Nghệ sĩ</string>
+    <string name="category">Thể loại</string>
 </resources>
