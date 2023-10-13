@@ -1,6 +1,6 @@
 package com.kt_media.domain.entities
 
-data class SongCategory(
+data class SongGenre(
     val id: Int=0,
     val name: String="",
     val image: String=""

@@ -13,8 +13,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentMusicsBinding
+import com.kt_media.domain.constant.CATEGORY_ID
+import com.kt_media.domain.constant.CHECK_CATEGORY
+import com.kt_media.domain.constant.SONG_ARTIST_CHILD
+import com.kt_media.domain.constant.SONG_GENRE_CHILD
 import com.kt_media.domain.entities.SongArtist
-import com.kt_media.domain.entities.SongCategory
+import com.kt_media.domain.entities.SongGenre
 import com.kt_media.ui.list_song.SongListActivity
 import com.mymusic.ui.adapters.SongArtistAdapter
 import com.mymusic.ui.adapters.SongCategoryAdapter
@@ -24,18 +28,17 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
 
     private lateinit var songCategoryAdapter: SongCategoryAdapter
 
-    private var songCategoryList = arrayListOf<SongCategory>()
+    private var songGenreList = arrayListOf<SongGenre>()
 
     private lateinit var songArtistAdapter: SongArtistAdapter
 
     private var songArtistList = arrayListOf<SongArtist>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding=FragmentMusicsBinding.bind(view)
-
+        setupSongGenre()
         binding?.btCategoryMf?.setOnClickListener {
-            setupSongCategory()
+            setupSongGenre()
         }
         binding?.btArtistMf?.setOnClickListener {
             setupSongArtist()
@@ -45,13 +48,13 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
 
     override fun onResume() {
         super.onResume()
-        setupSongCategory()
+
     }
 
-    private fun setupSongCategory() {
+    private fun setupSongGenre() {
         val binding=binding?:return
-        songCategoryAdapter = SongCategoryAdapter(onItemSongCategoryClick)
-        getAllSongCategory()
+        songCategoryAdapter = SongCategoryAdapter(onItemSongGenreClick)
+        getAllSongGenre()
         binding.recSongCateMf.adapter=songCategoryAdapter
         binding.recSongCateMf.layoutManager=GridLayoutManager(requireContext(),2,RecyclerView.VERTICAL,false)
 
@@ -62,19 +65,19 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
         binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6));
     }
 
-    private fun getAllSongCategory() {
+    private fun getAllSongGenre() {
         val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("SongCategories")
+            FirebaseDatabase.getInstance().getReference(SONG_GENRE_CHILD)
         databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                songCategoryList.clear()
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                songGenreList.clear()
 
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val songCategory = dataSnapShot.getValue(SongCategory::class.java)
-                    songCategory?.let { songCategoryList.add(it) }
+                for (data: DataSnapshot in dataSnapshot.children) {
+                    val songGenre = data.getValue(SongGenre::class.java)
+                    songGenre?.let { songGenreList.add(it) }
                 }
-                if (songCategoryList.isNotEmpty()) {
-                    songCategoryAdapter!!.submit(songCategoryList)
+                if (songGenreList.isNotEmpty()) {
+                    songCategoryAdapter.submit(songGenreList)
 
                 }
 
@@ -101,17 +104,17 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
     }
     private fun getAllSongArtist() {
         val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("SongArtists")
+            FirebaseDatabase.getInstance().getReference(SONG_ARTIST_CHILD)
         databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
                 songArtistList.clear()
 
-                for (dataSnapShot: DataSnapshot in snapshot.children) {
-                    val songArtist= dataSnapShot.getValue(SongArtist::class.java)
+                for (data: DataSnapshot in dataSnapshot.children) {
+                    val songArtist= data.getValue(SongArtist::class.java)
                     songArtist?.let { songArtistList.add(it) }
                 }
                 if (songArtistList.isNotEmpty()) {
-                    songArtistAdapter!!.submit(songArtistList)
+                    songArtistAdapter.submit(songArtistList)
 
                 }
 
@@ -125,14 +128,14 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
 
     private val onItemSongArtistClick: (SongArtist) -> Unit = {
         val intent = Intent(requireActivity(), SongListActivity::class.java)
-        intent.putExtra("ARTIST_OR_CATEGORY", "SongArtists")
-        intent.putExtra("ID_SONG_ARTIST", it.id)
+        intent.putExtra(CHECK_CATEGORY, SONG_ARTIST_CHILD)
+        intent.putExtra(CATEGORY_ID, it.id)
         startActivity(intent)
     }
-    private val onItemSongCategoryClick: (SongCategory) -> Unit = {
+    private val onItemSongGenreClick: (SongGenre) -> Unit = {
         val intent = Intent(requireActivity(), SongListActivity::class.java)
-        intent.putExtra("ARTIST_OR_CATEGORY", "SongCategories")
-        intent.putExtra("ID_SONG_ARTIST", it.id)
+        intent.putExtra(CHECK_CATEGORY, SONG_GENRE_CHILD)
+        intent.putExtra(CATEGORY_ID ,it.id)
         startActivity(intent)
     }
 }

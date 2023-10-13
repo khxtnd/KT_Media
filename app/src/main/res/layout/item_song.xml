@@ -4,7 +4,7 @@
     android:id="@+id/layout_item_song_artist"
     android:layout_margin="5dp"
     android:background="@color/gray_4"
-    android:paddingVertical="10dp"
+    android:paddingVertical="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 

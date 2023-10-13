@@ -22,5 +22,5 @@
     <string name="update_profile"> Sửa thông tin cá nhân</string>
     <string name="error">Lỗi</string>
     <string name="artist">Nghệ sĩ</string>
-    <string name="category">Thể loại</string>
+    <string name="genre">Thể loại</string>
 </resources>
