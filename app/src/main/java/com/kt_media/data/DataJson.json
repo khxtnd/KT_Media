@@ -1,0 +1,180 @@
+{
+  "Artists": {
+    "Alan Walker": {
+      "id": 1,
+      "image": "https://drive.google.com/uc?id=1bMwUZfoJo5IF_Z7MuxRNpoGxAKdydC7m",
+      "name": "Alan Walker"
+    },
+    "Andiez": {
+      "id": 7,
+      "image": "https://drive.google.com/uc?id=1fF0Jtoz2bZksaCHrd6TMOaB30MYHROyd",
+      "name": "Andiez"
+    },
+    "Avicii": {
+      "id": 2,
+      "image": "https://drive.google.com/uc?id=1ftW86l6Mckzbp9dcU3Z7z6kRrHuBuPeH",
+      "name": "Avicii"
+    },
+    "Bùi Trường Linh": {
+      "id": 5,
+      "image": "https://drive.google.com/uc?id=1z_qZvjPCT6gH-lQ9JdhhRXMDbsR6YaS-",
+      "name": "Bùi Trường Linh"
+    },
+    "Maroon 5": {
+      "id": 3,
+      "image": "https://drive.google.com/uc?id=1kARJ9JJQ13oaqhGfeLb4FLgiYSkmTJp5",
+      "name": "Maroon 5"
+    },
+    "Taylor Swift": {
+      "id": 4,
+      "image": "https://drive.google.com/uc?id=1nqFkEvbl4FSeooZXHki-Qh6_rIpodMyG",
+      "name": "Taylor Swift"
+    },
+    "Thanh Hưng": {
+      "id": 8,
+      "image": "https://drive.google.com/uc?id=12g6BuyoikEWcxOoD3miyUiS5ApG2BTxA",
+      "name": "Thanh Hưng"
+    },
+    "Wn (Dương)": {
+      "id": 6,
+      "image": "https://drive.google.com/uc?id=11vOOfBfWpmzXgl84dQa3vE3zCmS21YCJ",
+      "name": "Wn (Dương)"
+    }
+  },
+  "Genres": {
+    "Nhạc Country": {
+      "id": 8,
+      "image": "https://drive.google.com/uc?id=104bO3Zr_TgdUow50hu81Aey78JsoQV1S",
+      "name": "Nhạc Country"
+    },
+    "Nhạc Electronica Dance": {
+      "id": 6,
+      "image": "https://drive.google.com/uc?id=17vja0l8jvrHb_AKVb5pZ8hkjMwxMsLal",
+      "name": "Nhạc Electronica Dance"
+    },
+    "Nhạc Hàn": {
+      "id": 1,
+      "image": "https://drive.google.com/uc?id=1n2dhJzXriZYPPBCYAJSRyjpCt8bD2klK",
+      "name": "Nhạc Hàn"
+    },
+    "Nhạc Latin": {
+      "id": 7,
+      "image": "https://drive.google.com/uc?id=1WK66NnAX4T_65hnv4EdrRKpZFzon9aWr",
+      "name": "Nhạc Latin"
+    },
+    "Nhạc Nhật": {
+      "id": 2,
+      "image": "https://drive.google.com/uc?id=1pfqAvJ4yHmswZ3cqemQBsRRczrSd91x9",
+      "name": "Nhạc Nhật"
+    },
+    "Nhạc Pop US-UK": {
+      "id": 5,
+      "image": "https://drive.google.com/uc?id=1UsfLcXnNtjYqLsUuOc6PDFinj0XA4BZW",
+      "name": "Nhạc Pop US-UK"
+    },
+    "Nhạc Remix Việt": {
+      "id": 4,
+      "image": "https://drive.google.com/uc?id=1ZVGEG4e_4jHONW7lDXVrCJSEjHa7IOQk",
+      "name": "Nhạc Remix Việt"
+    },
+    "Nhạc Trẻ": {
+      "id": 3,
+      "image": "https://drive.google.com/uc?id=1D1WEuF-qxLDhIYsbEsnxqvFi8VuFqRrU",
+      "name": "Nhạc Trẻ"
+    }
+  },
+  "Songs": {
+    "1 Phút": {
+      "artistId": 7,
+      "genreId": 3,
+      "id": 1,
+      "image": "https://drive.google.com/uc?id=1xnubqEf9i5p5AS3ReU0oF-KLY7Dk73ST",
+      "link": "https://drive.google.com/uc?id=1OZFqGjQU7pg-5Wt7EJjX6EUR_VPtwGGF",
+      "name": "1 Phút"
+    },
+    "3107-2": {
+      "artistId": 6,
+      "genreId": 3,
+      "id": 2,
+      "image": "https://drive.google.com/uc?id=1wUMT9u71g_mIDEf2p8dNFJK9NpSpu0jf",
+      "link": "https://drive.google.com/uc?id=1nTSlV4M7zolcXjVafrEttFsSItWwMT5H",
+      "name": "3107-2"
+    },
+    "Love Story": {
+      "artistId": 4,
+      "genreId": 8,
+      "id": 4,
+      "image": "https://drive.google.com/uc?id=1izAS1O8StY8d3X_bBd7EAyR0I5gPcIor",
+      "link": "https://drive.google.com/uc?id=1awLD4TFQakFHN9Amh1PDsWDLSYC_kuIj",
+      "name": "Love Story"
+    },
+    "Sai người sai thời điểm": {
+      "artistId": 8,
+      "genreId": 3,
+      "id": 5,
+      "image": "https://drive.google.com/uc?id=1mco_-TW-XBtXsmdWpMsVKA7nP-JsDEPR",
+      "link": "https://drive.google.com/uc?id=1KTnLSZLsuab-xpeTSC7m2sPgJCO97eio",
+      "name": "Sai người sai thời điểm"
+    },
+    "Suýt nữa thì": {
+      "artistId": 7,
+      "genreId": 3,
+      "id": 6,
+      "image": "https://drive.google.com/uc?id=1um7GsD_ZnNhQSTRo7kbJKAQvK6zfMEl2",
+      "link": "https://drive.google.com/uc?id=1RO0kEIB7F_n5xDRGrlc2KZauPUG0zBPT",
+      "name": "Suýt nữa thì"
+    },
+    "Thay tôi yêu cô ấy": {
+      "artistId": 8,
+      "genreId": 3,
+      "id": 7,
+      "image": "https://drive.google.com/uc?id=1GdO2AMN1JOvIz78FAMJygqRMofgveB2o",
+      "link": "https://drive.google.com/uc?id=1WLIlaH6PKYDb2qq_p3Gv-kD8pOFKdCSa",
+      "name": "Thay tôi yêu cô ấy"
+    },
+    "Waiting for love": {
+      "artistId": 2,
+      "genreId": 5,
+      "id": 8,
+      "image": "https://drive.google.com/uc?id=1OCZuoHRxVrTeDPcgzuZpHyvA8kDCufu2",
+      "link": "https://drive.google.com/uc?id=1CFlt7DeqSWaZ3xLraXgyzQuvqCLruiLz",
+      "name": "Waiting for love"
+    },
+    "Wake me up": {
+      "artistId": 2,
+      "genreId": 5,
+      "id": 9,
+      "image": "https://drive.google.com/uc?id=19o1NrU4UajwuVJ1SYf8xP0uo0fW5YmC3",
+      "link": "https://drive.google.com/uc?id=1QfR6S_huEB7vS3wbLF2kJyq9ImHW3JNf",
+      "name": "Wake me up"
+    },
+    "Yêu người có ước mơ": {
+      "artistId": 5,
+      "genreId": 3,
+      "id": 10,
+      "image": "https://drive.google.com/uc?id=1kUUViIzwl2lcaMqZ-5kN4A94GId-NwGD",
+      "link": "https://drive.google.com/uc?id=1B4QIPKtrcGpe6Rx0PPJRloN4XX20UTKA",
+      "name": "Yêu người có ước mơ"
+    },
+    "Đường tôi chở em về": {
+      "artistId": 5,
+      "genreId": 3,
+      "id": 3,
+      "image": "https://drive.google.com/uc?id=1GWJHGxvanewBiQrUdvu3wguJXZsXvzEW",
+      "link": "https://drive.google.com/uc?id=16l4yrEMZGKmZFJ4_NjO3s_sBUOwjASZ5",
+      "name": "Đường tôi chở em về"
+    }
+  },
+  "Users": {
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fa5d42689-d7e4-4114-88ce-d82d838732dd?alt=media&token=972a2f56-b57b-4264-a088-24b24f85a9ac",
+      "name": "Phạm Khánh"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fc4332aba-bca6-40af-b3a5-ce62f54abf57?alt=media&token=196862f0-e1dd-4803-a9f2-9c64272b3f68",
+      "name": "Thanh Tâm"
+    }
+  }
+}

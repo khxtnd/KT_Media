@@ -8,6 +8,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.kt_media.R
 import com.kt_media.databinding.ActivityLoginBinding
+import com.kt_media.domain.constant.NAME_INTENT_LOGIN_WITH
+import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
 import com.kt_media.ui.main.MainActivity
 import com.kt_media.ui.register.RegisterActivity
 
@@ -25,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
         if (firebaseUser != null) {
-            moveToMain("email")
+            moveToMain(VAL_INTENT_LOGIN_EMAIL)
         }
         binding.btnLoginLa.setOnClickListener {
             loginWithEmail()
@@ -45,14 +47,14 @@ class LoginActivity : AppCompatActivity() {
         val email = binding.etEmailLa.text.toString()
         val password = binding.etPasswordLa.text.toString()
         if (email.isEmpty() && password.isEmpty()) {
-            toastNotification(R.string.notify_invalid.toString())
+            toastNotification(R.string.noty_invalid.toString())
         } else {
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        moveToMain("email")
+                        moveToMain(VAL_INTENT_LOGIN_EMAIL)
                     } else {
-                        toastNotification(R.string.notify_account.toString())
+                        toastNotification(R.string.noty_account.toString())
                     }
                 }
         }
@@ -60,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun moveToMain(loginWith: String) {
         var intent = Intent(this@LoginActivity, MainActivity::class.java)
-        intent.putExtra("login_with", loginWith)
+        intent.putExtra(NAME_INTENT_LOGIN_WITH, loginWith)
         startActivity(intent)
         finish()
     }

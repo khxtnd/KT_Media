@@ -4,12 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.kt_media.databinding.ItemSongArtistBinding
 import com.kt_media.databinding.ItemSongBinding
 import com.kt_media.domain.entities.Song
-import com.kt_media.domain.entities.SongArtist
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
 class SongAdapter (

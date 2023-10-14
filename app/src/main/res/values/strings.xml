@@ -14,13 +14,15 @@
     <string name="login_other">Đăng nhập bằng</string>
     <string name="config_password">Nhập lại mật khẩu</string>
     <string name="have_an_account">Bạn đã có tài khoản?</string>
-    <string name="notify_invalid">Không được để trống email và password!</string>
-    <string name="notify_config_pass">Mật khẩu không trùng khớp!</string>
-    <string name="notify_account">Email hoặc mật khẩu không đúng!</string>
-    <string name="notify_logout">Bạn có chắc chắn đăng xuất?</string>
+    <string name="noty_invalid">Không được để trống email và password!</string>
+    <string name="noty_config_pass">Mật khẩu không trùng khớp!</string>
+    <string name="noty_account">Email hoặc mật khẩu không đúng!</string>
+    <string name="noty_logout">Bạn có chắc chắn đăng xuất?</string>
     <string name="back">Quay lại</string>
     <string name="update_profile"> Sửa thông tin cá nhân</string>
     <string name="error">Lỗi</string>
     <string name="artist">Nghệ sĩ</string>
     <string name="genre">Thể loại</string>
+    <string name="noty_select_img">Chọn ảnh</string>
+    <string name="no_song">Không có bài hát nào</string>
 </resources>

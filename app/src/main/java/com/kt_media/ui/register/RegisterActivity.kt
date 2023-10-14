@@ -10,14 +10,16 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.kt_media.R
 import com.kt_media.databinding.ActivityRegisterBinding
+import com.kt_media.domain.constant.CHILD_ID
+import com.kt_media.domain.constant.CHILD_IMAGE
+import com.kt_media.domain.constant.CHILD_NAME
+import com.kt_media.domain.constant.CHILD_USER
 import com.kt_media.ui.login.LoginActivity
 import com.kt_media.ui.main.MainActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseUser: FirebaseUser
-    private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +43,9 @@ class RegisterActivity : AppCompatActivity() {
         val configPassword =binding.etConfigPasswordRa.text.toString()
 
         if (email.isEmpty() || password.isEmpty()){
-            Toast.makeText(applicationContext, R.string.notify_invalid, Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, R.string.noty_invalid, Toast.LENGTH_SHORT).show()
         } else if(password!=configPassword){
-            Toast.makeText(applicationContext, R.string.notify_config_pass, Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, R.string.noty_config_pass, Toast.LENGTH_SHORT).show()
         } else {
             registerUser(email, password)
         }
@@ -53,14 +55,14 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
                     val user: FirebaseUser? = firebaseAuth.currentUser
-                    val userId: String = user!!.uid
+                    val id: String = user!!.uid
                     databaseReference =
-                        FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                        FirebaseDatabase.getInstance().getReference(CHILD_USER).child(id)
 
                     val hashMap: HashMap<String, String> = HashMap()
-                    hashMap["userId"] = userId
-                    hashMap["userName"] = email
-                    hashMap["userImg"] = ""
+                    hashMap[CHILD_ID] = id
+                    hashMap[CHILD_NAME] = email
+                    hashMap[CHILD_IMAGE] = ""
 
                     databaseReference.setValue(hashMap).addOnCompleteListener(this) { it ->
                         if (it.isSuccessful) {

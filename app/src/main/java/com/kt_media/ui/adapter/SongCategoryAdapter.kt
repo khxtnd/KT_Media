@@ -6,16 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.kt_media.databinding.ItemSongCategoryBinding
-import com.kt_media.domain.entities.SongGenre
+import com.kt_media.domain.entities.Genre
 
 
 class SongCategoryAdapter (
-    private val onClick:(SongGenre)-> Unit
+    private val onClick:(Genre)-> Unit
 ): RecyclerView.Adapter<SongCategoryViewHolder>() {
 
-    private val list: ArrayList<SongGenre> = arrayListOf()
+    private val list: ArrayList<Genre> = arrayListOf()
 
-    fun submit(list: List<SongGenre>) {
+    fun submit(list: List<Genre>) {
 
         this.list.clear()
         this.list.addAll(list)

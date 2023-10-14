@@ -5,6 +5,6 @@ data class Song(
     val image: String="",
     val link: String="",
     val name: String="",
-    val songArtistId: Int=0,
-    val songCategoryId: Int=0
+    val artistId: Int=0,
+    val categoryId: Int=0
 )

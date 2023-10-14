@@ -7,17 +7,16 @@ import android.net.Uri
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.kt_media.domain.constant.CHILD_ARTIST
+import com.kt_media.domain.constant.CHILD_ARTIST_ID
+import com.kt_media.domain.constant.CHILD_GENRE
+import com.kt_media.domain.constant.CHILD_GENRE_ID
 import com.kt_media.domain.constant.CHILD_SONG
-import com.kt_media.domain.constant.CHILD_SONG_ARTIST
-import com.kt_media.domain.constant.CHILD_SONG_ARTIST_ID
-import com.kt_media.domain.constant.CHILD_SONG_GENRE
-import com.kt_media.domain.constant.CHILD_SONG_GENRE_ID
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_SONG_INDEX
@@ -25,12 +24,12 @@ import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
 import com.kt_media.domain.constant.INTENT_ACTION_SONG_INDEX
 import com.kt_media.domain.constant.INTENT_ACTION_SONG_INFO
 import com.kt_media.domain.constant.INTENT_ACTION_START_SERVICE
+import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
+import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
+import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
 import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
-import com.kt_media.domain.constant.VAL_INTENT_CATEGORY_ID
-import com.kt_media.domain.constant.VAL_INTENT_CHECK_CATEGORY
-import com.kt_media.domain.constant.VAL_INTENT_CHECK_IS_PLAYING
-import com.kt_media.domain.constant.VAL_INTENT_SONG_IMAGE
-import com.kt_media.domain.constant.VAL_INTENT_SONG_NAME
 import com.kt_media.domain.entities.Song
 
 class MusicService: Service() {
@@ -50,9 +49,9 @@ class MusicService: Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null && intent.action != null) {
             when (intent.action) {
-                INTENT_ACTION_START_SERVICE ->{
-                    checkCategory= intent.getStringExtra(VAL_INTENT_CHECK_CATEGORY).toString()
-                    idCategory=intent.getIntExtra(VAL_INTENT_CATEGORY_ID,0)
+                INTENT_ACTION_START_SERVICE -> {
+                    checkCategory = intent.getStringExtra(NAME_INTENT_CHECK_CATEGORY).toString()
+                    idCategory = intent.getIntExtra(NAME_INTENT_CATEGORY_ID, 0)
                     createMediaPlayer()
                 }
                 INTENT_ACTION_PLAY_OR_PAUSE -> playOrPauseSong()
@@ -72,37 +71,38 @@ class MusicService: Service() {
 
     private fun createMediaPlayer() {
         getAllSongCategory()
-        Log.e("aaaaaaaaaa",songList.size.toString())
         if (songList.size != 0) {
             val uri = Uri.parse(songList[songIndex].link)
             mediaPlayer = MediaPlayer.create(this, uri)
             sendSongInfo()
-        }
-
-        mediaPlayer?.setOnPreparedListener {
-            val duration = it.duration
-            updateSeekBar(duration, 0)
-        }
-        seekBarUpdateHandler = Handler(Looper.getMainLooper())
-        seekBarUpdateRunnable = object : Runnable {
-            override fun run() {
-                mediaPlayer.let {
-                    val progress = it.currentPosition
-                    val duration=it.duration
-                    updateSeekBar(progress, duration)
+            mediaPlayer.setOnPreparedListener {
+                val duration = it.duration
+                updateSeekBar(duration, 0)
+            }
+            seekBarUpdateHandler = Handler(Looper.getMainLooper())
+            seekBarUpdateRunnable = object : Runnable {
+                override fun run() {
+                    mediaPlayer.let {
+                        val progress = it.currentPosition
+                        val duration = it.duration
+                        updateSeekBar(progress, duration)
+                    }
+                    seekBarUpdateHandler?.postDelayed(this, 1000)
                 }
-                seekBarUpdateHandler?.postDelayed(this, 1000)
+            }
+
+            mediaPlayer.setOnCompletionListener {
+                playNext()
             }
         }
 
-        mediaPlayer.setOnCompletionListener {
-            playNext()
-        }
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         seekBarUpdateHandler?.removeCallbacks(seekBarUpdateRunnable!!)
+        mediaPlayer.stop()
         mediaPlayer.release()
     }
 
@@ -131,21 +131,18 @@ class MusicService: Service() {
     }
 
     private fun sendSongInfo() {
+        val sharedPreferences = getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(NAME_INTENT_CHECK_IS_PLAYING, mediaPlayer.isPlaying)
+        editor.putString(NAME_INTENT_SONG_NAME, songList[songIndex].name)
+        editor.putString(NAME_INTENT_SONG_IMAGE, songList[songIndex].image)
+        editor.apply()
 
-        if(mediaPlayer!=null){
-            val sharedPreferences = getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(VAL_INTENT_CHECK_IS_PLAYING, mediaPlayer.isPlaying)
-            editor.putString(VAL_INTENT_SONG_NAME, songList[songIndex].name)
-            editor.putString(VAL_INTENT_SONG_IMAGE,songList[songIndex].image)
-            editor.apply()
-
-            val intent = Intent(INTENT_ACTION_SONG_INFO)
-            intent.putExtra(VAL_INTENT_CHECK_IS_PLAYING, mediaPlayer.isPlaying)
-            intent.putExtra(VAL_INTENT_SONG_NAME, songList[songIndex].name)
-            intent.putExtra(VAL_INTENT_SONG_IMAGE,songList[songIndex].image)
-            sendBroadcast(intent)
-        }
+        val intent = Intent(INTENT_ACTION_SONG_INFO)
+        intent.putExtra(NAME_INTENT_CHECK_IS_PLAYING, mediaPlayer.isPlaying)
+        intent.putExtra(NAME_INTENT_SONG_NAME, songList[songIndex].name)
+        intent.putExtra(NAME_INTENT_SONG_IMAGE, songList[songIndex].image)
+        sendBroadcast(intent)
 
     }
 
@@ -208,10 +205,10 @@ class MusicService: Service() {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_SONG)
         var child = ""
-        if (checkCategory == CHILD_SONG_GENRE) {
-            child = CHILD_SONG_GENRE_ID
-        } else if (checkCategory == CHILD_SONG_ARTIST) {
-            child = CHILD_SONG_ARTIST_ID
+        if (checkCategory == CHILD_GENRE) {
+            child = CHILD_GENRE_ID
+        } else if (checkCategory == CHILD_ARTIST) {
+            child = CHILD_ARTIST_ID
         }
         val query =
             databaseReference.orderByChild(child).equalTo(idCategory.toDouble())

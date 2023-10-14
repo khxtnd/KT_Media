@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,20 +20,21 @@ import com.kt_media.R
 import com.kt_media.databinding.FragmentSongCategoryBinding
 import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_SONG
-import com.kt_media.domain.constant.CHILD_SONG_ARTIST
-import com.kt_media.domain.constant.CHILD_SONG_ARTIST_ID
-import com.kt_media.domain.constant.CHILD_SONG_GENRE
-import com.kt_media.domain.constant.CHILD_SONG_GENRE_ID
+import com.kt_media.domain.constant.CHILD_ARTIST
+import com.kt_media.domain.constant.CHILD_ARTIST_ID
+import com.kt_media.domain.constant.CHILD_GENRE
+import com.kt_media.domain.constant.CHILD_GENRE_ID
+import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_SONG_INFO
 import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
-import com.kt_media.domain.constant.VAL_INTENT_CATEGORY_ID
-import com.kt_media.domain.constant.VAL_INTENT_CHECK_CATEGORY
-import com.kt_media.domain.constant.VAL_INTENT_CHECK_IS_PLAYING
-import com.kt_media.domain.constant.VAL_INTENT_SONG_IMAGE
-import com.kt_media.domain.constant.VAL_INTENT_SONG_NAME
+import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
+import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
+import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
 import com.kt_media.domain.entities.Song
-import com.kt_media.domain.entities.SongArtist
-import com.kt_media.domain.entities.SongGenre
+import com.kt_media.domain.entities.Artist
+import com.kt_media.domain.entities.Genre
 import com.kt_media.service.MusicService
 import com.mymusic.ui.adapters.SongAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
@@ -50,34 +52,35 @@ class SongCategoryFragment :
         binding = FragmentSongCategoryBinding.bind(view)
         activity?.let {
             val intent = it.intent
-            checkCategory = intent.getStringExtra(VAL_INTENT_CHECK_CATEGORY).toString()
-            idCategory = intent.getIntExtra(VAL_INTENT_CATEGORY_ID, 0)
+            checkCategory = intent.getStringExtra(NAME_INTENT_CHECK_CATEGORY).toString()
+            idCategory = intent.getIntExtra(NAME_INTENT_CATEGORY_ID, 0)
         }
         setupSong()
         setupContent()
 
         binding!!.ivPlayScf.setOnClickListener {
             val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
-            playOrPauseMainIntent.action = "PLAY_OR_PAUSE"
+            playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
             requireActivity().startService(playOrPauseMainIntent)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val sharedPreferences = requireActivity().getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, Service.MODE_PRIVATE)
-        val isPlaying = sharedPreferences.getBoolean(VAL_INTENT_CHECK_IS_PLAYING, false)
-        val songName=sharedPreferences.getString(VAL_INTENT_SONG_NAME,"Không có bài hát")
-        val songImage=sharedPreferences.getString(VAL_INTENT_SONG_IMAGE,"Không rõ")
-        if(isPlaying!=null && songName!=null && songImage!=null){
-            setupStatus(songName,songImage,isPlaying)
-        }
-
         broadcastReceiver = MyBroadcastReceiver()
         val intentFilter = IntentFilter().apply {
             addAction(INTENT_ACTION_SONG_INFO)
         }
         requireActivity().registerReceiver(broadcastReceiver, intentFilter)
+
+
+        val sharedPreferences = requireActivity().getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, Service.MODE_PRIVATE)
+        val isPlaying = sharedPreferences.getBoolean(NAME_INTENT_CHECK_IS_PLAYING, false)
+        val songName=sharedPreferences.getString(NAME_INTENT_SONG_NAME,"")
+        val songImage=sharedPreferences.getString(NAME_INTENT_SONG_IMAGE,"")
+        if(!songName.isNullOrEmpty() && !songImage.isNullOrEmpty()){
+            setupStatus(songName,songImage,isPlaying)
+        }
 
     }
     private fun setupStatus(songName:String, songImage:String, isPlaying: Boolean) {
@@ -101,23 +104,23 @@ class SongCategoryFragment :
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (data in dataSnapshot.children) {
-                    if (checkCategory == CHILD_SONG_GENRE) {
-                        val songGenre = data.getValue(SongGenre::class.java)
-                        if (songGenre != null) {
+                    if (checkCategory == CHILD_GENRE) {
+                        val genre = data.getValue(Genre::class.java)
+                        if (genre != null) {
                             binding?.let {
-                                Glide.with(it.ivCategoryScf).load(songGenre.image)
+                                Glide.with(it.ivCategoryScf).load(genre.image)
                                     .into(binding!!.ivCategoryScf)
-                                binding!!.tvCategoryScf.text = songGenre.name
+                                binding!!.tvCategoryScf.text = genre.name
                             }
                         }
                         break
-                    } else if (checkCategory == CHILD_SONG_ARTIST) {
-                        val songArtist = data.getValue(SongArtist::class.java)
-                        if (songArtist != null) {
+                    } else if (checkCategory == CHILD_ARTIST) {
+                        val artist = data.getValue(Artist::class.java)
+                        if (artist != null) {
                             binding?.let {
-                                Glide.with(it.ivCategoryScf).load(songArtist.image)
+                                Glide.with(it.ivCategoryScf).load(artist.image)
                                     .into(binding!!.cirIvCategoryScf)
-                                binding!!.tvCategoryScf.text = songArtist.name
+                                binding!!.tvCategoryScf.text = artist.name
                             }
                         }
                         break
@@ -144,10 +147,10 @@ class SongCategoryFragment :
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_SONG)
         var child = ""
-        if (checkCategory == CHILD_SONG_GENRE) {
-            child = CHILD_SONG_GENRE_ID
-        } else if (checkCategory == CHILD_SONG_ARTIST) {
-            child = CHILD_SONG_ARTIST_ID
+        if (checkCategory == CHILD_GENRE) {
+            child = CHILD_GENRE_ID
+        } else if (checkCategory == CHILD_ARTIST) {
+            child = CHILD_ARTIST_ID
         }
         val query =
             databaseReference.orderByChild(child).equalTo(idCategory.toDouble())
@@ -159,10 +162,9 @@ class SongCategoryFragment :
                     val song = data.getValue(Song::class.java)
                     song?.let { songList.add(it) }
                 }
-
                 if (songList.isNotEmpty()) {
                     songAdapter.submit(songList)
-                    setupStatus(songList[0].name,songList[0].image,false)
+//                    setupStatus(songList[0].name,songList[0].image,false)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -177,11 +179,11 @@ class SongCategoryFragment :
     }
     inner class MyBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val isPlaying = intent.getBooleanExtra(VAL_INTENT_CHECK_IS_PLAYING, false)
-            val songName=intent.getStringExtra(VAL_INTENT_SONG_NAME)
-            val songImage=intent.getStringExtra(VAL_INTENT_SONG_IMAGE)
-            if(songName !=null && songImage !=null){
-                setupStatus(songName,songImage,isPlaying)
+            val isPlaying = intent.getBooleanExtra(NAME_INTENT_CHECK_IS_PLAYING, false)
+            val name=intent.getStringExtra(NAME_INTENT_SONG_NAME)
+            val image=intent.getStringExtra(NAME_INTENT_SONG_IMAGE)
+            if(name !=null && image !=null){
+                setupStatus(name,image,isPlaying)
             }
         }
     }

@@ -18,8 +18,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.kt_media.R
 import com.kt_media.databinding.ActivityProfileBinding
+import com.kt_media.domain.constant.CHILD_IMAGE
+import com.kt_media.domain.constant.CHILD_NAME
+import com.kt_media.domain.constant.CHILD_USER
+import com.kt_media.domain.constant.TITLE_ERROR
+import com.kt_media.domain.constant.TITLE_SELECT_IMAGE
+import com.kt_media.domain.constant.TITLE_UPLOADED
+import com.kt_media.domain.constant.VAL_REQUEST_CODE
 import com.kt_media.domain.entities.User
 import java.io.IOException
 import java.util.UUID
@@ -29,7 +35,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var firebaseUser: FirebaseUser
     private lateinit var databaseReference: DatabaseReference
     private var filePath: Uri? = null
-    private val PICK_IMAGE_REQUEST: Int = 2023
 
     private lateinit var storage: FirebaseStorage
     private lateinit var storageReference: StorageReference
@@ -41,7 +46,7 @@ class ProfileActivity : AppCompatActivity() {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
 
         databaseReference =
-            FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.uid)
+            FirebaseDatabase.getInstance().getReference(CHILD_USER).child(firebaseUser.uid)
 
         storage = FirebaseStorage.getInstance()
         storageReference = storage.reference
@@ -49,10 +54,10 @@ class ProfileActivity : AppCompatActivity() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                binding.etUsernamePa.setText(user!!.userName)
+                binding.etUsernamePa.setText(user!!.name)
 
-                if (user.userImg != "") {
-                    Glide.with(this@ProfileActivity).load(user.userImg).into(binding.cirIvAvatarPa)
+                if (user.image != "") {
+                    Glide.with(this@ProfileActivity).load(user.image).into(binding.cirIvAvatarPa)
                 }
             }
 
@@ -76,12 +81,12 @@ class ProfileActivity : AppCompatActivity() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST)
+        startActivityForResult(Intent.createChooser(intent, TITLE_SELECT_IMAGE), VAL_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode != null) {
+        if (requestCode == VAL_REQUEST_CODE && resultCode != null) {
             filePath = data!!.data
             try {
                 val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
@@ -112,17 +117,17 @@ class ProfileActivity : AppCompatActivity() {
                         val imageUrl = downloadUri.toString()
 
                         var hashMap: HashMap<String, String> = HashMap()
-                        hashMap["userName"] = binding.etUsernamePa.text.toString()
-                        hashMap["userImg"] = imageUrl
+                        hashMap[CHILD_NAME] = binding.etUsernamePa.text.toString()
+                        hashMap[CHILD_IMAGE] = imageUrl
 
                         databaseReference.updateChildren(hashMap as Map<String, Any>)
 
                         binding.progressBarPa.visibility = View.GONE
-                        Toast.makeText(applicationContext, "Đã tải lên", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, TITLE_UPLOADED, Toast.LENGTH_SHORT).show()
                         binding.btSavePa.visibility = View.GONE
                     } else {
                         binding.progressBarPa.visibility = View.GONE
-                        Toast.makeText(applicationContext, "Lỗi", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, TITLE_ERROR, Toast.LENGTH_SHORT).show()
                     }
                 }
         }

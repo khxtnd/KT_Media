@@ -67,6 +67,7 @@
             android:id="@+id/iv_song_scf"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:src="@drawable/logo_app_40"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="10dp"/>
@@ -75,6 +76,7 @@
             android:id="@+id/tv_song_name_scf"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:text="@string/no_song"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/iv_song_scf"
             android:gravity="center_vertical"

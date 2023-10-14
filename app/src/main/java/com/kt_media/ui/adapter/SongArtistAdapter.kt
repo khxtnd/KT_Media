@@ -6,17 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.kt_media.databinding.ItemSongArtistBinding
-import com.kt_media.domain.entities.SongArtist
+import com.kt_media.domain.entities.Artist
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
 class SongArtistAdapter(
-    private val onClick: (SongArtist) -> Unit
+    private val onClick: (Artist) -> Unit
 ) : RecyclerView.Adapter<SongArtistViewHolder>() {
 
-    private val list: ArrayList<SongArtist> = arrayListOf()
+    private val list: ArrayList<Artist> = arrayListOf()
 
-    fun submit(list: List<SongArtist>) {
+    fun submit(list: List<Artist>) {
 
         this.list.clear()
         this.list.addAll(list)

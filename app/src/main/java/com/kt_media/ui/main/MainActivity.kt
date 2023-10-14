@@ -18,6 +18,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
+import com.kt_media.domain.constant.CHILD_USER
+import com.kt_media.domain.constant.NAME_INTENT_LOGIN_WITH
+import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
 import com.kt_media.domain.entities.User
 import com.kt_media.ui.login.LoginActivity
 import com.kt_media.ui.profile.ProfileActivity
@@ -29,13 +32,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvUsernameNav: TextView
 
 
-    private var loginWith="email"
+    private var loginWith= VAL_INTENT_LOGIN_EMAIL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        loginWith= intent.getStringExtra("login_with").toString()
+        loginWith= intent.getStringExtra(NAME_INTENT_LOGIN_WITH).toString()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_ma) as NavHostFragment
         val navController = navHostFragment.navController
@@ -73,14 +76,14 @@ class MainActivity : AppCompatActivity() {
         tvUsernameNav=headerView.findViewById(R.id.tv_username_nav)
 
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser!!.uid)
+        val reference = FirebaseDatabase.getInstance().getReference(CHILD_USER).child(firebaseUser!!.uid)
         reference!!.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                tvUsernameNav.text = user!!.userName
+                tvUsernameNav.text = user!!.name
 
-                if (user.userImg != "") {
-                    Glide.with(this@MainActivity).load(user.userImg).into(ivAvatarNav)
+                if (user.image != "") {
+                    Glide.with(this@MainActivity).load(user.image).into(ivAvatarNav)
                 }
             }
             override fun onCancelled(error: DatabaseError) {
@@ -95,17 +98,17 @@ class MainActivity : AppCompatActivity() {
         builder
             .setTitle(R.string.logout)
             .setIcon(R.drawable.ic_logout_40)
-            .setMessage(R.string.notify_logout)
-            .setPositiveButton(R.string.back) { dialog, _ ->
-                dialog.cancel()
-            }
-            .setNegativeButton(R.string.logout) { _, _ ->
+            .setMessage(R.string.noty_logout)
+            .setPositiveButton(R.string.logout) { _, _ ->
                 firebaseAuth.signOut()
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 intent.flags =
                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 finish()
+            }
+            .setNegativeButton(R.string.back) { dialog, _ ->
+                dialog.cancel()
             }
         val dialog: AlertDialog = builder.create()
         dialog.show()
