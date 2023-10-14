@@ -13,13 +13,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentMusicsBinding
-import com.kt_media.domain.constant.CATEGORY_ID
-import com.kt_media.domain.constant.CHECK_CATEGORY
-import com.kt_media.domain.constant.SONG_ARTIST_CHILD
-import com.kt_media.domain.constant.SONG_GENRE_CHILD
+import com.kt_media.domain.constant.VAL_INTENT_CATEGORY_ID
+import com.kt_media.domain.constant.VAL_INTENT_CHECK_CATEGORY
+import com.kt_media.domain.constant.CHILD_SONG_ARTIST
+import com.kt_media.domain.constant.CHILD_SONG_GENRE
 import com.kt_media.domain.entities.SongArtist
 import com.kt_media.domain.entities.SongGenre
-import com.kt_media.ui.list_song.SongListActivity
+import com.kt_media.ui.play_song_category.PlaySongCategoryActivity
 import com.mymusic.ui.adapters.SongArtistAdapter
 import com.mymusic.ui.adapters.SongCategoryAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
@@ -46,10 +46,6 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
 
     private fun setupSongGenre() {
         val binding=binding?:return
@@ -67,7 +63,7 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
 
     private fun getAllSongGenre() {
         val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(SONG_GENRE_CHILD)
+            FirebaseDatabase.getInstance().getReference(CHILD_SONG_GENRE)
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 songGenreList.clear()
@@ -104,7 +100,7 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
     }
     private fun getAllSongArtist() {
         val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(SONG_ARTIST_CHILD)
+            FirebaseDatabase.getInstance().getReference(CHILD_SONG_ARTIST)
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 songArtistList.clear()
@@ -127,15 +123,15 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
     }
 
     private val onItemSongArtistClick: (SongArtist) -> Unit = {
-        val intent = Intent(requireActivity(), SongListActivity::class.java)
-        intent.putExtra(CHECK_CATEGORY, SONG_ARTIST_CHILD)
-        intent.putExtra(CATEGORY_ID, it.id)
+        val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
+        intent.putExtra(VAL_INTENT_CHECK_CATEGORY, CHILD_SONG_ARTIST)
+        intent.putExtra(VAL_INTENT_CATEGORY_ID, it.id)
         startActivity(intent)
     }
     private val onItemSongGenreClick: (SongGenre) -> Unit = {
-        val intent = Intent(requireActivity(), SongListActivity::class.java)
-        intent.putExtra(CHECK_CATEGORY, SONG_GENRE_CHILD)
-        intent.putExtra(CATEGORY_ID ,it.id)
+        val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
+        intent.putExtra(VAL_INTENT_CHECK_CATEGORY, CHILD_SONG_GENRE)
+        intent.putExtra(VAL_INTENT_CATEGORY_ID ,it.id)
         startActivity(intent)
     }
 }

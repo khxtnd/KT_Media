@@ -8,5 +8,8 @@
     <color name="gray_7">#8c8c8c</color>
     <color name="gray_8">#595959</color>
     <color name="gray_9">#434343</color>
+    <color name="geek_blue_1">#e6f4ff</color>
+    <color name="geek_blue_2">#bae0ff</color>
+    <color name="geek_blue_4">#69b1ff</color>
     <color name="geek_blue_6">#2f54eb</color>
 </resources>
