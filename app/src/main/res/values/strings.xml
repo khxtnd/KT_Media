@@ -25,4 +25,5 @@
     <string name="genre">Thể loại</string>
     <string name="noty_select_img">Chọn ảnh</string>
     <string name="no_song">Không có bài hát nào</string>
+    <string name="no_time_seek_bar">00:00</string>
 </resources>

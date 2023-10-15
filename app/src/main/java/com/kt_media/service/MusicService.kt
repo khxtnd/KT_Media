@@ -5,7 +5,10 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,15 +24,17 @@ import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_SONG_INDEX
 import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
-import com.kt_media.domain.constant.INTENT_ACTION_SONG_INDEX
 import com.kt_media.domain.constant.INTENT_ACTION_SONG_INFO
 import com.kt_media.domain.constant.INTENT_ACTION_START_SERVICE
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
 import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
+import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
 import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
+import com.kt_media.domain.constant.TITLE_NO_IMAGE
+import com.kt_media.domain.constant.TITLE_NO_SONG
 import com.kt_media.domain.entities.Song
 
 class MusicService: Service() {
@@ -38,9 +43,6 @@ class MusicService: Service() {
     private var idCategory = 0
     private var checkCategory = ""
     private var songIndex: Int = 0
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
-    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
@@ -55,11 +57,11 @@ class MusicService: Service() {
                     INTENT_ACTION_NEXT -> playNext()
                     INTENT_ACTION_PREVIOUS -> playPrevious()
                     INTENT_ACTION_PLAY_SONG_INDEX -> {
-                        songList.clear()
-                        songIndex = intent.getIntExtra(INTENT_ACTION_SONG_INDEX, 0)
+                        songIndex = intent.getIntExtra(NAME_INTENT_SONG_INDEX, 0)
                         playSongIndex()
                     }
                 }
+                seekBarUpdateHandler?.postDelayed(seekBarUpdateRunnable!!, 1000)
             }
         }
 
@@ -76,21 +78,31 @@ class MusicService: Service() {
                     .build()
             )
             setDataSource(applicationContext, link)
-            isLooping=true
+            isLooping = true
             prepare()
         }
+
+        setupSeekBar()
         sendSongInfo()
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
+        seekBarUpdateHandler?.removeCallbacks(seekBarUpdateRunnable!!)
         if (songList.isNotEmpty() && mediaPlayer != null) {
             if (mediaPlayer?.isPlaying == true) {
                 mediaPlayer?.stop()
             }
             mediaPlayer?.release()
         }
+        mediaPlayer=null
+        val sharedPreferences = getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(NAME_INTENT_CHECK_IS_PLAYING, false)
+        editor.putString(NAME_INTENT_SONG_NAME, TITLE_NO_SONG)
+        editor.putString(NAME_INTENT_SONG_IMAGE, TITLE_NO_IMAGE)
+        editor.apply()
     }
 
     private fun playOrPauseSong() {
@@ -128,9 +140,7 @@ class MusicService: Service() {
         editor.putString(NAME_INTENT_SONG_NAME, songList[songIndex].name)
         editor.putString(NAME_INTENT_SONG_IMAGE, songList[songIndex].image)
         editor.apply()
-
-        Log.e("Service", songList[songIndex].link)
-
+        
         val intent = Intent(INTENT_ACTION_SONG_INFO)
         intent.putExtra(NAME_INTENT_CHECK_IS_PLAYING, isPlaying)
         intent.putExtra(NAME_INTENT_SONG_NAME, songList[songIndex].name)
@@ -143,13 +153,12 @@ class MusicService: Service() {
         if (mediaPlayer?.isPlaying == true) {
             mediaPlayer?.stop()
         }
-        val uri = Uri.parse(songList[songIndex].link)
-        mediaPlayer = MediaPlayer.create(this, uri)
+        mediaPlayer?.reset()
+        mediaPlayer?.setDataSource(songList[songIndex].link)
+        mediaPlayer?.prepare()
         mediaPlayer?.start()
         sendSongInfo()
-        mediaPlayer = null
     }
-
     private fun playPrevious() {
         songIndex--
         if (songIndex < 0) {
@@ -164,8 +173,6 @@ class MusicService: Service() {
         mediaPlayer?.start()
         sendSongInfo()
     }
-
-
     private fun getAllSongCategory() {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_SONG)
@@ -196,8 +203,59 @@ class MusicService: Service() {
         })
     }
 
-
-    private val onItemSongClick: (Song) -> Unit = {
-
+    private var seekBarUpdateHandler: Handler? = null
+    private var seekBarUpdateRunnable: Runnable? = null
+    private var seekBarUpdateListener: SeekBarUpdateListener? = null
+    override fun onBind(p0: Intent?): IBinder? {
+        return LocalBinder()
     }
+
+    inner class LocalBinder : Binder() {
+        fun getService(): MusicService = this@MusicService
+    }
+
+    private fun setupSeekBar() {
+        mediaPlayer?.setOnPreparedListener {
+            val duration = it.duration
+            updateSeekBar(0, duration)
+        }
+        seekBarUpdateHandler = Handler(Looper.getMainLooper())
+        seekBarUpdateRunnable = object : Runnable {
+            override fun run() {
+                mediaPlayer.let {
+                    val progress = it?.currentPosition
+                    val duration = it?.duration
+                    if (progress != null && duration != null) {
+                        updateSeekBar(progress, duration)
+                    }
+                }
+                seekBarUpdateHandler?.postDelayed(this, 1000)
+            }
+        }
+    }
+
+    fun updateSeekBar(progress: Int, duration: Int) {
+        seekBarUpdateListener?.onSeekBarUpdate(progress, duration)
+    }
+
+    interface SeekBarUpdateListener {
+        fun onSeekBarUpdate(progress: Int, duration: Int)
+    }
+
+    fun setSeekBarUpdateListener(listener: SeekBarUpdateListener) {
+        seekBarUpdateListener = listener
+    }
+
+    fun seekTo(position: Int) {
+        mediaPlayer?.seekTo(position)
+    }
+
+    fun pauseSeekBarUpdate() {
+        seekBarUpdateHandler?.removeCallbacks(seekBarUpdateRunnable!!)
+    }
+
+    fun resumeSeekBarUpdate() {
+        seekBarUpdateHandler?.postDelayed(seekBarUpdateRunnable!!, 1000)
+    }
+
 }

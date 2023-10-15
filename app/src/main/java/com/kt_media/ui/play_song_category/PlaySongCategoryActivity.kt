@@ -57,13 +57,6 @@ class PlaySongCategoryActivity : AppCompatActivity() {
         super.onDestroy()
         val stopIntent = Intent(this, MusicService::class.java)
         stopService(stopIntent)
-        val sharedPreferences = getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(NAME_INTENT_CHECK_IS_PLAYING, false)
-        editor.putString(NAME_INTENT_SONG_NAME, TITLE_NO_SONG)
-        editor.putString(NAME_INTENT_SONG_IMAGE, TITLE_NO_IMAGE)
-        editor.apply()
-
     }
 
 }

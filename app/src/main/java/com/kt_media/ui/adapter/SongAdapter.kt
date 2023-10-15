@@ -9,7 +9,7 @@ import com.kt_media.domain.entities.Song
 
 
 class SongAdapter (
-    private val onClick:(Song)-> Unit
+    private val onClick:(Int)-> Unit
 ) : RecyclerView.Adapter<SongViewHolder>() {
 
     private val list: ArrayList<Song> = arrayListOf()
@@ -41,7 +41,7 @@ class SongAdapter (
             .into(holder.binding.cirIvSi)
         holder.binding.tvSongNameSi.text = item.name
         holder.binding.layoutItemSongArtist.setOnClickListener {
-            onClick(item)
+            onClick(position)
         }
 
     }

@@ -20,6 +20,9 @@ import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
 import com.kt_media.domain.constant.CHILD_USER
 import com.kt_media.domain.constant.NAME_INTENT_LOGIN_WITH
+import com.kt_media.domain.constant.TITLE_IMAGE
+import com.kt_media.domain.constant.TITLE_MUSIC
+import com.kt_media.domain.constant.TITLE_VIDEO
 import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
 import com.kt_media.domain.entities.User
 import com.kt_media.ui.login.LoginActivity
@@ -30,7 +33,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var ivAvatarNav: ImageView
     private lateinit var tvUsernameNav: TextView
-
 
     private var loginWith= VAL_INTENT_LOGIN_EMAIL
 
@@ -44,7 +46,19 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         binding.btNavMa.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.musicsFragment ->
+                    binding.tvTitleMa.text = TITLE_MUSIC
 
+                R.id.videosFragment ->
+                    binding.tvTitleMa.text = TITLE_VIDEO
+
+                R.id.imagesFragment ->
+                    binding.tvTitleMa.text = TITLE_IMAGE
+
+            }
+        }
         binding.ivToggleMa.setOnClickListener {
             binding.layoutMa.openDrawer(GravityCompat.START)
         }

@@ -26,12 +26,14 @@ import com.kt_media.domain.constant.CHILD_GENRE
 import com.kt_media.domain.constant.CHILD_GENRE_ID
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
+import com.kt_media.domain.constant.INTENT_ACTION_PLAY_SONG_INDEX
 import com.kt_media.domain.constant.INTENT_ACTION_SONG_INFO
 import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
 import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
+import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
 import com.kt_media.domain.constant.TITLE_NO_SONG
@@ -64,19 +66,19 @@ class SongCategoryFragment :
         binding?.ivPlayScf?.setOnClickListener {
             val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
             playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
-            requireActivity().startService(playOrPauseMainIntent)
+            requireContext().startService(playOrPauseMainIntent)
         }
         binding?.ivNextScf?.setOnClickListener {
-            val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
-            playOrPauseMainIntent.action = INTENT_ACTION_NEXT
-            requireActivity().startService(playOrPauseMainIntent)
+            val nextIntent = Intent(requireContext(), MusicService::class.java)
+            nextIntent.action = INTENT_ACTION_NEXT
+            requireContext().startService(nextIntent)
         }
 
     }
 
     override fun onResume() {
         super.onResume()
-        broadcastReceiver = MyBroadcastReceiver()
+        broadcastReceiver = SongCategoryBroadcastReceiver()
         val intentFilter = IntentFilter().apply {
             addAction(INTENT_ACTION_SONG_INFO)
         }
@@ -189,10 +191,13 @@ class SongCategoryFragment :
     }
 
 
-    private val onItemSongClick: (Song) -> Unit = {
-
+    private val onItemSongClick: (Int) -> Unit = {
+        val nextIntent = Intent(requireContext(), MusicService::class.java)
+        nextIntent.action = INTENT_ACTION_PLAY_SONG_INDEX
+        nextIntent.putExtra(NAME_INTENT_SONG_INDEX,it)
+        requireContext().startService(nextIntent)
     }
-    inner class MyBroadcastReceiver : BroadcastReceiver() {
+    inner class SongCategoryBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
                 val isPlaying = intent.getBooleanExtra(NAME_INTENT_CHECK_IS_PLAYING, false)
                 val name=intent.getStringExtra(NAME_INTENT_SONG_NAME)
