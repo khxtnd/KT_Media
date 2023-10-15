@@ -6,5 +6,5 @@ data class Song(
     val link: String="",
     val name: String="",
     val artistId: Int=0,
-    val categoryId: Int=0
+    val genreId: Int=0
 )

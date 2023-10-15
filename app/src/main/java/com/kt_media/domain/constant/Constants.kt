@@ -15,6 +15,8 @@ const val TITLE_GENRE = "Thể loại"
 const val TITLE_SELECT_IMAGE="Chọn ảnh"
 const val TITLE_UPLOADED="Đã tải lên"
 const val TITLE_ERROR="Lỗi"
+const val TITLE_NO_SONG="Không có bài hát nào"
+const val TITLE_NO_IMAGE="No Image"
 
 const val INTENT_ACTION_PLAY_OR_PAUSE = "1"
 const val INTENT_ACTION_PREVIOUS = "2"

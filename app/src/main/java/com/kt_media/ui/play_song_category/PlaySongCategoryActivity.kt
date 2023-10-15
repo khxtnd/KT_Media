@@ -12,6 +12,12 @@ import com.kt_media.domain.constant.CHILD_ARTIST
 import com.kt_media.domain.constant.CHILD_GENRE
 import com.kt_media.domain.constant.INTENT_ACTION_START_SERVICE
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
+import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
+import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
+import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
+import com.kt_media.domain.constant.TITLE_NO_IMAGE
+import com.kt_media.domain.constant.TITLE_NO_SONG
 import com.kt_media.service.MusicService
 import com.kt_media.ui.adapter.ViewPagerPSCAdapter
 
@@ -51,6 +57,13 @@ class PlaySongCategoryActivity : AppCompatActivity() {
         super.onDestroy()
         val stopIntent = Intent(this, MusicService::class.java)
         stopService(stopIntent)
+        val sharedPreferences = getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(NAME_INTENT_CHECK_IS_PLAYING, false)
+        editor.putString(NAME_INTENT_SONG_NAME, TITLE_NO_SONG)
+        editor.putString(NAME_INTENT_SONG_IMAGE, TITLE_NO_IMAGE)
+        editor.apply()
+
     }
 
 }

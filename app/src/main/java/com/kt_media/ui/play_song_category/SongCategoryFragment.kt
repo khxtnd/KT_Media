@@ -24,6 +24,7 @@ import com.kt_media.domain.constant.CHILD_ARTIST
 import com.kt_media.domain.constant.CHILD_ARTIST_ID
 import com.kt_media.domain.constant.CHILD_GENRE
 import com.kt_media.domain.constant.CHILD_GENRE_ID
+import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_SONG_INFO
 import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
@@ -32,6 +33,8 @@ import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
 import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
 import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
+import com.kt_media.domain.constant.TITLE_NO_IMAGE
+import com.kt_media.domain.constant.TITLE_NO_SONG
 import com.kt_media.domain.entities.Song
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
@@ -58,11 +61,17 @@ class SongCategoryFragment :
         setupSong()
         setupContent()
 
-        binding!!.ivPlayScf.setOnClickListener {
+        binding?.ivPlayScf?.setOnClickListener {
             val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
             playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
             requireActivity().startService(playOrPauseMainIntent)
         }
+        binding?.ivNextScf?.setOnClickListener {
+            val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
+            playOrPauseMainIntent.action = INTENT_ACTION_NEXT
+            requireActivity().startService(playOrPauseMainIntent)
+        }
+
     }
 
     override fun onResume() {
@@ -71,21 +80,29 @@ class SongCategoryFragment :
         val intentFilter = IntentFilter().apply {
             addAction(INTENT_ACTION_SONG_INFO)
         }
-        requireActivity().registerReceiver(broadcastReceiver, intentFilter)
+        requireContext().registerReceiver(broadcastReceiver, intentFilter)
 
 
         val sharedPreferences = requireActivity().getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, Service.MODE_PRIVATE)
         val isPlaying = sharedPreferences.getBoolean(NAME_INTENT_CHECK_IS_PLAYING, false)
-        val songName=sharedPreferences.getString(NAME_INTENT_SONG_NAME,"")
-        val songImage=sharedPreferences.getString(NAME_INTENT_SONG_IMAGE,"")
+        val songName=sharedPreferences.getString(NAME_INTENT_SONG_NAME, TITLE_NO_SONG)
+        val songImage=sharedPreferences.getString(NAME_INTENT_SONG_IMAGE, TITLE_NO_IMAGE)
         if(!songName.isNullOrEmpty() && !songImage.isNullOrEmpty()){
             setupStatus(songName,songImage,isPlaying)
         }
 
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireContext().unregisterReceiver(broadcastReceiver)
+
+    }
     private fun setupStatus(songName:String, songImage:String, isPlaying: Boolean) {
-        Glide.with(binding!!.ivSongScf).load(songImage)
-            .into(binding!!.ivSongScf)
+        if (songImage!= TITLE_NO_IMAGE){
+            Glide.with(binding!!.ivSongScf).load(songImage)
+                .into(binding!!.ivSongScf)
+        }
         binding!!.tvSongNameScf.text = songName
         if(!isPlaying){
             binding!!.ivPlayScf.setImageResource(R.drawable.ic_play_circle_outline_40)
@@ -134,7 +151,6 @@ class SongCategoryFragment :
             }
         })
     }
-
     private fun setupSong() {
         songAdapter = SongAdapter(onItemSongClick)
         getAllSong()
@@ -164,7 +180,6 @@ class SongCategoryFragment :
                 }
                 if (songList.isNotEmpty()) {
                     songAdapter.submit(songList)
-//                    setupStatus(songList[0].name,songList[0].image,false)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -179,12 +194,12 @@ class SongCategoryFragment :
     }
     inner class MyBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val isPlaying = intent.getBooleanExtra(NAME_INTENT_CHECK_IS_PLAYING, false)
-            val name=intent.getStringExtra(NAME_INTENT_SONG_NAME)
-            val image=intent.getStringExtra(NAME_INTENT_SONG_IMAGE)
-            if(name !=null && image !=null){
-                setupStatus(name,image,isPlaying)
-            }
+                val isPlaying = intent.getBooleanExtra(NAME_INTENT_CHECK_IS_PLAYING, false)
+                val name=intent.getStringExtra(NAME_INTENT_SONG_NAME)
+                val image=intent.getStringExtra(NAME_INTENT_SONG_IMAGE)
+                if(name !=null && image !=null){
+                    setupStatus(name,image,isPlaying)
+                }
         }
     }
 
