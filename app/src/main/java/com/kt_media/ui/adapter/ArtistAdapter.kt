@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.kt_media.databinding.ItemSongArtistBinding
+import com.kt_media.databinding.ItemArtistBinding
 import com.kt_media.domain.entities.Artist
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
-class SongArtistAdapter(
+class ArtistAdapter(
     private val onClick: (Artist) -> Unit
-) : RecyclerView.Adapter<SongArtistViewHolder>() {
+) : RecyclerView.Adapter<ArtistViewHolder>() {
 
     private val list: ArrayList<Artist> = arrayListOf()
 
@@ -29,33 +29,31 @@ class SongArtistAdapter(
         return list.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongArtistViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
 
         val binding =
-            ItemSongArtistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemArtistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return SongArtistViewHolder(binding)
+        return ArtistViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: SongArtistViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         val item = list[position]
-        val transformation = RoundedCornersTransformation(
-            10,
-            0,
+        val transformation = RoundedCornersTransformation(10, 0,
             RoundedCornersTransformation.CornerType.TOP
         )
         Glide.with(holder.binding.ivSai).load(item.image)
             .apply(RequestOptions.bitmapTransform(transformation))
             .into(holder.binding.ivSai)
         holder.binding.tvArtistSai.text = item.name
-        holder.binding.layoutItemSongArtist.setOnClickListener {
+        holder.binding.layoutItemArtist.setOnClickListener {
             onClick(item)
         }
 
     }
 }
 
-class SongArtistViewHolder(val binding: ItemSongArtistBinding) :
+class ArtistViewHolder(val binding: ItemArtistBinding) :
     RecyclerView.ViewHolder(binding.root)
 
 

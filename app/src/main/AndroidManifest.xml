@@ -15,10 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KTMedia"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.videos.PlayVideoActivity"
+            android:exported="false" />
+
         <service
             android:name=".service.MusicService"
             android:enabled="true"
             android:exported="true" />
+
         <activity
             android:name=".ui.play_song_category.PlaySongCategoryActivity"
             android:exported="false" />
@@ -39,7 +44,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

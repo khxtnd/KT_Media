@@ -26,4 +26,9 @@
     <string name="noty_select_img">Chọn ảnh</string>
     <string name="no_song">Không có bài hát nào</string>
     <string name="no_time_seek_bar">00:00</string>
+    <string name="comment">Bình luận</string>
+    <string name="like">Thích</string>
+    <string name="share">Chia sẻ</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

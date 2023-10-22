@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,39 +21,39 @@ import com.kt_media.domain.constant.CHILD_GENRE
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
 import com.kt_media.ui.play_song_category.PlaySongCategoryActivity
-import com.mymusic.ui.adapters.SongArtistAdapter
-import com.mymusic.ui.adapters.SongCategoryAdapter
+import com.mymusic.ui.adapters.ArtistAdapter
+import com.mymusic.ui.adapters.GenreAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
 
 class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.fragment_musics) {
 
-    private lateinit var songCategoryAdapter: SongCategoryAdapter
+    private lateinit var genreAdapter: GenreAdapter
 
     private var genreList = arrayListOf<Genre>()
 
-    private lateinit var songArtistAdapter: SongArtistAdapter
+    private lateinit var artistAdapter: ArtistAdapter
 
     private var artistList = arrayListOf<Artist>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding=FragmentMusicsBinding.bind(view)
-        setupSongGenre()
+        setupGenre()
         binding?.btCategoryMf?.setOnClickListener {
-            setupSongGenre()
+            setupGenre()
         }
         binding?.btArtistMf?.setOnClickListener {
-            setupSongArtist()
+            setupArtist()
         }
 
     }
 
 
-    private fun setupSongGenre() {
+    private fun setupGenre() {
         val binding=binding?:return
-        songCategoryAdapter = SongCategoryAdapter(onItemSongGenreClick)
-        getAllSongGenre()
-        binding.recSongCateMf.adapter=songCategoryAdapter
-        binding.recSongCateMf.layoutManager=GridLayoutManager(requireContext(),2,RecyclerView.VERTICAL,false)
+        genreAdapter = GenreAdapter(onItemGenreClick)
+        getAllGenre()
+        binding.recSongCateMf.adapter=genreAdapter
+        binding.recSongCateMf.layoutManager=LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false)
 
         binding.btCategoryMf.setBackgroundResource(R.drawable.bg_btn_filter)
         binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white));
@@ -61,7 +62,7 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
         binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6));
     }
 
-    private fun getAllSongGenre() {
+    private fun getAllGenre() {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_GENRE)
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -73,7 +74,7 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
                     genre?.let { genreList.add(it) }
                 }
                 if (genreList.isNotEmpty()) {
-                    songCategoryAdapter.submit(genreList)
+                    genreAdapter.submit(genreList)
 
                 }
 
@@ -85,11 +86,11 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
         })
     }
 
-    private fun setupSongArtist() {
+    private fun setupArtist() {
         val binding=binding?:return
-        songArtistAdapter = SongArtistAdapter(onItemSongArtistClick)
-        getAllSongArtist()
-        binding.recSongCateMf.adapter=songArtistAdapter
+        artistAdapter = ArtistAdapter(onItemArtistClick)
+        getAllArtist()
+        binding.recSongCateMf.adapter=artistAdapter
         binding.recSongCateMf.layoutManager=GridLayoutManager(requireContext(),3,RecyclerView.VERTICAL,false)
         binding.btCategoryMf.setBackgroundResource(R.drawable.bg_btn_outline)
         binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6));
@@ -98,7 +99,7 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
         binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white));
 
     }
-    private fun getAllSongArtist() {
+    private fun getAllArtist() {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_ARTIST)
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -110,7 +111,7 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
                     artist?.let { artistList.add(it) }
                 }
                 if (artistList.isNotEmpty()) {
-                    songArtistAdapter.submit(artistList)
+                    artistAdapter.submit(artistList)
 
                 }
 
@@ -122,13 +123,13 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
         })
     }
 
-    private val onItemSongArtistClick: (Artist) -> Unit = {
+    private val onItemArtistClick: (Artist) -> Unit = {
         val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
         intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_ARTIST)
         intent.putExtra(NAME_INTENT_CATEGORY_ID, it.id)
         startActivity(intent)
     }
-    private val onItemSongGenreClick: (Genre) -> Unit = {
+    private val onItemGenreClick: (Genre) -> Unit = {
         val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
         intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_GENRE)
         intent.putExtra(NAME_INTENT_CATEGORY_ID ,it.id)

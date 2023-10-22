@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.images.ImagesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.kt_media.ui.custom.VerticalViewPager
+        android:id="@+id/vertical_viewpager_vf"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="image" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

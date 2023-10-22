@@ -7,24 +7,20 @@
     android:paddingVertical="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/cir_iv_si"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <ImageView
+        android:id="@+id/iv_video_vi"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"/>
     <TextView
-        android:id="@+id/tv_song_name_si"
-        android:layout_width="0dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_video_vi"
+        android:id="@+id/tv_video_name_vi"
+        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/geek_blue_6"
         android:textSize="20dp"
-        android:layout_marginStart="10dp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cir_iv_si"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:textStyle="bold"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

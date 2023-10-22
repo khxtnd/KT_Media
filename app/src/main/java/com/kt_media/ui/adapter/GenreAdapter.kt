@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.kt_media.databinding.ItemSongCategoryBinding
+import com.kt_media.databinding.ItemGenreBinding
 import com.kt_media.domain.entities.Genre
 
 
-class SongCategoryAdapter (
+class GenreAdapter (
     private val onClick:(Genre)-> Unit
-): RecyclerView.Adapter<SongCategoryViewHolder>() {
+): RecyclerView.Adapter<GenreViewHolder>() {
 
     private val list: ArrayList<Genre> = arrayListOf()
 
@@ -28,26 +28,26 @@ class SongCategoryAdapter (
         return list.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongCategoryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
 
         val binding =
-            ItemSongCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemGenreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return SongCategoryViewHolder(binding)
+        return GenreViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: SongCategoryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GenreViewHolder, position: Int) {
         val item = list[position]
         Glide.with(holder.binding.ivSci).load(item.image).transform(RoundedCorners(16))
             .into(holder.binding.ivSci)
-        holder.binding.layoutItemSongCategory.setOnClickListener {
+        holder.binding.layoutItemGenre.setOnClickListener {
             onClick(item)
         }
 
     }
 }
 
-class SongCategoryViewHolder(val binding: ItemSongCategoryBinding) :
+class GenreViewHolder(val binding: ItemGenreBinding) :
     RecyclerView.ViewHolder(binding.root)
 
 

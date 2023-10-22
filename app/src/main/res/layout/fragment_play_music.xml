@@ -23,61 +23,88 @@
             android:id="@+id/tv_song_name_pmf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_song"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:text="@string/no_song"
             android:textColor="@color/geek_blue_6"
             android:textSize="25dp"
             android:textStyle="bold" />
 
     </LinearLayout>
 
-
-
     <LinearLayout
-        android:id="@+id/lin_layout_pmf"
+        android:id="@+id/lin2_layout_pmf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/lin3_layout_pmf"
-        android:layout_marginBottom="10dp"
-        android:orientation="vertical">
+        android:layout_marginBottom="40dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-        <SeekBar
-            android:id="@+id/seek_bar_pmf"
-            android:layout_width="320dp"
-            android:layout_height="3dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:progressTint="@color/geek_blue_2"
-            android:thumbTint="@color/geek_blue_6" />
-
-        <LinearLayout
+        <ImageView
+            android:id="@+id/iv_repeat_pmf"
+            android:src="@drawable/ic_repeat_one_on_50"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp">
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/tv_progress_pmf"
-                android:layout_marginRight="230dp"
-                android:text="@string/no_time_seek_bar"
-                android:textColor="@color/geek_blue_6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp" />
+        <ImageView
+            android:id="@+id/iv_like_pmf"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:src="@drawable/ic_favorite_border_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/tv_duration_pmf"
-                android:layout_height="wrap_content"
-                android:text="@string/no_time_seek_bar"
-                android:textColor="@color/geek_blue_6"
-                android:layout_width="wrap_content"
-                android:textSize="15dp" />
-        </LinearLayout>
+        <ImageView
+            android:src="@drawable/ic_download_50"
+            android:id="@+id/iv_download_pmf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/lin3_layout_pmf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lin4_layout_pmf"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:weightSum="20">
+
+        <TextView
+            android:id="@+id/tv_progress_pmf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:gravity="end"
+            android:layout_weight="1"
+            android:text="@string/no_time_seek_bar"
+            android:textColor="@color/geek_blue_6"
+            android:textSize="15dp" />
+
+        <SeekBar
+            android:id="@+id/seek_bar_pmf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="18"
+            android:progressTint="@color/geek_blue_2"
+            android:thumbTint="@color/geek_blue_6" />
+
+        <TextView
+            android:id="@+id/tv_duration_pmf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:text="@string/no_time_seek_bar"
+            android:textColor="@color/geek_blue_6"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin4_layout_pmf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

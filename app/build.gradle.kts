@@ -59,8 +59,10 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation ("jp.wasabeef:glide-transformations:4.3.0")
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
+    implementation("androidx.media3:media3-exoplayer:1.1.1")
+    implementation("androidx.media3:media3-ui:1.1.1")
 
 }

@@ -9,6 +9,8 @@ const val CHILD_SONG = "Songs"
 const val CHILD_NAME="name"
 const val CHILD_IMAGE="image"
 const val CHILD_USER="Users"
+const val CHILD_VIDEO="Videos"
+
 
 const val TITLE_ARTIST = "Nghệ sĩ"
 const val TITLE_GENRE = "Thể loại"
@@ -40,6 +42,8 @@ const val NAME_INTENT_LOGIN_WITH="36"
 const val NAME_INTENT_PROGRESS_SEEK_BAR="37"
 const val NAME_INTENT_DURATION_SEEK_BAR="38"
 const val NAME_INTENT_SONG_INDEX="39"
+const val NAME_INTENT_VIDEO_ID = "40"
+
 
 const val VAL_INTENT_LOGIN_EMAIL="61"
 

@@ -1,60 +1,71 @@
 package com.kt_media.ui.videos
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
+import com.kt_media.databinding.FragmentVideosBinding
+import com.kt_media.domain.constant.CHILD_GENRE
+import com.kt_media.domain.constant.CHILD_SONG
+import com.kt_media.domain.constant.CHILD_VIDEO
+import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
+import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
+import com.kt_media.domain.entities.Genre
+import com.kt_media.domain.entities.Video
+import com.kt_media.ui.play_song_category.PlaySongCategoryActivity
+import com.mymusic.ui.adapters.VideoAdapter
+import com.mymusic.ui.base.BaseViewBindingFragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [VideosFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class VideosFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class VideosFragment : BaseViewBindingFragment<FragmentVideosBinding>(R.layout.fragment_videos) {
+    private lateinit var videoAdapter: VideoAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private var videoList = arrayListOf<Video>()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentVideosBinding.bind(view)
+        videoAdapter = VideoAdapter { (onItemVideoClick) }
+        getAllVideo()
+        binding?.recVideoVf?.adapter = videoAdapter
+        binding?.recVideoVf?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_videos, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment VideosFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            VideosFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun getAllVideo() {
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                videoList.clear()
+                for (data: DataSnapshot in dataSnapshot.children) {
+                    val video = data.getValue(Video::class.java)
+                    video?.let { videoList.add(it) }
                 }
+                if (videoList.isNotEmpty()) {
+                    videoAdapter.submit(videoList)
+                }
+
             }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
     }
+
+    private val onItemVideoClick: (Video) -> Unit = {
+        val intent = Intent(requireActivity(), PlayVideoActivity::class.java)
+        intent.putExtra(NAME_INTENT_VIDEO_ID, it.id)
+        startActivity(intent)
+    }
+
 }

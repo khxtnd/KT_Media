@@ -11,6 +11,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -128,8 +129,10 @@ class SongCategoryFragment :
                         if (genre != null) {
                             binding?.let {
                                 Glide.with(it.ivCategoryScf).load(genre.image)
+                                    .transform(
+                                        RoundedCorners(16))
                                     .into(binding!!.ivCategoryScf)
-                                binding!!.tvCategoryScf.text = genre.name
+                                binding?.linScf?.visibility=View.GONE
                             }
                         }
                         break
@@ -139,7 +142,7 @@ class SongCategoryFragment :
                             binding?.let {
                                 Glide.with(it.ivCategoryScf).load(artist.image)
                                     .into(binding!!.cirIvCategoryScf)
-                                binding!!.tvCategoryScf.text = artist.name
+                                binding!!.tvArtistNameScf.text = artist.name
                             }
                         }
                         break

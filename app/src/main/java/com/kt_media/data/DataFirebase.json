@@ -1,0 +1,754 @@
+{
+  "Artists": {
+    "01 Alan Walker": {
+      "id": 1,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/b/a/6/b/ba6b56ca02dd06f37693d945acfcdad9.jpg",
+      "name": "Alan Walker"
+    },
+    "02 Andiez": {
+      "id": 2,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/7/5/a/e/75ae579a51cfa505932f59397eac8d69.jpg",
+      "name": "Andiez"
+    },
+    "03 Avicii": {
+      "id": 3,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/avatars/c/c/cc38fa85ce8e6dd638f4072e196a2fa4_1502420964.jpg",
+      "name": "Avicii"
+    },
+    "04 Bùi Trường Linh": {
+      "id": 4,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/4/9/5/a/495a614a1930fcfb06ca7e6b484e3cc1.jpg",
+      "name": "Bùi Trường Linh"
+    },
+    "05 Maroon 5": {
+      "id": 5,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_jpeg/avatars/3/7/5/3/375337f6d1cb508665d89f2e7d8fc51a.jpg",
+      "name": "Maroon 5"
+    },
+    "06 Taylor Swift": {
+      "id": 6,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/2/f/2/6/2f262d9ad6093869bb5ba03170cdd2fb.jpg",
+      "name": "Taylor Swift"
+    },
+    "07 Thanh Hưng": {
+      "id": 7,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/b/a/a/d/baad2edb86c7926d2b6d1b0a778aa809.jpg",
+      "name": "Thanh Hưng"
+    },
+    "08 Wn (Dương)": {
+      "id": 8,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/7/a/a/e/7aae3be0b7eccc2e4b34e58379d13f3f.jpg",
+      "name": "Wn (Dương)"
+    },
+    "09 Không rõ": {
+      "id": 9,
+      "image": "https://stc-id.nixcdn.com/v11/images/avatar_default.jpg",
+      "name": "Không rõ"
+    },
+    "10 Westlife": {
+      "id": 10,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2021/10/15/3/6/d/f/1634268669137.jpg",
+      "name": "Westlife"
+    },
+    "11 Shane Filan": {
+      "id": 11,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2016/01/25/4/1/1/7/1453717213703.jpg",
+      "name": "Shane Filan"
+    },
+    "12 The Chainsmokers": {
+      "id": 12,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2023/08/10/0/6/7/c/79799.jpg",
+      "name": "The Chainsmokers"
+    },
+    "13 911": {
+      "id": 13,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2023/02/15/6/e/e/8/1676455046401.jpg",
+      "name": "911"
+    },
+    "14 Bùi Anh Tuấn": {
+      "id": 14,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/09/12/c/3/c/7/1568273754205.jpg",
+      "name": "Bùi Anh Tuấn"
+    },
+    "15 HuyR": {
+      "id": 15,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/09/14/0/2/8/0/1600066616632.jpg",
+      "name": "HuyR"
+    },
+    "16 Đạt G": {
+      "id": 16,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2023/08/17/4/1/c/6/1692267069347_600.jpg",
+      "name": "Đạt G"
+    },
+    "17 Trung Quân Idol": {
+      "id": 17,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2022/09/15/d/c/b/c/1663237004941_600.jpg",
+      "name": "Trung Quân Idol"
+    },
+    "18 Trịnh Thăng Bình": {
+      "id": 18,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2022/10/28/d/f/a/6/1666943774061.jpg",
+      "name": "Trịnh Thăng Bình"
+    },
+    "19 Mr Siro": {
+      "id": 19,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2017/09/11/2/9/c/6/1505103180911.jpg",
+      "name": "Mr Siro"
+    },
+    "20 Lã": {
+      "id": 20,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2023/02/21/4/c/a/b/1676952936180.jpg",
+      "name": "Lã"
+    },
+    "21 JustaTee": {
+      "id": 21,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/07/22/f/e/a/2/1563758181487.jpg",
+      "name": "JustaTee"
+    },
+    "22 Noo Phước Thịnh": {
+      "id": 22,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/09/14/0/2/8/0/1600055795446.jpg",
+      "name": "Noo Phước Thịnh"
+    },
+    "23 OnlyC": {
+      "id": 23,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/11/07/3/8/1/0/1573112650755.jpg",
+      "name": "OnlyC"
+    },
+    "24 Soobin Hoàng Sơn": {
+      "id": 24,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/09/05/d/9/5/e/1567670108816.jpg",
+      "name": "Soobin Hoàng Sơn"
+    },
+    "25 Lê Thiện Hiếu": {
+      "id": 25,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2020/11/23/f/2/4/4/1606126912651.jpg",
+      "name": "Lê Thiện Hiếu"
+    },
+    "26 Tăng Phúc": {
+      "id": 26,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2023/09/18/6/1/f/2/1695032682156.jpg",
+      "name": "Tăng Phúc"
+    },
+    "27 SHAUN": {
+      "id": 27,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2018/07/18/3/b/7/f/1531879450741.jpg",
+      "name": "SHAUN"
+    },
+    "28 Timbaland": {
+      "id": 28,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2016/01/25/4/1/1/7/1453717726922.jpg",
+      "name": "Timbaland"
+    },
+    "29 Erik": {
+      "id": 29,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/10/31/c/0/b/8/1572506582623.jpg",
+      "name": "Erik"
+    },
+    "30 Rhymastic": {
+      "id": 30,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2022/09/16/2/e/3/c/1663304448274.jpg",
+      "name": "Rhymastic"
+    },
+    "31 Đức Phúc": {
+      "id": 31,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/11/26/4/6/7/7/1574739632135.jpg",
+      "name": "Đức Phúc"
+    }
+  },
+  "Genres": {
+    "01 Nhạc Việt": {
+      "id": 1,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2023/06/13/9/0/a/5/1686638604841_org.jpg",
+      "name": "Nhạc Việt"
+    },
+    "02 Nhạc Nhật": {
+      "id": 2,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2021/05/20/8/5/2/a/1621496790819_org.jpg",
+      "name": "Nhạc Nhật"
+    },
+    "03 Nhạc Âu Mỹ": {
+      "id": 3,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2022/12/29/2/2/4/8/1672295146448_org.jpg",
+      "name": "Nhạc Pop US-UK"
+    },
+    "04 Nhạc Hoa": {
+      "id": 4,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2022/12/29/2/2/4/8/1672295549435_org.jpg",
+      "name": "Nhạc Hoa"
+    },
+    "05 Nhạc Hàn": {
+      "id": 5,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2022/08/08/6/f/6/6/1659943944559_org.jpg",
+      "name": "Nhạc Hàn"
+    },
+    "06 Nhạc Anime": {
+      "id": 6,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2020/06/18/8/1/b/5/1592451702976_org.jpg",
+      "name": "Nhạc Anime"
+    },
+    "07 Nhạc Acoustic": {
+      "id": 7,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2020/08/13/e/5/a/b/1597291906936_org.jpg",
+      "name": "Nhạc Acoustic"
+    },
+    "08 Nhạc Buồn": {
+      "id": 8,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2022/12/05/2/4/a/2/1670222063961_org.jpg",
+      "name": "Nhạc Buồn"
+    },
+    "09 Nhạc Phim": {
+      "id": 9,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2022/12/05/2/4/a/2/1670222644758_org.jpg",
+      "name": "Nhạc Phim"
+    },
+    "10 Nhạc Piano": {
+      "id": 10,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2022/11/24/e/a/1/f/1669262775489_org.jpg",
+      "name": "Nhạc Piano"
+    },
+    "11 Nhạc EDM": {
+      "id": 11,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2020/09/03/3/4/d/6/1599120670727_org.jpg",
+      "name": "Nhạc EDM"
+    },
+    "12 Nhạc Gaming": {
+      "id": 12,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2022/12/05/2/4/a/2/1670221887921_org.jpg",
+      "name": "Nhạc Gaming"
+    },
+    "13 Nhạc Nostop": {
+      "id": 13,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2020/06/11/a/3/6/c/1591856761534_org.jpg",
+      "name": "Nhạc Nostop"
+    },
+    "14 Nhạc Lofi": {
+      "id": 14,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2020/06/15/9/d/c/3/1592214676187_org.jpg",
+      "name": "Nhạc Lofi"
+    },
+    "15 Nhạc Wedding": {
+      "id": 15,
+      "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2020/06/09/3/2/9/5/1591684753921_org.jpg",
+      "name": "Nhạc Wedding"
+    }
+  },
+  "Songs": {
+    "01 1 Phút": {
+      "artistId": 2,
+      "genreId": 8,
+      "id": 1,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/12/11/d/e/d/a/1512987573454.jpg",
+      "link": "https://drive.google.com/uc?id=1OZFqGjQU7pg-5Wt7EJjX6EUR_VPtwGGF",
+      "name": "1 Phút"
+    },
+    "02 3107-2": {
+      "artistId": 8,
+      "genreId": 8,
+      "id": 2,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2022/08/08/8/5/a/0/1659911129100.jpg",
+      "link": "https://drive.google.com/uc?id=1nTSlV4M7zolcXjVafrEttFsSItWwMT5H",
+      "name": "3107-2"
+    },
+    "03 Love Story": {
+      "artistId": 6,
+      "genreId": 7,
+      "id": 3,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2019/11/28/1/e/6/0/1574924746015.jpg",
+      "link": "https://drive.google.com/uc?id=1awLD4TFQakFHN9Amh1PDsWDLSYC_kuIj",
+      "name": "Love Story"
+    },
+    "04 Sai người sai thời điểm": {
+      "artistId": 7,
+      "genreId": 1,
+      "id": 4,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/01/03/a/9/3/2/1514949097180.jpg",
+      "link": "https://drive.google.com/uc?id=1KTnLSZLsuab-xpeTSC7m2sPgJCO97eio",
+      "name": "Sai người sai thời điểm"
+    },
+    "05 Suýt nữa thì": {
+      "artistId": 2,
+      "genreId": 8,
+      "id": 5,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/07/19/6/0/9/e/1532010326915.jpg",
+      "link": "https://drive.google.com/uc?id=1RO0kEIB7F_n5xDRGrlc2KZauPUG0zBPT",
+      "name": "Suýt nữa thì"
+    },
+    "06 Thay tôi yêu cô ấy": {
+      "artistId": 8,
+      "genreId": 8,
+      "id": 6,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2019/09/09/4/5/3/d/1568021560662.jpg",
+      "link": "https://drive.google.com/uc?id=1WLIlaH6PKYDb2qq_p3Gv-kD8pOFKdCSa",
+      "name": "Thay tôi yêu cô ấy"
+    },
+    "07 Waiting for love": {
+      "artistId": 3,
+      "genreId": 3,
+      "id": 7,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/04/21/8/a/b/9/1524286187550.jpg",
+      "link": "https://drive.google.com/uc?id=1CFlt7DeqSWaZ3xLraXgyzQuvqCLruiLz",
+      "name": "Waiting for love"
+    },
+    "08 Wake me up": {
+      "artistId": 3,
+      "genreId": 3,
+      "id": 8,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/04/21/8/a/b/9/1524286149451.jpg",
+      "link": "https://drive.google.com/uc?id=1QfR6S_huEB7vS3wbLF2kJyq9ImHW3JNf",
+      "name": "Wake me up"
+    },
+    "09 Yêu người có ước mơ": {
+      "artistId": 4,
+      "genreId": 1,
+      "id": 9,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2022/12/15/0/3/9/2/1671089368641.jpg",
+      "link": "https://drive.google.com/uc?id=1B4QIPKtrcGpe6Rx0PPJRloN4XX20UTKA",
+      "name": "Yêu người có ước mơ"
+    },
+    "10 Đường tôi chở em về": {
+      "artistId": 4,
+      "genreId": 1,
+      "id": 10,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2020/07/02/5/d/c/9/1593687560557.jpg",
+      "link": "https://drive.google.com/uc?id=16l4yrEMZGKmZFJ4_NjO3s_sBUOwjASZ5",
+      "name": "Đường tôi chở em về"
+    },
+    "11 All Falls Down": {
+      "artistId": 1,
+      "genreId": 11,
+      "id": 11,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/10/27/9/d/8/d/1509093543890.jpg",
+      "link": "https://drive.google.com/uc?id=1mSeebBNhqJQLxspITMq4aETy6qxka1CT",
+      "name": "All Falls Down"
+    },
+    "12 Faded": {
+      "artistId": 1,
+      "genreId": 11,
+      "id": 12,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/11/20/f/c/e/7/1511141429975.jpg",
+      "link": "https://drive.google.com/uc?id=1Rzj-EnFcqtN485uYfs3bDraleoDCIQ2d",
+      "name": "Faded"
+    },
+    "13 Animals": {
+      "artistId": 5,
+      "genreId": 3,
+      "id": 13,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w165_r1x1_jpeg/cover/d/4/3/a/d43adbeb01a3f61ba3ba479c19a72e11.jpg",
+      "link": "https://drive.google.com/uc?id=157IcOVX9tbLELlOl-9agUVEO69Kh4O0y",
+      "name": "Animals"
+    },
+    "14 Beautiful In White": {
+      "artistId": 11,
+      "genreId": 15,
+      "id": 14,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2023/07/21/5/e/1/e/1689910397272.jpg",
+      "link": "https://drive.google.com/uc?id=1QdrAnewBJvhSFWWCwILKrjhUUTBQ1T-l",
+      "name": "Beautiful In White"
+    },
+    "15 Closer": {
+      "artistId": 12,
+      "genreId": 3,
+      "id": 15,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/10/04/a/4/8/6/1507109116689.jpg",
+      "link": "https://drive.google.com/uc?id=1CnP6eORO8mdcdBXsgjsMHY0ypXjbosnh",
+      "name": "Closer"
+    },
+    "16 I do": {
+      "artistId": 13,
+      "genreId": 15,
+      "id": 16,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2023/03/07/d/3/e/f/1678184650105.jpg",
+      "link": "https://drive.google.com/uc?id=1Ytimdn6oDqbgn27HPy2kW-wjAjsVrnmn",
+      "name": "I do"
+    },
+    "17 Maps": {
+      "artistId": 5,
+      "genreId": 3,
+      "id": 17,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/06/22/0/c/c/b/1529655937714.jpg",
+      "link": "https://drive.google.com/uc?id=1r-unLGocmxcj0VF3PzyvKp86iA7A8Z15",
+      "name": "Maps"
+    },
+    "18 Sugar": {
+      "artistId": 5,
+      "genreId": 3,
+      "id": 18,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/06/22/0/c/c/b/1529655970762.jpg",
+      "link": "https://drive.google.com/uc?id=19mw8RD4cP5M-dLIJ3_f18XzP4cYk_3Gu",
+      "name": "Sugar"
+    },
+    "19 3107-1": {
+      "artistId": 8,
+      "genreId": 8,
+      "id": 19,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2023/05/24/b/d/9/f/1684903463100.jpg",
+      "link": "https://drive.google.com/uc?id=1E_L4HJGxWxX3iMovykLPSqea7eaNTzo5",
+      "name": "3107-1"
+    },
+    "20 3107-3": {
+      "artistId": 8,
+      "genreId": 8,
+      "id": 20,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2021/08/02/5/0/1/7/1627860417460.jpg",
+      "link": "https://drive.google.com/uc?id=1R8ZJq2DRsbCyTtu5-T9tQY0nRckpHQ4m",
+      "name": "3107-3"
+    },
+    "21 Apologize": {
+      "artistId": 28,
+      "genreId": 3,
+      "id": 21,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2019/11/11/c/f/7/2/1573439212855.jpg",
+      "link": "https://drive.google.com/uc?id=1XL6q9pguqXTzIIZxUBx1HF05RA5lH-wN",
+      "name": "Apologize"
+    },
+    "22 Way Back Home": {
+      "artistId": 27,
+      "genreId": 5,
+      "id": 22,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/07/15/c/f/8/9/1531651682098.jpg",
+      "link": "https://drive.google.com/uc?id=1qj9dZnp7uZaDQ5005wEtFkubyC2v5wL9",
+      "name": "Way Back Home"
+    },
+    "23 Apollo": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 23,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2022/12/09/2/2/3/f/1670576487476.jpg",
+      "link": "https://drive.google.com/uc?id=1WM2Kdc1AgbTv1XdbmILyWjVCj1GpAiPo",
+      "name": "Apollo"
+    },
+    "24 Counting Starts": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 24,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/11/13/3/e/1/2/1510567502143.jpg",
+      "link": "https://drive.google.com/uc?id=1au40AOVxp4wdwpA6X8FbGB6lNd0U4rbu",
+      "name": "Counting Starts"
+    },
+    "25 Cry On My Shoulder": {
+      "artistId": 10,
+      "genreId": 15,
+      "id": 25,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w165_r1x1_jpeg/cover/8/3/2/5/8325115930768bef5a2aec6543226cf0.jpg",
+      "link": "https://drive.google.com/uc?id=19lfz8HY-XEolzHC3ACPWxtrjSQBWb-ud",
+      "name": "Cry On My Shoulder"
+    },
+    "26 Happy": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 26,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/03/12/7/d/7/c/1520841375271.jpg",
+      "link": "https://drive.google.com/uc?id=1-zQb_N59LydEc3vZ7kTlKb39-nI4MKgs",
+      "name": "Happy"
+    },
+    "27 Heartbeat": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 27,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2016/12/13/0/6/9/1/1481592744965.jpg",
+      "link": "https://drive.google.com/uc?id=1XGzHW3xKoaQA9W4yRCIuSskCxqmI6ckR",
+      "name": "Heartbeat"
+    },
+    "28 Let Her Go": {
+      "artistId": 9,
+      "genreId": 7,
+      "id": 28,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/02/08/b/b/c/8/1518073035542.jpg",
+      "link": "https://drive.google.com/uc?id=1ZfLF4azJvRKua1NI6u9ZiNBKcPtDCdov",
+      "name": "Let Her Go"
+    },
+    "29 Reality": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 29,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w165_r1x1_jpeg/cover/9/7/6/c/976c321fd27d1d810dcbcd2f1d74d187.jpg",
+      "link": "https://drive.google.com/uc?id=1dlFJyMTjNelo3CTy3XBqAa_jmSmCwjD_",
+      "name": "Reality"
+    },
+    "30 Pretty Girl": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 30,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2020/08/05/a/d/4/9/1596626639424.jpg",
+      "link": "https://drive.google.com/uc?id=1maAKc1c4WUNfWME4BSOwjkB6TnkZ_-kE",
+      "name": "Pretty Girl"
+    },
+    "31 Scars To Your Beautiful": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 31,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2018/07/12/c/2/0/9/1531383755469.jpg",
+      "link": "https://drive.google.com/uc?id=1JlRQqgOB9wZMN5nTM9P1BnzeO4NuSwPz",
+      "name": "Scars To Your Beautiful"
+    },
+    "32 Send It": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 32,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2023/01/06/2/b/5/e/1672973806882.jpg",
+      "link": "https://drive.google.com/uc?id=191ZMD_sVuX-nbAil09VkKAb6U17BtH8_",
+      "name": "Send It"
+    },
+    "33 Something Just Like This": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 33,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/11/07/a/1/4/5/1510038809679.jpg",
+      "link": "https://drive.google.com/uc?id=1ZaYTRpWn634vPQoY9OYU-rmvooRURJMT",
+      "name": "Something Just Like This"
+    },
+    "34 Star Walkin": {
+      "artistId": 9,
+      "genreId": 12,
+      "id": 34,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2022/09/26/a/b/1/3/1664169823705.jpg",
+      "link": "https://drive.google.com/uc?id=1O2LKNkqeVGfHtIyaLfUa-E2ajWodn9PA",
+      "name": "Star Walkin"
+    },
+    "35 Stereo Hearts": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 35,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2013/11/06/c/c/a/8/1383720752202.jpg",
+      "link": "https://drive.google.com/uc?id=1_EquUJS3BFunA-fV7tyFewGgD3Y2U_01",
+      "name": "Stereo Hearts"
+    },
+    "36 Stronger": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 36,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2014/01/24/c/d/a/3/1390548139368.jpg",
+      "link": "https://drive.google.com/uc?id=12WYEwEq15hKVsDN6kqoFOwz95Y_lk9S-",
+      "name": "Stronger"
+    },
+    "37 Symphony": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 37,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/08/17/0/c/1/3/1502978086799.jpg",
+      "link": "https://drive.google.com/uc?id=1XE4LcOHtXRSXA1mgYNQLuCxrSnFRQdC0",
+      "name": "Symphony"
+    },
+    "38 Take Me Hand": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 38,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/11/15/f/e/7/1/1542250577447.jpg",
+      "link": "https://drive.google.com/uc?id=1jVXwo9H4ExwfgHSsS-GXiN82UVbYXhPD",
+      "name": "Take Me Hand"
+    },
+    "39 Take Me To Your Heart": {
+      "artistId": 9,
+      "genreId": 3,
+      "id": 39,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2020/08/06/6/0/8/0/1596649278845.jpg",
+      "link": "https://drive.google.com/uc?id=1MXWVNv3iSQKQkad1Y1yJLLNlZI-SPtuD",
+      "name": "Take Me To Your Heart"
+    },
+    "40 Anh Thanh Niên": {
+      "artistId": 15,
+      "genreId": 1,
+      "id": 40,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2020/01/21/e/0/f/1/1579574645587.jpg",
+      "link": "https://drive.google.com/uc?id=1pkjCYQ8uCg5QirP08zoBAiMWkeA--63g",
+      "name": "Anh Thanh Niên"
+    },
+    "41 Bánh Mì Không": {
+      "artistId": 16,
+      "genreId": 1,
+      "id": 41,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2022/12/09/2/2/3/f/1670572822067.jpg",
+      "link": "https://drive.google.com/uc?id=1l7uE68thjJL5AhYpa_qjoypFgAqcy0SQ",
+      "name": "Bánh Mì Không"
+    },
+    "42 Chia Tay": {
+      "artistId": 14,
+      "genreId": 1,
+      "id": 42,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/09/22/1/a/3/6/1506075605071.jpg",
+      "link": "https://drive.google.com/uc?id=1WPYRg5_bFvP1RMPrp-br38hkrhNq-6WS",
+      "name": "Chia Tay"
+    },
+    "43 Cô gái m52": {
+      "artistId": 15,
+      "genreId": 1,
+      "id": 43,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/02/23/a/c/6/e/1519388831424.jpg",
+      "link": "https://drive.google.com/uc?id=1WPWyHRe78b2pnxgx-q61ODDQi7_wxd_5",
+      "name": "Cô gái m52"
+    },
+    "44 Cô gái vàng": {
+      "artistId": 15,
+      "genreId": 1,
+      "id": 44,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2020/09/14/2/3/f/6/1600066773009.jpg",
+      "link": "https://drive.google.com/uc?id=1UWKcWJH_DQggyVatnrj7AzF4HDIZspwD",
+      "name": "Cô gái vàng"
+    },
+    "45 Thấy là yêu thương": {
+      "artistId": 23,
+      "genreId": 1,
+      "id": 45,
+      "image": "https://photo-resize-zmp3.zmdcdn.me/w165_r1x1_jpeg/covers/b/2/b2c0638904fb8f20547dd66f8f18d279_1510887342.jpg",
+      "link": "https://drive.google.com/uc?id=1-H8wf35fgL91RIQsuDSBKIqDfO9MUHyu",
+      "name": "Thấy là yêu thương"
+    },
+    "46 Dấu mưa": {
+      "artistId": 17,
+      "genreId": 1,
+      "id": 46,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2015/03/21/1/3/7/8/1426916188047.jpg",
+      "link": "https://drive.google.com/uc?id=1yTSkLEwgtMZnt1zLhrP9_Hekc8iGG9Qw",
+      "name": "Dấu mưa"
+    },
+    "47 Chưa bao giờ": {
+      "artistId": 17,
+      "genreId": 1,
+      "id": 47,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/12/14/d/5/5/1/1544756071240.jpg",
+      "link": "https://drive.google.com/uc?id=1a9eFksTjnBagGo2wxbD9zfmQoSz-oi5p",
+      "name": "Chưa bao giờ"
+    },
+    "48 Đã lỡ yêu em nhiều": {
+      "artistId": 21,
+      "genreId": 1,
+      "id": 48,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/11/13/3/e/1/2/1510581214185.jpg",
+      "link": "https://drive.google.com/uc?id=1rURzYLZOaXLm3MRP8IY0XqTE_Rq8RZms",
+      "name": "Đã lỡ yêu em nhiều"
+    },
+    "49 Đau để trưởng thành": {
+      "artistId": 23,
+      "genreId": 1,
+      "id": 49,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2023/02/09/3/c/3/5/1675924482464.jpg",
+      "link": "https://drive.google.com/uc?id=1gONacnRkzoOIDkQemQYcN--Ey33dHWlf",
+      "name": "Đau để trưởng thành"
+    },
+    "50 Như phút ban đầu": {
+      "artistId": 22,
+      "genreId": 1,
+      "id": 50,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/11/21/f/d/3/3/1542796855179.jpg",
+      "link": "https://drive.google.com/uc?id=1UsDmaAzOkLHYS7epg3qMSdVQDcJvW39y",
+      "name": "Như phút ban đầu"
+    },
+    "51 Tiểu thuyết tình yêu": {
+      "artistId": 26,
+      "genreId": 1,
+      "id": 51,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2020/01/15/2/7/d/2/1579085080176.jpg",
+      "link": "https://drive.google.com/uc?id=1knrt-Vzn6OJiKVD6ulYNAMpxllAsMvSl",
+      "name": "Tiểu thuyết tình yêu"
+    },
+    "52 Đừng chờ anh nữa": {
+      "artistId": 26,
+      "genreId": 1,
+      "id": 52,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/12/11/b/5/2/4/1544510189576.jpg",
+      "link": "https://drive.google.com/uc?id=1zTIp28ATO7wdtiriAHiBvUj4y5uABSn6",
+      "name": "Đừng chờ anh nữa"
+    },
+    "53 Chạm đáy nỗi đau": {
+      "artistId": 29,
+      "genreId": 8,
+      "id": 53,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2018/04/12/e/e/b/e/1523541719057.jpg",
+      "link": "https://drive.google.com/uc?id=1MiTv6RCWATLBwS1tqt8HccGPu3EcqK0Y",
+      "name": "Chạm đáy nỗi đau"
+    },
+    "54 Chạm khẽ tim anh một chút thôi": {
+      "artistId": 22,
+      "genreId": 8,
+      "id": 54,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/10/17/6/c/9/9/1508222792935.jpg",
+      "link": "https://drive.google.com/uc?id=1foqLLQFsAI-o0m4iu7qZ4FmNYBccNyLN",
+      "name": "Chạm khẽ tim anh một chút thôi"
+    },
+    "55 Ghen": {
+      "artistId": 29,
+      "genreId": 1,
+      "id": 55,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2019/10/31/c/0/b/8/1572506582623.jpg",
+      "link": "https://drive.google.com/uc?id=1U13wIvy2F5nk47onxgg_j0xJtqBlEQW-",
+      "name": "Ghen"
+    },
+    "56 Giữa chúng ta có khác biệt to lớn": {
+      "artistId": 18,
+      "genreId": 1,
+      "id": 56,
+      "image": "https://avatar-ex-swe.nixcdn.com/singer/avatar/2022/10/28/d/f/a/6/1666943774061.jpg",
+      "link": "https://drive.google.com/uc?id=1T1ky9SPQSOXRa_V1NwJnZs-US6wtdk0t",
+      "name": "Giữa chúng ta có khác biệt to lớn"
+    },
+    "57 Hết thương cạn nhớ": {
+      "artistId": 31,
+      "genreId": 8,
+      "id": 57,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2019/10/15/6/d/4/7/1571111986702.jpg",
+      "link": "https://drive.google.com/uc?id=19w7Ww1Clq4X0tNuK5G-9_B5jnDVkdtgm",
+      "name": "Hết thương cạn nhớ"
+    },
+    "58 Hơn cả yêu": {
+      "artistId": 31,
+      "genreId": 1,
+      "id": 58,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2020/03/01/4/4/a/b/1583051677939.jpg",
+      "link": "https://drive.google.com/uc?id=1PToi58zxDiqsYlxzv-O-OZGK3BoFfsfg",
+      "name": "Hơn cả yêu"
+    },
+    "59 Một bước yêu, vạn dặm đau": {
+      "artistId": 19,
+      "genreId": 8,
+      "id": 59,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2023/02/17/3/0/c/c/1676631501968.jpg",
+      "link": "https://drive.google.com/uc?id=1hFYHvvGFx2b5uwXvtkAt63GAV-IRi1CY",
+      "name": "Một bước yêu, vạn dặm đau"
+    },
+    "60 Sau tất cả": {
+      "artistId": 29,
+      "genreId": 8,
+      "id": 60,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/11/29/0/6/1/1/1511950269534.jpg",
+      "link": "https://drive.google.com/uc?id=1zG5777i_WnbJeEBWelEeomQORQlzcwzT",
+      "name": "Sau tất cả"
+    },
+    "61 Trót yêu": {
+      "artistId": 17,
+      "genreId": 8,
+      "id": 61,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2014/11/27/c/0/b/c/1417077531523.jpg",
+      "link": "https://drive.google.com/uc?id=1GlroyividI8tx0sfXOfxpfX1T9Sa7lEL",
+      "name": "Trót yêu"
+    },
+    "62 Xin đừng lặng im": {
+      "artistId": 24,
+      "genreId": 8,
+      "id": 62,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2017/12/18/5/5/c/8/1513590981686.jpg",
+      "link": "https://drive.google.com/uc?id=1cn-LXqs91N8TB9lnx_oZgNsAYmLxoM_z",
+      "name": "Xin đừng lặng im"
+    },
+    "63 Yêu thương ngày đó": {
+      "artistId": 24,
+      "genreId": 8,
+      "id": 63,
+      "image": "https://avatar-ex-swe.nixcdn.com/song/2023/04/25/b/2/1/2/1682395072112.jpg",
+      "link": "https://drive.google.com/uc?id=1ROUcIfQM7Sbb3YL66gx6_oJVBj40Dey9",
+      "name": "Yêu thương ngày đó"
+    }
+  },
+  "Users": {
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fa5d42689-d7e4-4114-88ce-d82d838732dd?alt=media&token=972a2f56-b57b-4264-a088-24b24f85a9ac",
+      "name": "Phạm Khánh"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fc4332aba-bca6-40af-b3a5-ce62f54abf57?alt=media&token=196862f0-e1dd-4803-a9f2-9c64272b3f68",
+      "name": "Thanh Tâm"
+    }
+  }
+}
