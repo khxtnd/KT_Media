@@ -3,22 +3,22 @@ package com.kt_media.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.kt_media.ui.images.PlayVideoFragment
+import com.kt_media.ui.images.show_image.ShowImageFragment
 
-class ViewPagerVideoAdapter(fm: FragmentManager?, videoFragments: List<PlayVideoFragment>) :
+class ViewPagerImageAdapter(fm: FragmentManager?, imageFragments: List<ShowImageFragment>) :
     FragmentStatePagerAdapter(fm!!) {
-    private val videoFragments: List<PlayVideoFragment>
+    private val imageFragments: List<ShowImageFragment>
 
     init {
-        this.videoFragments = videoFragments
+        this.imageFragments = imageFragments
     }
 
     override fun getItem(position: Int): Fragment {
-        return videoFragments[position]
+        return imageFragments[position]
     }
 
     override fun getCount(): Int {
-        return videoFragments.size
+        return imageFragments.size
     }
 }
 

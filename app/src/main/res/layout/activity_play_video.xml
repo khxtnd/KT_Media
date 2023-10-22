@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="7"
-    tools:context=".ui.videos.PlayVideoActivity">
+    tools:context=".ui.videos.play_video.PlayVideoActivity">
 
     <androidx.media3.ui.PlayerView
         android:id="@+id/player_view_pva"
@@ -21,7 +21,6 @@
         android:id="@+id/lin_layout_pva"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/player_view_pva">
 
@@ -31,16 +30,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:textColor="@color/black"
-            android:textSize="50dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
             android:orientation="horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:weightSum="3">
 
             <LinearLayout
@@ -52,7 +50,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_like_off_50" />
+                    android:src="@drawable/ic_like_off_35" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -61,22 +59,22 @@
                     android:layout_marginStart="10dp"
                     android:gravity="center"
                     android:text="@string/like"
-                    android:textSize="40dp" />
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lin_layout_comment_pva"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_comment_50" />
+                    android:src="@drawable/ic_comment_35" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -84,7 +82,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
                     android:text="@string/comment"
-                    android:textSize="40dp" />
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -96,7 +94,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_share_50" />
+                    android:src="@drawable/ic_share_35" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -105,7 +103,7 @@
                     android:layout_marginStart="10dp"
                     android:gravity="center"
                     android:text="@string/share"
-                    android:textSize="40dp" />
+                    android:textSize="18dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -119,6 +117,8 @@
         android:layout_weight="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lin_layout_pva" />
+        app:layout_constraintTop_toBottomOf="@id/lin_layout_pva"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

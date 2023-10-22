@@ -1,59 +1,62 @@
 package com.kt_media.ui.images
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.viewpager.widget.ViewPager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentImagesBinding
-import com.kt_media.databinding.FragmentVideosBinding
-import com.kt_media.ui.adapter.ViewPagerVideoAdapter
+import com.kt_media.domain.constant.CHILD_CATEGORY_IMAGE
+import com.kt_media.domain.constant.CHILD_VIDEO
+import com.kt_media.domain.entities.CategoryImage
+import com.mymusic.ui.adapters.CategoryImageAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
 
 class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.fragment_images)  {
-    private lateinit var adapter: ViewPagerVideoAdapter
+    private lateinit var categoryImage: CategoryImageAdapter
+    private var categoryImageList = arrayListOf<CategoryImage>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding=FragmentImagesBinding.bind(view)
+        categoryImage=CategoryImageAdapter(onItemCategoryImageClick)
+        getAllCategoryItem()
+        binding?.recCategoryImageIf?.adapter=categoryImage
+        binding?.recCategoryImageIf?.layoutManager =
+            GridLayoutManager(requireContext(), 2,RecyclerView.VERTICAL, false)
 
-        adapter= ViewPagerVideoAdapter(fragmentManager,createVideoFragments())
-        binding?.verticalViewpagerVf?.adapter=adapter
-        binding?.verticalViewpagerVf?.offscreenPageLimit = 1
-        binding?.verticalViewpagerVf?.addOnPageChangeListener(object :
-            ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                val currentFragment = adapter.getItem(position) as PlayVideoFragment
-                currentFragment.stopExo()
-            }
-
-            override fun onPageSelected(position: Int) {
-                val currentFragment = adapter.getItem(position) as PlayVideoFragment
-                currentFragment.startExo()
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-        });
     }
-    private fun createVideoFragments(): List<PlayVideoFragment> {
-        val videoFragments = ArrayList<PlayVideoFragment>()
+    private fun getAllCategoryItem() {
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference(CHILD_CATEGORY_IMAGE)
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                categoryImageList.clear()
+                for (data: DataSnapshot in dataSnapshot.children) {
+                    val categoryImage = data.getValue(CategoryImage::class.java)
+                    categoryImage?.let { categoryImageList.add(it) }
+                }
+                if (categoryImageList.isNotEmpty()) {
+                    categoryImage.submit(categoryImageList)
+                }
 
-        val videoFragment1 = PlayVideoFragment.newInstance("https://drive.google.com/uc?id=1NHE4H3OWcOKbRZWiy16flzrMOpKc1LK4")
-        val videoFragment2 = PlayVideoFragment.newInstance("https://drive.google.com/uc?id=15QxUbIng1GYp8XW9Jbl1ZtYLCHDQYDYJ")
-        val videoFragment3 = PlayVideoFragment.newInstance("https://drive.google.com/uc?id=1dvyFwSQ6A_WIMhRJAdjmWNASyrYaOM1w")
+            }
 
-        videoFragments.add(videoFragment1)
-        videoFragments.add(videoFragment2)
-        videoFragments.add(videoFragment3)
+            override fun onCancelled(error: DatabaseError) {
+            }
 
-        return videoFragments
+        })
+    }
+    private val onItemCategoryImageClick: (Int) -> Unit = {
+//        val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
+//        intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_GENRE)
+//        intent.putExtra(NAME_INTENT_CATEGORY_ID ,it.id)
+//        startActivity(intent)
     }
 }

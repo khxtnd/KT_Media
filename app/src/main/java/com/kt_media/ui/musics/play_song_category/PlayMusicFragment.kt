@@ -1,4 +1,4 @@
-package com.kt_media.ui.play_song_category
+package com.kt_media.ui.musics.play_song_category
 
 import android.app.Service
 import android.content.BroadcastReceiver

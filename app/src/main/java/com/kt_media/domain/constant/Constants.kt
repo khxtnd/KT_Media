@@ -10,6 +10,8 @@ const val CHILD_NAME="name"
 const val CHILD_IMAGE="image"
 const val CHILD_USER="Users"
 const val CHILD_VIDEO="Videos"
+const val CHILD_CATEGORY_IMAGE="CategoryImages"
+
 
 
 const val TITLE_ARTIST = "Nghệ sĩ"

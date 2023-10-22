@@ -9,7 +9,7 @@ import com.kt_media.domain.entities.Video
 
 
 class VideoAdapter (
-    private val onClick:(Int)-> Unit
+    private val onClick:(Video)-> Unit
 ) : RecyclerView.Adapter<VideoViewHolder>() {
 
     private val list: ArrayList<Video> = arrayListOf()
@@ -40,8 +40,8 @@ class VideoAdapter (
         Glide.with(holder.binding.ivVideoVi).load(item.image)
             .into(holder.binding.ivVideoVi)
         holder.binding.tvVideoNameVi.text = item.name
-        holder.binding.layoutItemArtist.setOnClickListener {
-            onClick(position)
+        holder.binding.layoutItemVideo.setOnClickListener {
+            onClick(item)
         }
 
     }

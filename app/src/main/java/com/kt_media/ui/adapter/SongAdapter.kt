@@ -40,7 +40,7 @@ class SongAdapter (
         Glide.with(holder.binding.cirIvSi).load(item.image)
             .into(holder.binding.cirIvSi)
         holder.binding.tvSongNameSi.text = item.name
-        holder.binding.layoutItemArtist.setOnClickListener {
+        holder.binding.layoutItemSong.setOnClickListener {
             onClick(position)
         }
 

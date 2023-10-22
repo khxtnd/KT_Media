@@ -20,7 +20,7 @@ import com.kt_media.domain.constant.CHILD_ARTIST
 import com.kt_media.domain.constant.CHILD_GENRE
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
-import com.kt_media.ui.play_song_category.PlaySongCategoryActivity
+import com.kt_media.ui.musics.play_song_category.PlaySongCategoryActivity
 import com.mymusic.ui.adapters.ArtistAdapter
 import com.mymusic.ui.adapters.GenreAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment

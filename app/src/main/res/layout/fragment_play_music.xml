@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.play_song_category.PlayMusicFragment">
+    tools:context=".ui.musics.play_song_category.PlayMusicFragment">
 
     <LinearLayout
         android:id="@+id/lin1_layout_pmf"
