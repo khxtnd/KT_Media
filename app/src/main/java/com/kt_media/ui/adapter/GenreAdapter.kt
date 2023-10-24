@@ -10,7 +10,7 @@ import com.kt_media.domain.entities.Genre
 
 
 class GenreAdapter (
-    private val onClick:(Genre)-> Unit
+    private val onClick:(Int)-> Unit
 ): RecyclerView.Adapter<GenreViewHolder>() {
 
     private val list: ArrayList<Genre> = arrayListOf()
@@ -41,7 +41,7 @@ class GenreAdapter (
         Glide.with(holder.binding.ivSci).load(item.image).transform(RoundedCorners(16))
             .into(holder.binding.ivSci)
         holder.binding.layoutItemGenre.setOnClickListener {
-            onClick(item)
+            onClick(item.id)
         }
 
     }

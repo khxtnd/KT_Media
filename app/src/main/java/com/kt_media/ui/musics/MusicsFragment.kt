@@ -123,16 +123,16 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
         })
     }
 
-    private val onItemArtistClick: (Artist) -> Unit = {
+    private val onItemArtistClick: (Int) -> Unit = {
         val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
         intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_ARTIST)
-        intent.putExtra(NAME_INTENT_CATEGORY_ID, it.id)
+        intent.putExtra(NAME_INTENT_CATEGORY_ID, it)
         startActivity(intent)
     }
-    private val onItemGenreClick: (Genre) -> Unit = {
+    private val onItemGenreClick: (Int) -> Unit = {
         val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
         intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_GENRE)
-        intent.putExtra(NAME_INTENT_CATEGORY_ID ,it.id)
+        intent.putExtra(NAME_INTENT_CATEGORY_ID ,it)
         startActivity(intent)
     }
 }

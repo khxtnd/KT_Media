@@ -9,7 +9,7 @@ import com.kt_media.domain.entities.Video
 
 
 class VideoAdapter (
-    private val onClick:(Video)-> Unit
+    private val onClick:(Int)-> Unit
 ) : RecyclerView.Adapter<VideoViewHolder>() {
 
     private val list: ArrayList<Video> = arrayListOf()
@@ -41,7 +41,7 @@ class VideoAdapter (
             .into(holder.binding.ivVideoVi)
         holder.binding.tvVideoNameVi.text = item.name
         holder.binding.layoutItemVideo.setOnClickListener {
-            onClick(item)
+            onClick(item.id)
         }
 
     }

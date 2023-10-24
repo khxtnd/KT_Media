@@ -58,11 +58,10 @@ class VideosFragment : BaseViewBindingFragment<FragmentVideosBinding>(R.layout.f
         })
     }
 
-    private val onItemVideoClick: (Video) -> Unit = {
+    private val onItemVideoClick: (Int) -> Unit = {
         val intent = Intent(requireActivity(), PlayVideoActivity::class.java)
-        intent.putExtra(NAME_INTENT_VIDEO_ID, it.id)
+        intent.putExtra(NAME_INTENT_VIDEO_ID, it)
         startActivity(intent)
-        Log.e("VideoFragment", "id" + it.id)
     }
 
 }

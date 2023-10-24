@@ -39,15 +39,11 @@ class CategoryImageAdapter(
 
     override fun onBindViewHolder(holder: CategoryImageViewHolder, position: Int) {
         val item = list[position]
-        val transformation = RoundedCornersTransformation(10, 0,
-            RoundedCornersTransformation.CornerType.TOP
-        )
         Glide.with(holder.binding.ivCii).load(item.image)
-            .apply(RequestOptions.bitmapTransform(transformation))
             .into(holder.binding.ivCii)
         holder.binding.tvNameCii.text = item.name
         holder.binding.layoutItemCategoryImage.setOnClickListener {
-            onClick(it.id)
+            onClick(item.id)
         }
 
     }

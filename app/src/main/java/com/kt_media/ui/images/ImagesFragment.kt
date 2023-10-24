@@ -1,9 +1,10 @@
 package com.kt_media.ui.images
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -13,8 +14,13 @@ import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentImagesBinding
 import com.kt_media.domain.constant.CHILD_CATEGORY_IMAGE
-import com.kt_media.domain.constant.CHILD_VIDEO
+import com.kt_media.domain.constant.CHILD_ID
+import com.kt_media.domain.constant.CHILD_IMAGE
+import com.kt_media.domain.constant.CHILD_LIST_IMAGE
+import com.kt_media.domain.constant.CHILD_NAME
+import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_IMAGE_ID
 import com.kt_media.domain.entities.CategoryImage
+import com.kt_media.ui.images.show_image.ShowImageActivity
 import com.mymusic.ui.adapters.CategoryImageAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
 
@@ -26,21 +32,25 @@ class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.f
         super.onViewCreated(view, savedInstanceState)
         binding=FragmentImagesBinding.bind(view)
         categoryImage=CategoryImageAdapter(onItemCategoryImageClick)
-        getAllCategoryItem()
+        getAllCategoryImageItem()
         binding?.recCategoryImageIf?.adapter=categoryImage
         binding?.recCategoryImageIf?.layoutManager =
-            GridLayoutManager(requireContext(), 2,RecyclerView.VERTICAL, false)
+            GridLayoutManager(requireContext(), 3,RecyclerView.VERTICAL, false)
 
     }
-    private fun getAllCategoryItem() {
+    private fun getAllCategoryImageItem() {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_CATEGORY_IMAGE)
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 categoryImageList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
-                    val categoryImage = data.getValue(CategoryImage::class.java)
-                    categoryImage?.let { categoryImageList.add(it) }
+                    val id= (data.child(CHILD_ID).value as Long).toInt()
+                    val name = data.child(CHILD_NAME).value.toString()
+                    val image = data.child(CHILD_LIST_IMAGE).children.firstOrNull()?.value.toString()
+                    val categoryImage=CategoryImage(id,image,name)
+
+                    categoryImageList.add(categoryImage)
                 }
                 if (categoryImageList.isNotEmpty()) {
                     categoryImage.submit(categoryImageList)
@@ -54,9 +64,8 @@ class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.f
         })
     }
     private val onItemCategoryImageClick: (Int) -> Unit = {
-//        val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
-//        intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_GENRE)
-//        intent.putExtra(NAME_INTENT_CATEGORY_ID ,it.id)
-//        startActivity(intent)
+        val intent = Intent(requireActivity(), ShowImageActivity::class.java)
+        intent.putExtra(NAME_INTENT_CATEGORY_IMAGE_ID,it)
+        startActivity(intent)
     }
 }

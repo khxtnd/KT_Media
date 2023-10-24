@@ -11,6 +11,7 @@ const val CHILD_IMAGE="image"
 const val CHILD_USER="Users"
 const val CHILD_VIDEO="Videos"
 const val CHILD_CATEGORY_IMAGE="CategoryImages"
+const val CHILD_LIST_IMAGE="listImage"
 
 
 
@@ -45,6 +46,7 @@ const val NAME_INTENT_PROGRESS_SEEK_BAR="37"
 const val NAME_INTENT_DURATION_SEEK_BAR="38"
 const val NAME_INTENT_SONG_INDEX="39"
 const val NAME_INTENT_VIDEO_ID = "40"
+const val NAME_INTENT_CATEGORY_IMAGE_ID = "41"
 
 
 const val VAL_INTENT_LOGIN_EMAIL="61"

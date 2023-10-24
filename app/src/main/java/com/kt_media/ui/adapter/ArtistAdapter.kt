@@ -11,7 +11,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
 class ArtistAdapter(
-    private val onClick: (Artist) -> Unit
+    private val onClick: (Int) -> Unit
 ) : RecyclerView.Adapter<ArtistViewHolder>() {
 
     private val list: ArrayList<Artist> = arrayListOf()
@@ -47,7 +47,7 @@ class ArtistAdapter(
             .into(holder.binding.ivSai)
         holder.binding.tvArtistSai.text = item.name
         holder.binding.layoutItemArtist.setOnClickListener {
-            onClick(item)
+            onClick(item.id)
         }
 
     }
