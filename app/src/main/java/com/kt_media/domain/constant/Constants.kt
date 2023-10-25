@@ -25,6 +25,7 @@ const val TITLE_NO_IMAGE="No Image"
 const val TITLE_MUSIC="Âm nhạc"
 const val TITLE_VIDEO="Video"
 const val TITLE_IMAGE="Ảnh"
+const val TITLE_DOWNLOAD_SUCCESS="Tải thành công"
 
 const val INTENT_ACTION_PLAY_OR_PAUSE = "1"
 const val INTENT_ACTION_PREVIOUS = "2"
@@ -52,5 +53,7 @@ const val NAME_INTENT_CATEGORY_IMAGE_ID = "41"
 const val VAL_INTENT_LOGIN_EMAIL="61"
 
 const val VAL_REQUEST_CODE=23032001
+
+
 
 
