@@ -11,9 +11,10 @@
     <androidx.media3.ui.PlayerView
         android:id="@+id/player_view_pva"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        app:use_controller="true"
+        app:controller_layout_id="@layout/custom_exo_controller"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

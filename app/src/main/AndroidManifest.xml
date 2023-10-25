@@ -20,7 +20,6 @@
         <activity
             android:name=".ui.images.show_image.ShowImageActivity"
             android:exported="false"
-            android:label="@string/title_activity_show_image"
             android:theme="@style/Theme.KTMedia" />
         <activity
             android:name=".ui.videos.play_video.PlayVideoActivity"

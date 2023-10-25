@@ -80,7 +80,7 @@
             android:layout_marginEnd="3dp"
             android:gravity="end"
             android:layout_weight="1"
-            android:text="@string/no_time_seek_bar"
+            android:text="@string/colon"
             android:textColor="@color/geek_blue_6"
             android:textSize="15dp" />
 
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:layout_weight="1"
-            android:text="@string/no_time_seek_bar"
+            android:text="@string/colon"
             android:textColor="@color/geek_blue_6"
             android:textSize="15dp" />
     </LinearLayout>
