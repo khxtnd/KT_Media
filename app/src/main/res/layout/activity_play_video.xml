@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="7"
     tools:context=".ui.videos.play_video.PlayVideoActivity">
 
     <androidx.media3.ui.PlayerView
         android:id="@+id/player_view_pva"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="234dp"
         app:use_controller="true"
         app:controller_layout_id="@layout/custom_exo_controller"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,11 +114,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lin_layout_pva"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/lin_layout_pva"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
