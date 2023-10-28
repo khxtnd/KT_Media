@@ -61,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun moveToMain(loginWith: String) {
-        var intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
         intent.putExtra(NAME_INTENT_LOGIN_WITH, loginWith)
         startActivity(intent)
         finish()

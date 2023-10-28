@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kt_media.R
 import com.kt_media.databinding.ItemVideoBinding
 import com.kt_media.domain.entities.Video
 
@@ -11,7 +12,7 @@ import com.kt_media.domain.entities.Video
 class VideoSuggestAdapter (
     private val onClick:(Int)-> Unit
 ) : RecyclerView.Adapter<VideoSuggestViewHolder>() {
-
+    private var videoSelectedPosition=-1
     private val list: ArrayList<Video> = arrayListOf()
 
     fun submit(list: List<Video>) {
@@ -43,7 +44,16 @@ class VideoSuggestAdapter (
         holder.binding.layoutItemVideo.setOnClickListener {
             onClick(position)
         }
+        if (videoSelectedPosition==position) {
+            holder.binding.layoutItemVideo.setBackgroundResource(R.drawable.bg_item_song_or_video_selected);
+        } else {
+            holder.binding.layoutItemVideo.setBackgroundResource(R.drawable.bg_item_song_or_video);
+        }
 
+    }
+    fun setBackgroundItem(index:Int){
+        videoSelectedPosition=index
+        notifyDataSetChanged()
     }
 }
 

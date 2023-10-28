@@ -12,6 +12,8 @@ const val CHILD_USER="Users"
 const val CHILD_VIDEO="Videos"
 const val CHILD_CATEGORY_IMAGE="CategoryImages"
 const val CHILD_LIST_IMAGE="listImage"
+const val CHILD_VIDEO_FAV="VideoFavs"
+const val CHILD_COMMENT="Comments"
 
 
 

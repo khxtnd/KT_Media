@@ -62,9 +62,11 @@ dependencies {
     implementation("jp.wasabeef:glide-transformations:4.3.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-    implementation("androidx.media3:media3-exoplayer:1.1.1")
-    implementation("androidx.media3:media3-ui:1.1.1")
-    implementation ("androidx.media3:media3-exoplayer-dash:1.1.1")
+    val media3_version = "1.1.1"
+    implementation("androidx.media3:media3-exoplayer:$media3_version")
+    implementation("androidx.media3:media3-exoplayer-dash:$media3_version")
+    implementation("androidx.media3:media3-ui:$media3_version")
+
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
