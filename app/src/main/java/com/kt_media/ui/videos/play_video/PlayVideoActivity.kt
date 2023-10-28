@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +29,6 @@ import com.kt_media.domain.entities.Comment
 import com.kt_media.domain.entities.Video
 import com.kt_media.domain.entities.VideoFav
 import com.mymusic.ui.adapters.CommentAdapter
-import com.mymusic.ui.adapters.VideoAdapter
 import com.mymusic.ui.adapters.VideoSuggestAdapter
 
 
@@ -271,9 +269,9 @@ class PlayVideoActivity : AppCompatActivity() {
         etCommentDf = view.findViewById(R.id.et_comment_df)
         ivSendDf = view.findViewById(R.id.iv_send_df)
 
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
         ivSendDf.setOnClickListener {
             val content = etCommentDf.text.toString()
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
             if (userId != null && content.isNotEmpty()) {
                 dbRefComment = FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
                 val id = dbRefComment.push().key.toString()
@@ -282,17 +280,14 @@ class PlayVideoActivity : AppCompatActivity() {
                 etCommentDf.setText("")
             }
         }
-        if(userId!=null){
-            commentAdapter= CommentAdapter()
-            getCommentList(videoId,userId)
-            recCommentDf.adapter=commentAdapter
-            recCommentDf.layoutManager =
-                LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        }
-
+        commentAdapter = CommentAdapter()
+        getCommentList(videoId)
+        recCommentDf.adapter = commentAdapter
+        recCommentDf.layoutManager =
+            LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     }
 
-    private fun getCommentList(videoId: Int,userId: String) {
+    private fun getCommentList(videoId: Int) {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -300,7 +295,7 @@ class PlayVideoActivity : AppCompatActivity() {
                 commentList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
                     val comment = data.getValue(Comment::class.java)
-                    if(comment!=null && comment.videoId==videoId && comment.userId==userId){
+                    if (comment != null && comment.videoId == videoId) {
                         commentList.add(comment)
                     }
                 }
