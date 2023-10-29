@@ -24,7 +24,10 @@ import com.kt_media.domain.constant.CHILD_COMMENT
 import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_VIDEO
 import com.kt_media.domain.constant.CHILD_VIDEO_FAV
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
+import com.kt_media.domain.constant.VAL_INTENT_ALL_VIDEO
+import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.Comment
 import com.kt_media.domain.entities.Video
 import com.kt_media.domain.entities.VideoFav
@@ -49,9 +52,11 @@ class PlayVideoActivity : AppCompatActivity() {
     private lateinit var etCommentDf: EditText
     private lateinit var ivSendDf: ImageView
 
-    private lateinit var dbRefVideo: DatabaseReference
+    private lateinit var dbRefVideoList: DatabaseReference
     private lateinit var dbRefVideoFav: DatabaseReference
     private lateinit var dbRefComment: DatabaseReference
+
+    private lateinit var userId:String
     private var idVideo = 0
     private var allVideoSize = 0
 
@@ -65,34 +70,43 @@ class PlayVideoActivity : AppCompatActivity() {
         binding = ActivityPlayVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        idVideo = intent.getIntExtra(NAME_INTENT_VIDEO_ID, 0)
         videoAdapter = VideoSuggestAdapter(onItemVideoClick)
-        getAllVideo()
+        val checkVideo = intent.getStringExtra(NAME_INTENT_CHECK_VIDEO)
+
+        dbRefVideoFav = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO_FAV)
+        dbRefVideoList = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
+        dbRefComment = FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
+        userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        if (checkVideo == VAL_INTENT_ALL_VIDEO) {
+            idVideo = intent.getIntExtra(NAME_INTENT_VIDEO_ID, 0)
+            getCountVideo()
+        } else if (checkVideo == VAL_INTENT_VIDEO_FAV) {
+            getVideoFav()
+        }
+
         binding.recVideoPva.adapter = videoAdapter
         binding.recVideoPva.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
     }
 
     private val onItemVideoClick: (Int) -> Unit = {
         playExoMediaItemIndex(it)
     }
 
-    private fun getAllVideo() {
-        dbRefVideo = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
-        dbRefVideo.addValueEventListener(object : ValueEventListener {
+    private fun getCountVideo() {
+        dbRefVideoList.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 allVideoSize = dataSnapshot.childrenCount.toInt()
-                getListVideo()
+                getVideoList()
             }
-
             override fun onCancelled(error: DatabaseError) {}
         })
     }
 
-    private fun getListVideo() {
+    private fun getVideoList() {
         if (allVideoSize >= idVideo + 9) {
-            val query = dbRefVideo.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
+            val query = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
                 .endAt((idVideo + 9).toDouble())
             query.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -101,12 +115,10 @@ class PlayVideoActivity : AppCompatActivity() {
                         val video = data.getValue(Video::class.java)
                         video?.let { videoList.add(it) }
                     }
-
                     if (videoList.isNotEmpty()) {
-                        videoAdapter.submit(videoList)
-                        initCustomExo()
-                        setExoPlayer()
+                        videoListIsNotEmpty()
                     }
+
 
                 }
 
@@ -115,9 +127,9 @@ class PlayVideoActivity : AppCompatActivity() {
 
             })
         } else {
-            val query1 = dbRefVideo.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
+            val query1 = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
                 .endAt((allVideoSize + 1).toDouble())
-            val query2 = dbRefVideo.orderByChild(CHILD_ID).startAt(1.0)
+            val query2 = dbRefVideoList.orderByChild(CHILD_ID).startAt(1.0)
                 .endAt((8 - allVideoSize + idVideo).toDouble())
             query1.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot1: DataSnapshot) {
@@ -135,9 +147,7 @@ class PlayVideoActivity : AppCompatActivity() {
                                 video?.let { videoList.add(it) }
                             }
                             if (videoList.isNotEmpty()) {
-                                videoAdapter.submit(videoList)
-                                initCustomExo()
-                                setExoPlayer()
+                              videoListIsNotEmpty()
                             }
                         }
 
@@ -150,6 +160,57 @@ class PlayVideoActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+    private fun videoListIsNotEmpty(){
+        videoAdapter.submit(videoList)
+        initCustomExo()
+        setExoPlayer()
+    }
+
+    private fun getVideoFav() {
+
+        val videoFavList = arrayListOf<Int>()
+        dbRefVideoFav.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                videoFavList.clear()
+                for (snapshot in dataSnapshot.children) {
+                    val videoFav = snapshot.getValue(VideoFav::class.java)
+                    if (videoFav != null && videoFav.userId == userId) {
+                        videoFavList.add(videoFav.videoId)
+                    }
+                    if (videoFavList.isNotEmpty()) {
+                        getVideoFavList(videoFavList)
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    private fun getVideoFavList(videoFavList: ArrayList<Int>) {
+        dbRefVideoList.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                videoList.clear()
+                for (data: DataSnapshot in dataSnapshot.children) {
+                    val video = data.getValue(Video::class.java)
+                    video?.let {
+                        for (i in videoFavList) {
+                            if (i == video.id) {
+                                videoList.add(it)
+                                break
+                            }
+                        }
+                    }
+                }
+
+                if (videoList.isNotEmpty()) {
+                    videoListIsNotEmpty()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun setExoPlayer() {
@@ -247,12 +308,11 @@ class PlayVideoActivity : AppCompatActivity() {
         }
         binding.tvVideoNamePva.text = name
 
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
         val videoId = videoList[index].id
         binding.linLayoutCommentPva.setOnClickListener {
             showBottomSheet(videoId)
         }
-        userId?.let { checkIsLike(it, videoId) }
+        checkIsLike(videoId)
 
     }
 
@@ -271,9 +331,7 @@ class PlayVideoActivity : AppCompatActivity() {
 
         ivSendDf.setOnClickListener {
             val content = etCommentDf.text.toString()
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-            if (userId != null && content.isNotEmpty()) {
-                dbRefComment = FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
+            if (content.isNotEmpty()) {
                 val id = dbRefComment.push().key.toString()
                 val comment = Comment(id, userId, videoId, content)
                 dbRefComment.child(id).setValue(comment)
@@ -288,9 +346,7 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun getCommentList(videoId: Int) {
-        val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        dbRefComment.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 commentList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
@@ -311,9 +367,7 @@ class PlayVideoActivity : AppCompatActivity() {
         })
     }
 
-    private fun checkIsLike(userId: String, videoId: Int) {
-        dbRefVideoFav = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO_FAV)
-
+    private fun checkIsLike(videoId: Int) {
         dbRefVideoFav.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
@@ -326,7 +380,7 @@ class PlayVideoActivity : AppCompatActivity() {
                         binding.ivLikePva.setImageResource(R.drawable.ic_like_off_35)
                         isLike = false
                     }
-                    setActionLike(userId, videoId)
+                    setActionLike(videoId)
                 }
             }
 
@@ -336,17 +390,17 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
 
-    private fun setActionLike(userId: String, videoId: Int) {
+    private fun setActionLike(videoId: Int) {
         binding.linLayoutLikePva.setOnClickListener {
             if (isLike) {
-                removeLikeVideo(userId, videoId)
+                removeLikeVideo(videoId)
             } else {
-                likeVideo(userId, videoId)
+                likeVideo(videoId)
             }
         }
     }
 
-    private fun likeVideo(userId: String, videoId: Int) {
+    private fun likeVideo(videoId: Int) {
         val id = "$userId+$videoId"
         val videoFav = VideoFav(id, userId, videoId)
         dbRefVideoFav.child(id).setValue(videoFav).addOnCompleteListener {
@@ -367,7 +421,7 @@ class PlayVideoActivity : AppCompatActivity() {
         binding.ivLikePva.setImageResource(R.drawable.ic_like_off_35)
     }
 
-    private fun removeLikeVideo(userId: String, videoId: Int) {
+    private fun removeLikeVideo(videoId: Int) {
         dbRefVideoFav.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
@@ -399,6 +453,4 @@ class PlayVideoActivity : AppCompatActivity() {
         }
         player.release()
     }
-
-
 }

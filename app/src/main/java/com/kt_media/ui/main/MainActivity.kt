@@ -19,14 +19,19 @@ import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
 import com.kt_media.domain.constant.CHILD_USER
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_LOGIN_WITH
+import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
 import com.kt_media.domain.constant.TITLE_IMAGE
 import com.kt_media.domain.constant.TITLE_MUSIC
 import com.kt_media.domain.constant.TITLE_VIDEO
+import com.kt_media.domain.constant.VAL_INTENT_ALL_VIDEO
 import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
+import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.User
 import com.kt_media.ui.login.LoginActivity
 import com.kt_media.ui.profile.ProfileActivity
+import com.kt_media.ui.videos.play_video.PlayVideoActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -66,13 +71,15 @@ class MainActivity : AppCompatActivity() {
 
         binding.navMa.setNavigationItemSelectedListener {
             when (it.itemId) {
+                R.id.mVideoFav->{
+                    playVideoFav()
+                }
                 R.id.mLogout -> {
                     logOut()
                 }
                 R.id.mAccount ->{
                     updateProfile()
                 }
-
             }
             return@setNavigationItemSelectedListener true
         }
@@ -83,6 +90,11 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this@MainActivity, ProfileActivity::class.java)
         startActivity(intent)
     }
+    private fun playVideoFav(){
+        val intent = Intent(this@MainActivity, PlayVideoActivity::class.java)
+        intent.putExtra(NAME_INTENT_CHECK_VIDEO, VAL_INTENT_VIDEO_FAV)
+        startActivity(intent)
+    }
 
     private fun setNav(loginWith: String) {
         val headerView: View = binding.navMa.getHeaderView(0)
@@ -91,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         val reference = FirebaseDatabase.getInstance().getReference(CHILD_USER).child(firebaseUser!!.uid)
-        reference!!.addValueEventListener(object : ValueEventListener {
+        reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
                 tvUsernameNav.text = user!!.name
@@ -100,10 +112,7 @@ class MainActivity : AppCompatActivity() {
                     Glide.with(this@MainActivity).load(user.image).into(ivAvatarNav)
                 }
             }
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 

@@ -2,7 +2,6 @@ package com.kt_media.ui.videos
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +13,9 @@ import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentVideosBinding
 import com.kt_media.domain.constant.CHILD_VIDEO
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
+import com.kt_media.domain.constant.VAL_INTENT_ALL_VIDEO
 import com.kt_media.domain.entities.Video
 import com.kt_media.ui.videos.play_video.PlayVideoActivity
 import com.mymusic.ui.adapters.VideoAdapter
@@ -37,9 +38,9 @@ class VideosFragment : BaseViewBindingFragment<FragmentVideosBinding>(R.layout.f
     }
 
     private fun getAllVideo() {
-        val databaseReference: DatabaseReference =
+        val dbRefVideoList: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        dbRefVideoList.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 videoList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
@@ -52,14 +53,13 @@ class VideosFragment : BaseViewBindingFragment<FragmentVideosBinding>(R.layout.f
 
             }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
     private val onItemVideoClick: (Int) -> Unit = {
         val intent = Intent(requireActivity(), PlayVideoActivity::class.java)
+        intent.putExtra(NAME_INTENT_CHECK_VIDEO, VAL_INTENT_ALL_VIDEO)
         intent.putExtra(NAME_INTENT_VIDEO_ID, it)
         startActivity(intent)
     }

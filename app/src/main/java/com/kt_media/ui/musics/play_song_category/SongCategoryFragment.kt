@@ -60,20 +60,21 @@ class SongCategoryFragment :
             val intent = it.intent
             checkCategory = intent.getStringExtra(NAME_INTENT_CHECK_CATEGORY).toString()
             idCategory = intent.getIntExtra(NAME_INTENT_CATEGORY_ID, 0)
-        }
-        setupSong()
-        setupContent()
+            setupSong()
+            setupContent()
 
-        binding?.ivPlayScf?.setOnClickListener {
-            val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
-            playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
-            requireContext().startService(playOrPauseMainIntent)
+            binding?.ivPlayScf?.setOnClickListener {
+                val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
+                playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
+                requireContext().startService(playOrPauseMainIntent)
+            }
+            binding?.ivNextScf?.setOnClickListener {
+                val nextIntent = Intent(requireContext(), MusicService::class.java)
+                nextIntent.action = INTENT_ACTION_NEXT
+                requireContext().startService(nextIntent)
+            }
         }
-        binding?.ivNextScf?.setOnClickListener {
-            val nextIntent = Intent(requireContext(), MusicService::class.java)
-            nextIntent.action = INTENT_ACTION_NEXT
-            requireContext().startService(nextIntent)
-        }
+
 
     }
 

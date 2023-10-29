@@ -30,6 +30,7 @@
     <string name="like">Thích</string>
     <string name="share">Chia sẻ</string>
     <string name="slash">/</string>
-
-
+    <string name="song_fav">Bài hát yêu thích</string>
+    <string name="video_fav">Video yêu thích</string>
+    <string name="playlist">Danh sách bài hát của tôi</string>
 </resources>
