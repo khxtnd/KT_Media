@@ -31,6 +31,7 @@ import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
 import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
+import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
 import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
 import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
@@ -40,16 +41,15 @@ import com.kt_media.domain.entities.Song
 class MusicService: Service() {
     private var mediaPlayer: MediaPlayer? = null
     private var songList = arrayListOf<Song>()
-    private var idCategory = 0
-    private var checkCategory = ""
     private var songIndex: Int = 0
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             if (intent.action == INTENT_ACTION_START_SERVICE) {
-                checkCategory = intent.getStringExtra(NAME_INTENT_CHECK_CATEGORY).toString()
-                idCategory = intent.getIntExtra(NAME_INTENT_CATEGORY_ID, 0)
-                getAllSongCategory()
+                songList=intent.getSerializableExtra(NAME_INTENT_SONG_LIST) as ArrayList<Song>
+                if(songList.isNotEmpty()){
+                    createMediaPlayer()
+                }
             }
             if (mediaPlayer != null) {
                 when (intent.action) {
@@ -172,35 +172,6 @@ class MusicService: Service() {
         mediaPlayer?.prepare()
         mediaPlayer?.start()
         sendSongInfo()
-    }
-    private fun getAllSongCategory() {
-        val databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(CHILD_SONG)
-        var child = ""
-        if (checkCategory == CHILD_GENRE) {
-            child = CHILD_GENRE_ID
-        } else if (checkCategory == CHILD_ARTIST) {
-            child = CHILD_ARTIST_ID
-        }
-        val query =
-            databaseReference.orderByChild(child).equalTo(idCategory.toDouble())
-
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                songList.clear()
-                for (data in dataSnapshot.children) {
-                    val song = data.getValue(Song::class.java)
-                    song?.let { songList.add(it) }
-                }
-                if (songList.isNotEmpty()) {
-                    createMediaPlayer()
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
     }
 
     private var seekBarUpdateHandler: Handler? = null

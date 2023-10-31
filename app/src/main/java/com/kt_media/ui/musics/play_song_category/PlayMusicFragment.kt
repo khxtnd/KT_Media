@@ -1,5 +1,6 @@
 package com.kt_media.ui.musics.play_song_category
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.ComponentName
@@ -95,6 +96,7 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
         }
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onResume() {
         super.onResume()
         broadcastReceiver = PlayMusicBroadcastReceiver()

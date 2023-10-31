@@ -102,7 +102,7 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
     private fun getAllArtist() {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_ARTIST)
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 artistList.clear()
 
@@ -112,7 +112,6 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
                 }
                 if (artistList.isNotEmpty()) {
                     artistAdapter.submit(artistList)
-
                 }
 
             }

@@ -1,12 +1,12 @@
 package com.kt_media.ui.musics.play_song_category
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,28 +19,30 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentSongCategoryBinding
-import com.kt_media.domain.constant.CHILD_ID
-import com.kt_media.domain.constant.CHILD_SONG
 import com.kt_media.domain.constant.CHILD_ARTIST
 import com.kt_media.domain.constant.CHILD_ARTIST_ID
 import com.kt_media.domain.constant.CHILD_GENRE
 import com.kt_media.domain.constant.CHILD_GENRE_ID
+import com.kt_media.domain.constant.CHILD_ID
+import com.kt_media.domain.constant.CHILD_SONG
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_SONG_INDEX
 import com.kt_media.domain.constant.INTENT_ACTION_SONG_INFO
-import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
+import com.kt_media.domain.constant.INTENT_ACTION_START_SERVICE
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
 import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
+import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
 import com.kt_media.domain.constant.NAME_INTENT_SONG_NAME
+import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
 import com.kt_media.domain.constant.TITLE_NO_SONG
-import com.kt_media.domain.entities.Song
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
+import com.kt_media.domain.entities.Song
 import com.kt_media.service.MusicService
 import com.mymusic.ui.adapters.SongAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
@@ -62,22 +64,23 @@ class SongCategoryFragment :
             idCategory = intent.getIntExtra(NAME_INTENT_CATEGORY_ID, 0)
             setupSong()
             setupContent()
-
-            binding?.ivPlayScf?.setOnClickListener {
-                val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
-                playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
-                requireContext().startService(playOrPauseMainIntent)
-            }
-            binding?.ivNextScf?.setOnClickListener {
-                val nextIntent = Intent(requireContext(), MusicService::class.java)
-                nextIntent.action = INTENT_ACTION_NEXT
-                requireContext().startService(nextIntent)
-            }
         }
-
-
     }
 
+    private fun setupActionButton() {
+        binding?.ivPlayScf?.setOnClickListener {
+            val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
+            playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
+            requireContext().startService(playOrPauseMainIntent)
+        }
+        binding?.ivNextScf?.setOnClickListener {
+            val nextIntent = Intent(requireContext(), MusicService::class.java)
+            nextIntent.action = INTENT_ACTION_NEXT
+            requireContext().startService(nextIntent)
+        }
+    }
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onResume() {
         super.onResume()
         broadcastReceiver = SongCategoryBroadcastReceiver()
@@ -97,8 +100,8 @@ class SongCategoryFragment :
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onPause() {
+        super.onPause()
         requireContext().unregisterReceiver(broadcastReceiver)
 
     }
@@ -116,11 +119,11 @@ class SongCategoryFragment :
     }
 
     private fun setupContent() {
-        val databaseReference: DatabaseReference =
+        val dbRefArtistOrGenre: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(checkCategory)
 
         val query =
-            databaseReference.orderByChild(CHILD_ID).equalTo(idCategory.toDouble())
+            dbRefArtistOrGenre.orderByChild(CHILD_ID).equalTo(idCategory.toDouble())
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -152,9 +155,7 @@ class SongCategoryFragment :
 
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
+            override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
     private fun setupSong() {
@@ -166,7 +167,7 @@ class SongCategoryFragment :
     }
 
     private fun getAllSong() {
-        val databaseReference: DatabaseReference =
+        val dbRefSong: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_SONG)
         var child = ""
         if (checkCategory == CHILD_GENRE) {
@@ -175,7 +176,7 @@ class SongCategoryFragment :
             child = CHILD_ARTIST_ID
         }
         val query =
-            databaseReference.orderByChild(child).equalTo(idCategory.toDouble())
+            dbRefSong.orderByChild(child).equalTo(idCategory.toDouble())
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -185,12 +186,16 @@ class SongCategoryFragment :
                     song?.let { songList.add(it) }
                 }
                 if (songList.isNotEmpty()) {
+                    val intentStartService = Intent(requireContext(), MusicService::class.java)
+                    intentStartService.action = INTENT_ACTION_START_SERVICE
+                    intentStartService.putExtra(NAME_INTENT_SONG_LIST,songList)
+                    requireContext().startService(intentStartService)
                     songAdapter.submit(songList)
+                    setupActionButton()
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) {
 
-            }
+            override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
 

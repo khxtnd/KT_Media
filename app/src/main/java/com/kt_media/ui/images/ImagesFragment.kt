@@ -2,7 +2,6 @@ package com.kt_media.ui.images
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +14,6 @@ import com.kt_media.R
 import com.kt_media.databinding.FragmentImagesBinding
 import com.kt_media.domain.constant.CHILD_CATEGORY_IMAGE
 import com.kt_media.domain.constant.CHILD_ID
-import com.kt_media.domain.constant.CHILD_IMAGE
 import com.kt_media.domain.constant.CHILD_LIST_IMAGE
 import com.kt_media.domain.constant.CHILD_NAME
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_IMAGE_ID
@@ -39,9 +37,9 @@ class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.f
 
     }
     private fun getAllCategoryImageItem() {
-        val databaseReference: DatabaseReference =
+        val dbRefCategoryImage: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_CATEGORY_IMAGE)
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        dbRefCategoryImage.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 categoryImageList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
@@ -49,7 +47,6 @@ class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.f
                     val name = data.child(CHILD_NAME).value.toString()
                     val image = data.child(CHILD_LIST_IMAGE).children.firstOrNull()?.value.toString()
                     val categoryImage=CategoryImage(id,image,name)
-
                     categoryImageList.add(categoryImage)
                 }
                 if (categoryImageList.isNotEmpty()) {
@@ -58,9 +55,7 @@ class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.f
 
             }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
     private val onItemCategoryImageClick: (Int) -> Unit = {

@@ -30,13 +30,6 @@ class PlaySongCategoryActivity : AppCompatActivity() {
         binding = ActivityPlaySongCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val checkCategory=intent.getStringExtra(NAME_INTENT_CHECK_CATEGORY)
-        val idCategory=intent.getIntExtra(NAME_INTENT_CATEGORY_ID, 0)
-
-//        val intentStartService = Intent(this, MusicService::class.java)
-//        intentStartService.action= INTENT_ACTION_START_SERVICE
-//        intentStartService.putExtra(NAME_INTENT_CHECK_CATEGORY,checkCategory)
-//        intentStartService.putExtra(NAME_INTENT_CATEGORY_ID,idCategory)
-//        startService(intentStartService)
 
         binding.ivBackPsca.setOnClickListener {
             finish()

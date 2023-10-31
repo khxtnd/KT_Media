@@ -14,6 +14,7 @@ const val CHILD_CATEGORY_IMAGE="CategoryImages"
 const val CHILD_LIST_IMAGE="listImage"
 const val CHILD_VIDEO_FAV="VideoFavs"
 const val CHILD_COMMENT="Comments"
+const val CHILD_USER_ID="userId"
 
 
 
@@ -51,6 +52,7 @@ const val NAME_INTENT_SONG_INDEX="39"
 const val NAME_INTENT_VIDEO_ID = "40"
 const val NAME_INTENT_CATEGORY_IMAGE_ID = "41"
 const val NAME_INTENT_CHECK_VIDEO="42"
+const val NAME_INTENT_SONG_LIST="43"
 
 
 const val VAL_INTENT_LOGIN_EMAIL="61"

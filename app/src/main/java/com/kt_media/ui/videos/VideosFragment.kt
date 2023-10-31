@@ -40,7 +40,7 @@ class VideosFragment : BaseViewBindingFragment<FragmentVideosBinding>(R.layout.f
     private fun getAllVideo() {
         val dbRefVideoList: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
-        dbRefVideoList.addValueEventListener(object : ValueEventListener {
+        dbRefVideoList.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 videoList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {

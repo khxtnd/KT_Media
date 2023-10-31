@@ -22,6 +22,7 @@ import com.kt_media.R
 import com.kt_media.databinding.ActivityPlayVideoBinding
 import com.kt_media.domain.constant.CHILD_COMMENT
 import com.kt_media.domain.constant.CHILD_ID
+import com.kt_media.domain.constant.CHILD_USER_ID
 import com.kt_media.domain.constant.CHILD_VIDEO
 import com.kt_media.domain.constant.CHILD_VIDEO_FAV
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
@@ -82,7 +83,7 @@ class PlayVideoActivity : AppCompatActivity() {
             idVideo = intent.getIntExtra(NAME_INTENT_VIDEO_ID, 0)
             getCountVideo()
         } else if (checkVideo == VAL_INTENT_VIDEO_FAV) {
-            getVideoFav()
+            getVideoIdFavList()
         }
 
         binding.recVideoPva.adapter = videoAdapter
@@ -108,7 +109,7 @@ class PlayVideoActivity : AppCompatActivity() {
         if (allVideoSize >= idVideo + 9) {
             val query = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
                 .endAt((idVideo + 9).toDouble())
-            query.addValueEventListener(object : ValueEventListener {
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     videoList.clear()
                     for (data: DataSnapshot in dataSnapshot.children) {
@@ -118,29 +119,24 @@ class PlayVideoActivity : AppCompatActivity() {
                     if (videoList.isNotEmpty()) {
                         videoListIsNotEmpty()
                     }
-
-
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                }
-
+                override fun onCancelled(error: DatabaseError) {}
             })
         } else {
             val query1 = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
                 .endAt((allVideoSize + 1).toDouble())
             val query2 = dbRefVideoList.orderByChild(CHILD_ID).startAt(1.0)
                 .endAt((8 - allVideoSize + idVideo).toDouble())
-            query1.addValueEventListener(object : ValueEventListener {
+            query1.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot1: DataSnapshot) {
                     videoList.clear()
                     for (data: DataSnapshot in dataSnapshot1.children) {
                         val video = data.getValue(Video::class.java)
                         video?.let { videoList.add(it) }
-
                     }
 
-                    query2.addValueEventListener(object : ValueEventListener {
+                    query2.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot2: DataSnapshot) {
                             for (data: DataSnapshot in dataSnapshot2.children) {
                                 val video = data.getValue(Video::class.java)
@@ -152,12 +148,10 @@ class PlayVideoActivity : AppCompatActivity() {
                         }
 
                         override fun onCancelled(error: DatabaseError) {}
-
                     })
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                }
+                override fun onCancelled(error: DatabaseError) {}
             })
         }
     }
@@ -167,20 +161,20 @@ class PlayVideoActivity : AppCompatActivity() {
         setExoPlayer()
     }
 
-    private fun getVideoFav() {
-
-        val videoFavList = arrayListOf<Int>()
-        dbRefVideoFav.addListenerForSingleValueEvent(object : ValueEventListener {
+    private fun getVideoIdFavList() {
+        val videoIdFavList = arrayListOf<Int>()
+        val query=dbRefVideoFav.orderByChild(CHILD_USER_ID).equalTo(userId)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                videoFavList.clear()
+                videoIdFavList.clear()
                 for (snapshot in dataSnapshot.children) {
                     val videoFav = snapshot.getValue(VideoFav::class.java)
-                    if (videoFav != null && videoFav.userId == userId) {
-                        videoFavList.add(videoFav.videoId)
+                    if (videoFav != null) {
+                        videoIdFavList.add(videoFav.videoId)
                     }
-                    if (videoFavList.isNotEmpty()) {
-                        getVideoFavList(videoFavList)
-                    }
+                }
+                if (videoIdFavList.isNotEmpty()) {
+                    getVideoFavList(videoIdFavList)
                 }
             }
 
@@ -188,14 +182,14 @@ class PlayVideoActivity : AppCompatActivity() {
         })
     }
 
-    private fun getVideoFavList(videoFavList: ArrayList<Int>) {
-        dbRefVideoList.addValueEventListener(object : ValueEventListener {
+    private fun getVideoFavList(videoIdFavList: ArrayList<Int>) {
+        dbRefVideoList.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 videoList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
                     val video = data.getValue(Video::class.java)
                     video?.let {
-                        for (i in videoFavList) {
+                        for (i in videoIdFavList) {
                             if (i == video.id) {
                                 videoList.add(it)
                                 break
@@ -203,7 +197,6 @@ class PlayVideoActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 if (videoList.isNotEmpty()) {
                     videoListIsNotEmpty()
                 }
@@ -368,7 +361,7 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun checkIsLike(videoId: Int) {
-        dbRefVideoFav.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbRefVideoFav.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
                     val videoFav = snapshot.getValue(VideoFav::class.java)
@@ -380,8 +373,8 @@ class PlayVideoActivity : AppCompatActivity() {
                         binding.ivLikePva.setImageResource(R.drawable.ic_like_off_35)
                         isLike = false
                     }
-                    setActionLike(videoId)
                 }
+                setActionLike(videoId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -403,22 +396,8 @@ class PlayVideoActivity : AppCompatActivity() {
     private fun likeVideo(videoId: Int) {
         val id = "$userId+$videoId"
         val videoFav = VideoFav(id, userId, videoId)
-        dbRefVideoFav.child(id).setValue(videoFav).addOnCompleteListener {
-            if (it.isSuccessful) {
-                setViewIsLike()
-            }
-        }
+        dbRefVideoFav.child(id).setValue(videoFav)
 
-    }
-
-    private fun setViewIsLike() {
-        isLike = true
-        binding.ivLikePva.setImageResource(R.drawable.ic_like_on_35)
-    }
-
-    private fun setViewNotIsLike() {
-        isLike = false
-        binding.ivLikePva.setImageResource(R.drawable.ic_like_off_35)
     }
 
     private fun removeLikeVideo(videoId: Int) {
@@ -428,7 +407,6 @@ class PlayVideoActivity : AppCompatActivity() {
                     val videoFav = snapshot.getValue(VideoFav::class.java)
                     if (videoFav != null && videoFav.videoId == videoId && videoFav.userId == userId) {
                         snapshot.ref.removeValue()
-                        setViewNotIsLike()
                     }
                 }
             }
