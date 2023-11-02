@@ -9,25 +9,11 @@ import android.os.Binder
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.kt_media.domain.constant.CHILD_ARTIST
-import com.kt_media.domain.constant.CHILD_ARTIST_ID
-import com.kt_media.domain.constant.CHILD_GENRE
-import com.kt_media.domain.constant.CHILD_GENRE_ID
-import com.kt_media.domain.constant.CHILD_SONG
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_SONG_INDEX
 import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
-import com.kt_media.domain.constant.INTENT_ACTION_SONG_INFO
 import com.kt_media.domain.constant.INTENT_ACTION_START_SERVICE
-import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
-import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_IS_PLAYING
 import com.kt_media.domain.constant.NAME_INTENT_SONG_IMAGE
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
@@ -37,6 +23,7 @@ import com.kt_media.domain.constant.NAME_MUSIC_SHARED_PREFERENCE
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
 import com.kt_media.domain.constant.TITLE_NO_SONG
 import com.kt_media.domain.entities.Song
+import org.greenrobot.eventbus.EventBus
 
 class MusicService: Service() {
     private var mediaPlayer: MediaPlayer? = null
@@ -61,7 +48,7 @@ class MusicService: Service() {
                         playSongIndex()
                     }
                 }
-                seekBarUpdateHandler?.postDelayed(seekBarUpdateRunnable!!, 1000)
+                seekBarUpdateHandler.postDelayed(seekBarUpdateRunnable, 1000)
             }
         }
 
@@ -78,8 +65,10 @@ class MusicService: Service() {
                     .build()
             )
             setDataSource(applicationContext, link)
-            isLooping = true
             prepare()
+        }
+        mediaPlayer!!.setOnCompletionListener {
+            mediaPlayer!!.start()
         }
 
         setupSeekBar()
@@ -89,7 +78,7 @@ class MusicService: Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        seekBarUpdateHandler?.removeCallbacks(seekBarUpdateRunnable!!)
+        seekBarUpdateHandler.removeCallbacks(seekBarUpdateRunnable)
         if (songList.isNotEmpty() && mediaPlayer != null) {
             if (mediaPlayer?.isPlaying == true) {
                 mediaPlayer?.stop()
@@ -97,12 +86,6 @@ class MusicService: Service() {
             mediaPlayer?.release()
         }
         mediaPlayer=null
-        val sharedPreferences = getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(NAME_INTENT_CHECK_IS_PLAYING, false)
-        editor.putString(NAME_INTENT_SONG_NAME, TITLE_NO_SONG)
-        editor.putString(NAME_INTENT_SONG_IMAGE, TITLE_NO_IMAGE)
-        editor.apply()
     }
 
     private fun playOrPauseSong() {
@@ -119,9 +102,9 @@ class MusicService: Service() {
         if (songIndex >= songList.size) {
             songIndex = 0
         }
-        if (mediaPlayer?.isPlaying == true) {
-            mediaPlayer?.stop()
-        }
+//        if (mediaPlayer?.isPlaying == true) {
+//            mediaPlayer?.stop()
+//        }
         mediaPlayer?.reset()
         mediaPlayer?.setDataSource(songList[songIndex].link)
         mediaPlayer?.prepare()
@@ -130,29 +113,21 @@ class MusicService: Service() {
     }
 
     private fun sendSongInfo() {
-        val sharedPreferences = getSharedPreferences(NAME_MUSIC_SHARED_PREFERENCE, MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
         var isPlaying = false
         if (mediaPlayer?.isPlaying == true) {
             isPlaying=true
         }
-        editor.putBoolean(NAME_INTENT_CHECK_IS_PLAYING, isPlaying)
-        editor.putString(NAME_INTENT_SONG_NAME, songList[songIndex].name)
-        editor.putString(NAME_INTENT_SONG_IMAGE, songList[songIndex].image)
-        editor.apply()
-        
-        val intent = Intent(INTENT_ACTION_SONG_INFO)
-        intent.putExtra(NAME_INTENT_CHECK_IS_PLAYING, isPlaying)
-        intent.putExtra(NAME_INTENT_SONG_NAME, songList[songIndex].name)
-        intent.putExtra(NAME_INTENT_SONG_IMAGE, songList[songIndex].image)
-        sendBroadcast(intent)
+        updateSong(songList[songIndex], isPlaying)
+    }
 
+    private fun updateSong(song: Song, isPlaying: Boolean) {
+        EventBus.getDefault().post(SongEvent(song,isPlaying))
     }
 
     private fun playSongIndex() {
-        if (mediaPlayer?.isPlaying == true) {
-            mediaPlayer?.stop()
-        }
+//        if (mediaPlayer?.isPlaying == true) {
+//            mediaPlayer?.stop()
+//        }
         mediaPlayer?.reset()
         mediaPlayer?.setDataSource(songList[songIndex].link)
         mediaPlayer?.prepare()
@@ -164,9 +139,9 @@ class MusicService: Service() {
         if (songIndex < 0) {
             songIndex = songList.size - 1
         }
-        if (mediaPlayer?.isPlaying == true) {
-            mediaPlayer?.stop()
-        }
+//        if (mediaPlayer?.isPlaying == true) {
+//            mediaPlayer?.stop()
+//        }
         mediaPlayer?.reset()
         mediaPlayer?.setDataSource(songList[songIndex].link)
         mediaPlayer?.prepare()
@@ -174,10 +149,10 @@ class MusicService: Service() {
         sendSongInfo()
     }
 
-    private var seekBarUpdateHandler: Handler? = null
-    private var seekBarUpdateRunnable: Runnable? = null
-    private var seekBarUpdateListener: SeekBarUpdateListener? = null
-    override fun onBind(p0: Intent?): IBinder? {
+    private lateinit var seekBarUpdateHandler: Handler
+    private lateinit var seekBarUpdateRunnable: Runnable
+    private lateinit var seekBarUpdateListener: SeekBarUpdateListener
+    override fun onBind(p0: Intent?): IBinder {
         return LocalBinder()
     }
 
@@ -200,13 +175,13 @@ class MusicService: Service() {
                         updateSeekBar(progress, duration)
                     }
                 }
-                seekBarUpdateHandler?.postDelayed(this, 1000)
+                seekBarUpdateHandler.postDelayed(this, 1000)
             }
         }
     }
 
     fun updateSeekBar(progress: Int, duration: Int) {
-        seekBarUpdateListener?.onSeekBarUpdate(progress, duration)
+        seekBarUpdateListener.onSeekBarUpdate(progress, duration)
     }
 
     interface SeekBarUpdateListener {
@@ -222,11 +197,11 @@ class MusicService: Service() {
     }
 
     fun pauseSeekBarUpdate() {
-        seekBarUpdateHandler?.removeCallbacks(seekBarUpdateRunnable!!)
+        seekBarUpdateHandler.removeCallbacks(seekBarUpdateRunnable)
     }
 
     fun resumeSeekBarUpdate() {
-        seekBarUpdateHandler?.postDelayed(seekBarUpdateRunnable!!, 1000)
+        seekBarUpdateHandler.postDelayed(seekBarUpdateRunnable, 1000)
     }
 
 }

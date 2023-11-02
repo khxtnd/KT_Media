@@ -18,18 +18,20 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
+import com.kt_media.domain.constant.CHILD_SONG_FAV
 import com.kt_media.domain.constant.CHILD_USER
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_LOGIN_WITH
-import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
 import com.kt_media.domain.constant.TITLE_IMAGE
 import com.kt_media.domain.constant.TITLE_MUSIC
 import com.kt_media.domain.constant.TITLE_VIDEO
-import com.kt_media.domain.constant.VAL_INTENT_ALL_VIDEO
 import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
 import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.User
 import com.kt_media.ui.login.LoginActivity
+import com.kt_media.ui.musics.play_song_category.PlaySongActivity
+import com.kt_media.ui.playlist.PlayListActivity
 import com.kt_media.ui.profile.ProfileActivity
 import com.kt_media.ui.videos.play_video.PlayVideoActivity
 
@@ -74,6 +76,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.mVideoFav->{
                     playVideoFav()
                 }
+                R.id.mSongFav->{
+                    playSongFav()
+                }
+                R.id.mPlayList->{
+                    navPlayList()
+                }
                 R.id.mLogout -> {
                     logOut()
                 }
@@ -84,6 +92,17 @@ class MainActivity : AppCompatActivity() {
             return@setNavigationItemSelectedListener true
         }
         setNav(loginWith)
+    }
+
+    private fun navPlayList() {
+        val intent = Intent(this@MainActivity, PlayListActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun playSongFav() {
+        val intent = Intent(this@MainActivity, PlaySongActivity::class.java)
+        intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_SONG_FAV)
+        startActivity(intent)
     }
 
     private fun updateProfile() {

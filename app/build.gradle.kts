@@ -67,7 +67,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:$media3_version")
     implementation("androidx.media3:media3-ui:$media3_version")
 
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    implementation("org.greenrobot:eventbus:3.3.1")
 }

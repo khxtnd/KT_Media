@@ -4,10 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.kt_media.databinding.ItemCategoryImageBinding
 import com.kt_media.domain.entities.CategoryImage
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 
 class CategoryImageAdapter(
@@ -25,7 +23,6 @@ class CategoryImageAdapter(
     }
 
     override fun getItemCount(): Int {
-
         return list.size
     }
 

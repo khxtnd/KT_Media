@@ -8,16 +8,25 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:screenOrientation="portrait"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo_app_40"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo_app_40"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.KTMedia"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.playlist.UpdatePlayListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.playlist.AddPlayListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.playlist.PlayListActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.images.show_image.ShowImageActivity"
             android:exported="false"
@@ -32,7 +41,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.musics.play_song_category.PlaySongCategoryActivity"
+            android:name=".ui.musics.play_song_category.PlaySongActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.ProfileActivity"

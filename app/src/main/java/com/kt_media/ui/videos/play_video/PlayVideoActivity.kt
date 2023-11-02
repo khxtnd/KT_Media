@@ -85,7 +85,6 @@ class PlayVideoActivity : AppCompatActivity() {
         } else if (checkVideo == VAL_INTENT_VIDEO_FAV) {
             getVideoIdFavList()
         }
-
         binding.recVideoPva.adapter = videoAdapter
         binding.recVideoPva.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
@@ -174,7 +173,7 @@ class PlayVideoActivity : AppCompatActivity() {
                     }
                 }
                 if (videoIdFavList.isNotEmpty()) {
-                    getVideoFavList(videoIdFavList)
+                    getVideoListById(videoIdFavList)
                 }
             }
 
@@ -182,7 +181,8 @@ class PlayVideoActivity : AppCompatActivity() {
         })
     }
 
-    private fun getVideoFavList(videoIdFavList: ArrayList<Int>) {
+    private fun getVideoListById(videoIdFavList: ArrayList<Int>) {
+        var count=0
         dbRefVideoList.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 videoList.clear()
@@ -192,9 +192,13 @@ class PlayVideoActivity : AppCompatActivity() {
                         for (i in videoIdFavList) {
                             if (i == video.id) {
                                 videoList.add(it)
+                                count++
                                 break
                             }
                         }
+                    }
+                    if(videoIdFavList.size==count){
+                        break
                     }
                 }
                 if (videoList.isNotEmpty()) {
@@ -416,7 +420,7 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun setShowVideoSelectedOnTop(index: Int) {
-        binding.recVideoPva.smoothScrollToPosition(index);
+        binding.recVideoPva.smoothScrollToPosition(index)
     }
 
     override fun onPause() {

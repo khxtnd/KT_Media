@@ -14,13 +14,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentMusicsBinding
-import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
-import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.CHILD_ARTIST
 import com.kt_media.domain.constant.CHILD_GENRE
+import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
+import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
-import com.kt_media.ui.musics.play_song_category.PlaySongCategoryActivity
+import com.kt_media.ui.musics.play_song_category.PlaySongActivity
 import com.mymusic.ui.adapters.ArtistAdapter
 import com.mymusic.ui.adapters.GenreAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
@@ -44,28 +44,27 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
         binding?.btArtistMf?.setOnClickListener {
             setupArtist()
         }
-
     }
 
 
     private fun setupGenre() {
         val binding=binding?:return
         genreAdapter = GenreAdapter(onItemGenreClick)
-        getAllGenre()
+        getGenreList()
         binding.recSongCateMf.adapter=genreAdapter
         binding.recSongCateMf.layoutManager=LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false)
 
         binding.btCategoryMf.setBackgroundResource(R.drawable.bg_btn_filter)
-        binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white));
+        binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white))
 
         binding.btArtistMf.setBackgroundResource(R.drawable.bg_btn_outline)
-        binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6));
+        binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6))
     }
 
-    private fun getAllGenre() {
-        val databaseReference: DatabaseReference =
+    private fun getGenreList() {
+        val dbRefGenre: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_GENRE)
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        dbRefGenre.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 genreList.clear()
 
@@ -75,34 +74,30 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
                 }
                 if (genreList.isNotEmpty()) {
                     genreAdapter.submit(genreList)
-
                 }
-
             }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
     private fun setupArtist() {
         val binding=binding?:return
         artistAdapter = ArtistAdapter(onItemArtistClick)
-        getAllArtist()
+        getArtistList()
         binding.recSongCateMf.adapter=artistAdapter
         binding.recSongCateMf.layoutManager=GridLayoutManager(requireContext(),3,RecyclerView.VERTICAL,false)
         binding.btCategoryMf.setBackgroundResource(R.drawable.bg_btn_outline)
-        binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6));
+        binding.btCategoryMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.geek_blue_6))
 
         binding.btArtistMf.setBackgroundResource(R.drawable.bg_btn_filter)
-        binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white));
+        binding.btArtistMf.setTextColor(ContextCompat.getColor(this.requireContext(), R.color.white))
 
     }
-    private fun getAllArtist() {
-        val databaseReference: DatabaseReference =
+    private fun getArtistList() {
+        val dbRefArtist: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_ARTIST)
-        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbRefArtist.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 artistList.clear()
 
@@ -113,23 +108,20 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
                 if (artistList.isNotEmpty()) {
                     artistAdapter.submit(artistList)
                 }
-
             }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
-
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
     private val onItemArtistClick: (Int) -> Unit = {
-        val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
+        val intent = Intent(requireActivity(), PlaySongActivity::class.java)
         intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_ARTIST)
         intent.putExtra(NAME_INTENT_CATEGORY_ID, it)
         startActivity(intent)
     }
     private val onItemGenreClick: (Int) -> Unit = {
-        val intent = Intent(requireActivity(), PlaySongCategoryActivity::class.java)
+        val intent = Intent(requireActivity(), PlaySongActivity::class.java)
         intent.putExtra(NAME_INTENT_CHECK_CATEGORY, CHILD_GENRE)
         intent.putExtra(NAME_INTENT_CATEGORY_ID ,it)
         startActivity(intent)

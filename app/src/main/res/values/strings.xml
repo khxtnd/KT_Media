@@ -33,4 +33,13 @@
     <string name="song_fav">Bài hát yêu thích</string>
     <string name="video_fav">Video yêu thích</string>
     <string name="playlist">Danh sách bài hát của tôi</string>
+    <string name="save">"Lưu</string>
+    <string name="add_playlist">Tạo danh sách phát</string>
+    <string name="name_playlist">Tên Playlist</string>
+    <string name="noty_name_play_list">Tên không được để trống</string>
+    <string name="noty_count_play_list">Chọn ít nhất 3 bài hát</string>
+    <string name="update">Cập nhật</string>
+    <string name="noty_delete">Thông báo xóa!!!</string>
+    <string name="confirm_delete">Bạn có chắc chắn muốn xóa?</string>
+    <string name="delete">Xóa</string>
 </resources>

@@ -45,9 +45,9 @@ class VideoSuggestAdapter (
             onClick(position)
         }
         if (videoSelectedPosition==position) {
-            holder.binding.layoutItemVideo.setBackgroundResource(R.drawable.bg_item_song_or_video_selected);
+            holder.binding.layoutItemVideo.setBackgroundResource(R.drawable.bg_item_song_or_video_selected)
         } else {
-            holder.binding.layoutItemVideo.setBackgroundResource(R.drawable.bg_item_song_or_video);
+            holder.binding.layoutItemVideo.setBackgroundResource(R.drawable.bg_item_song_or_video)
         }
 
     }

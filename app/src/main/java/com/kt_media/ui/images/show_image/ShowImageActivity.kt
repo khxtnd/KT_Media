@@ -2,21 +2,14 @@ package com.kt_media.ui.images.show_image
 
 import android.Manifest
 import android.app.Activity
-import android.app.DownloadManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.MediaScannerConnection
-import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -29,19 +22,15 @@ import com.kt_media.domain.constant.CHILD_LIST_IMAGE
 import com.kt_media.domain.constant.CHILD_NAME
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_IMAGE_ID
 import com.kt_media.domain.constant.TITLE_DOWNLOAD_SUCCESS
-import com.kt_media.domain.constant.VAL_REQUEST_CODE
 import com.mymusic.ui.adapters.ImageAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
 import java.net.URL
 import java.util.UUID
 
@@ -121,7 +110,7 @@ class ShowImageActivity : AppCompatActivity() {
 
         val idCategoryImage=intent.getIntExtra(NAME_INTENT_CATEGORY_IMAGE_ID, 0)
         adapter = ImageAdapter()
-        getAllImageItem(idCategoryImage)
+        getImageInCatgory(idCategoryImage)
         binding.viewPager2Sia.adapter = adapter
         binding.ivBackSia.setOnClickListener {
             finish()
@@ -133,19 +122,19 @@ class ShowImageActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAllImageItem(idCategoryImage:Int) {
-        val databaseReference: DatabaseReference =
+    private fun getImageInCatgory(idCategoryImage:Int) {
+        val dbRefCategoryImage: DatabaseReference =
             FirebaseDatabase.getInstance().getReference(CHILD_CATEGORY_IMAGE)
         val query =
-            databaseReference.orderByChild(CHILD_ID).equalTo(idCategoryImage.toDouble())
+            dbRefCategoryImage.orderByChild(CHILD_ID).equalTo(idCategoryImage.toDouble())
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 imageList.clear()
                 for (data in dataSnapshot.children) {
-                    val categoryImage = data.child(CHILD_LIST_IMAGE).children
-                    for (imageData in categoryImage) {
-                        val imageUrl = imageData.value as String
+                    val listImage = data.child(CHILD_LIST_IMAGE).children
+                    for (image in listImage) {
+                        val imageUrl = image.value as String
                         imageList.add(imageUrl)
                     }
                     if(imageList.isNotEmpty()){
@@ -155,9 +144,7 @@ class ShowImageActivity : AppCompatActivity() {
                     binding.tvCategoryImageSia.text=categoryName
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
+            override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
 

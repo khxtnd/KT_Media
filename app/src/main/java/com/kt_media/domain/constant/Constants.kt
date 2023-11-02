@@ -15,6 +15,12 @@ const val CHILD_LIST_IMAGE="listImage"
 const val CHILD_VIDEO_FAV="VideoFavs"
 const val CHILD_COMMENT="Comments"
 const val CHILD_USER_ID="userId"
+const val CHILD_SONG_FAV="SongFavs"
+const val CHILD_IMAGE_OTHER="ImageOther"
+const val CHILD_IMAGE_SONG_FAV="imageSongFav"
+const val CHILD_PLAY_LIST="PlayLists"
+const val CHILD_SONG_IN_PLAY_LIST="songInPlaylist"
+
 
 
 
@@ -28,7 +34,9 @@ const val TITLE_NO_IMAGE="No Image"
 const val TITLE_MUSIC="Âm nhạc"
 const val TITLE_VIDEO="Video"
 const val TITLE_IMAGE="Ảnh"
+const val TITLE_SONG_FAV="Bài hát yêu thích"
 const val TITLE_DOWNLOAD_SUCCESS="Tải thành công"
+const val TITLE_PLAY_LIST="Danh sách phát"
 
 const val INTENT_ACTION_PLAY_OR_PAUSE = "1"
 const val INTENT_ACTION_PREVIOUS = "2"
@@ -53,11 +61,13 @@ const val NAME_INTENT_VIDEO_ID = "40"
 const val NAME_INTENT_CATEGORY_IMAGE_ID = "41"
 const val NAME_INTENT_CHECK_VIDEO="42"
 const val NAME_INTENT_SONG_LIST="43"
+const val NAME_INTENT_PLAY_LIST_ID="44"
 
 
 const val VAL_INTENT_LOGIN_EMAIL="61"
 const val VAL_INTENT_ALL_VIDEO="62"
 const val VAL_INTENT_VIDEO_FAV="63"
+const val VAL_INTENT_SONG_FAV="64"
 
 const val VAL_REQUEST_CODE=23032001
 

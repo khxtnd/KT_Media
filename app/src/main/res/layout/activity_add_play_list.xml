@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.playlist.PlayListActivity">
+
+    <RelativeLayout
+        android:id="@+id/rel_layout_apla"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_back_apla"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_40" />
+
+        <TextView
+            android:id="@+id/tv_title_apla"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/iv_save_apla"
+            android:layout_toEndOf="@id/iv_back_apla"
+            android:gravity="center"
+            android:text="@string/add_playlist"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/iv_save_apla"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:text="@string/save"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <EditText
+        android:orientation="vertical"
+        android:id="@+id/et_name_play_list_apla"
+        android:layout_width="300dp"
+        app:layout_goneMarginTop="5dp"
+        android:hint="@string/name_playlist"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rel_layout_apla"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_song_apla"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_name_play_list_apla"
+        app:layout_constraintBottom_toTopOf="@id/lin_layout_apla"/>
+    <LinearLayout
+        android:id="@+id/lin_layout_apla"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_prev_rec_apla"
+            android:src="@drawable/ic_arrow_back_ios_new_35_gray"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/iv_next_rec_apla"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ic_arrow_forward_ios_35"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

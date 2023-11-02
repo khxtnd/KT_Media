@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -32,26 +31,23 @@ import java.util.UUID
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-    private lateinit var firebaseUser: FirebaseUser
-    private lateinit var databaseReference: DatabaseReference
+    private lateinit var dbRefUser: DatabaseReference
     private var filePath: Uri? = null
 
-    private lateinit var storage: FirebaseStorage
-    private lateinit var storageReference: StorageReference
+    private lateinit var storageRef: StorageReference
+    private lateinit var userId:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
+        userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        dbRefUser =
+            FirebaseDatabase.getInstance().getReference(CHILD_USER).child(userId)
 
-        databaseReference =
-            FirebaseDatabase.getInstance().getReference(CHILD_USER).child(firebaseUser.uid)
+        storageRef = FirebaseStorage.getInstance().reference
 
-        storage = FirebaseStorage.getInstance()
-        storageReference = storage.reference
-
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        dbRefUser.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
                 binding.etUsernamePa.setText(user!!.name)
@@ -101,7 +97,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun uploadImage() {
         if (filePath != null) {
             val ref: StorageReference =
-                storageReference.child("image/" + UUID.randomUUID().toString())
+                storageRef.child("image/" + UUID.randomUUID().toString())
             val uploadTask = ref.putFile(filePath!!)
             uploadTask.continueWithTask { task ->
                 if (!task.isSuccessful) {
@@ -120,7 +116,7 @@ class ProfileActivity : AppCompatActivity() {
                         hashMap[CHILD_NAME] = binding.etUsernamePa.text.toString()
                         hashMap[CHILD_IMAGE] = imageUrl
 
-                        databaseReference.updateChildren(hashMap as Map<String, Any>)
+                        dbRefUser.updateChildren(hashMap as Map<String, Any>)
 
                         binding.progressBarPa.visibility = View.GONE
                         Toast.makeText(applicationContext, TITLE_UPLOADED, Toast.LENGTH_SHORT).show()

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.musics.play_song_category.SongCategoryFragment">
+    tools:context=".ui.musics.play_song_category.SongListFragment">
 
     <FrameLayout
         android:id="@+id/fr_layout_scf"
@@ -14,22 +14,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/iv_category_scf"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_gravity="center_horizontal" />
+
         <LinearLayout
             android:id="@+id/lin_scf"
             android:orientation="horizontal"
             android:background="@color/gray_4"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:layout_marginStart="10dp"
                 android:id="@+id/cir_iv_category_scf"
                 android:layout_width="120dp"
-                android:layout_height="120dp"/>
+                android:layout_height="120dp" />
+
             <TextView
                 android:id="@+id/tv_artist_name_scf"
                 android:layout_gravity="center_vertical"
@@ -38,7 +42,7 @@
                 android:textColor="@color/geek_blue_6"
                 android:textSize="25dp"
                 android:layout_marginStart="20dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </LinearLayout>
     </FrameLayout>
 
