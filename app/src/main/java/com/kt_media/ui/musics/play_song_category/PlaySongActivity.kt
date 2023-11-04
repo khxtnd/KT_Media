@@ -40,14 +40,19 @@ class PlaySongActivity : AppCompatActivity() {
         viewPagerAdapter = ViewPagerPSCAdapter(supportFragmentManager)
         binding.viewPagerPsca.adapter = viewPagerAdapter
 
-        if(checkCategory== CHILD_ARTIST){
-            binding.tvTitlePsca.text= TITLE_ARTIST
-        }else if (checkCategory== CHILD_GENRE){
-            binding.tvTitlePsca.text= TITLE_GENRE
-        }else if(checkCategory== CHILD_SONG_FAV){
-            binding.tvTitlePsca.text= TITLE_SONG_FAV
-        }else{
-            binding.tvTitlePsca.text= TITLE_PLAY_LIST
+        when (checkCategory) {
+            CHILD_ARTIST -> {
+                binding.tvTitlePsca.text= TITLE_ARTIST
+            }
+            CHILD_GENRE -> {
+                binding.tvTitlePsca.text= TITLE_GENRE
+            }
+            CHILD_SONG_FAV -> {
+                binding.tvTitlePsca.text= TITLE_SONG_FAV
+            }
+            else -> {
+                binding.tvTitlePsca.text= TITLE_PLAY_LIST
+            }
         }
 
     }

@@ -1,10 +1,14 @@
 package com.kt_media.ui.videos.play_video
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
@@ -27,7 +31,6 @@ import com.kt_media.domain.constant.CHILD_VIDEO
 import com.kt_media.domain.constant.CHILD_VIDEO_FAV
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
-import com.kt_media.domain.constant.VAL_INTENT_ALL_VIDEO
 import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.Comment
 import com.kt_media.domain.entities.Video
@@ -48,6 +51,7 @@ class PlayVideoActivity : AppCompatActivity() {
     private lateinit var ivPrevCustomExo: ImageView
     private lateinit var ivNextCustomExo: ImageView
     private lateinit var tvTitleCustomExo: TextView
+    private lateinit var sbProgressCustomExo: SeekBar
 
     private lateinit var recCommentDf: RecyclerView
     private lateinit var etCommentDf: EditText
@@ -220,8 +224,25 @@ class PlayVideoActivity : AppCompatActivity() {
             val mediaItem = MediaItem.fromUri(linkVideo)
             player.addMediaItem(mediaItem)
         }
+        setSeekBarProgress()
         setActionCustomExo()
         playExoMediaItemIndex(0)
+    }
+
+    private fun setSeekBarProgress() {
+        val handler = Handler(Looper.getMainLooper())
+
+        val updateProgressAction: Runnable = object : Runnable {
+            override fun run() {
+                val currentPosition: Long = player.currentPosition
+                val duration: Long = player.duration
+                val progress = (100 * currentPosition / duration).toInt()
+                sbProgressCustomExo.progress = progress
+                handler.postDelayed(this, 1000)
+            }
+        }
+
+        handler.post(updateProgressAction)
     }
 
     private fun initCustomExo() {
@@ -232,9 +253,21 @@ class PlayVideoActivity : AppCompatActivity() {
         ivPrevCustomExo.isEnabled = false
         ivNextCustomExo = findViewById(R.id.iv_next_custom_exo)
         tvTitleCustomExo = findViewById(R.id.tv_title_custom_exo)
+        sbProgressCustomExo=findViewById(R.id.sb_progress_custom_exo)
     }
 
     private fun setActionCustomExo() {
+        sbProgressCustomExo.setOnSeekBarChangeListener(object : OnSeekBarChangeListener{
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {}
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+                val newPosition = (sbProgressCustomExo.progress) * player.duration / 100
+                player.seekTo(newPosition)
+            }
+
+        })
         ivBackCustomExo.setOnClickListener {
             finish()
         }
