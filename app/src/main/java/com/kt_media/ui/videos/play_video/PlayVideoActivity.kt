@@ -57,14 +57,14 @@ class PlayVideoActivity : AppCompatActivity() {
     private lateinit var dbRefVideoFav: DatabaseReference
     private lateinit var dbRefComment: DatabaseReference
 
-    private lateinit var userId:String
+    private lateinit var userId: String
     private var idVideo = 0
-    private var allVideoSize = 0
+    private var videoCount = 0
 
     private val MAX_LENGTH = 60
 
-    private var videoList = arrayListOf<Video>()
-    private var commentList = arrayListOf<Comment>()
+    private var listVideo = arrayListOf<Video>()
+    private var listComment = arrayListOf<Comment>()
     private var isLike = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,11 +79,11 @@ class PlayVideoActivity : AppCompatActivity() {
         dbRefComment = FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
-        if (checkVideo == VAL_INTENT_ALL_VIDEO) {
+        if (checkVideo == VAL_INTENT_VIDEO_FAV) {
+            getVideoIdFavList()
+        } else {
             idVideo = intent.getIntExtra(NAME_INTENT_VIDEO_ID, 0)
             getCountVideo()
-        } else if (checkVideo == VAL_INTENT_VIDEO_FAV) {
-            getVideoIdFavList()
         }
         binding.recVideoPva.adapter = videoAdapter
         binding.recVideoPva.layoutManager =
@@ -97,25 +97,26 @@ class PlayVideoActivity : AppCompatActivity() {
     private fun getCountVideo() {
         dbRefVideoList.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                allVideoSize = dataSnapshot.childrenCount.toInt()
+                videoCount = dataSnapshot.childrenCount.toInt()
                 getVideoList()
             }
+
             override fun onCancelled(error: DatabaseError) {}
         })
     }
 
     private fun getVideoList() {
-        if (allVideoSize >= idVideo + 9) {
+        if (videoCount >= idVideo + 9) {
             val query = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
                 .endAt((idVideo + 9).toDouble())
             query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    videoList.clear()
+                    listVideo.clear()
                     for (data: DataSnapshot in dataSnapshot.children) {
                         val video = data.getValue(Video::class.java)
-                        video?.let { videoList.add(it) }
+                        video?.let { listVideo.add(it) }
                     }
-                    if (videoList.isNotEmpty()) {
+                    if (listVideo.isNotEmpty()) {
                         videoListIsNotEmpty()
                     }
                 }
@@ -124,25 +125,25 @@ class PlayVideoActivity : AppCompatActivity() {
             })
         } else {
             val query1 = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
-                .endAt((allVideoSize + 1).toDouble())
+                .endAt((videoCount + 1).toDouble())
             val query2 = dbRefVideoList.orderByChild(CHILD_ID).startAt(1.0)
-                .endAt((8 - allVideoSize + idVideo).toDouble())
+                .endAt((8 - videoCount + idVideo).toDouble())
             query1.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot1: DataSnapshot) {
-                    videoList.clear()
+                    listVideo.clear()
                     for (data: DataSnapshot in dataSnapshot1.children) {
                         val video = data.getValue(Video::class.java)
-                        video?.let { videoList.add(it) }
+                        video?.let { listVideo.add(it) }
                     }
 
                     query2.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot2: DataSnapshot) {
                             for (data: DataSnapshot in dataSnapshot2.children) {
                                 val video = data.getValue(Video::class.java)
-                                video?.let { videoList.add(it) }
+                                video?.let { listVideo.add(it) }
                             }
-                            if (videoList.isNotEmpty()) {
-                              videoListIsNotEmpty()
+                            if (listVideo.isNotEmpty()) {
+                                videoListIsNotEmpty()
                             }
                         }
 
@@ -154,15 +155,16 @@ class PlayVideoActivity : AppCompatActivity() {
             })
         }
     }
-    private fun videoListIsNotEmpty(){
-        videoAdapter.submit(videoList)
+
+    private fun videoListIsNotEmpty() {
+        videoAdapter.submit(listVideo)
         initCustomExo()
         setExoPlayer()
     }
 
     private fun getVideoIdFavList() {
         val videoIdFavList = arrayListOf<Int>()
-        val query=dbRefVideoFav.orderByChild(CHILD_USER_ID).equalTo(userId)
+        val query = dbRefVideoFav.orderByChild(CHILD_USER_ID).equalTo(userId)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 videoIdFavList.clear()
@@ -182,26 +184,26 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun getVideoListById(videoIdFavList: ArrayList<Int>) {
-        var count=0
+        var count = 0
         dbRefVideoList.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                videoList.clear()
+                listVideo.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
                     val video = data.getValue(Video::class.java)
                     video?.let {
                         for (i in videoIdFavList) {
                             if (i == video.id) {
-                                videoList.add(it)
+                                listVideo.add(it)
                                 count++
                                 break
                             }
                         }
                     }
-                    if(videoIdFavList.size==count){
+                    if (videoIdFavList.size == count) {
                         break
                     }
                 }
-                if (videoList.isNotEmpty()) {
+                if (listVideo.isNotEmpty()) {
                     videoListIsNotEmpty()
                 }
             }
@@ -213,7 +215,7 @@ class PlayVideoActivity : AppCompatActivity() {
     private fun setExoPlayer() {
         player = ExoPlayer.Builder(this).build()
         binding.playerViewPva.player = player
-        for (video in videoList) {
+        for (video in listVideo) {
             val linkVideo = video.link
             val mediaItem = MediaItem.fromUri(linkVideo)
             player.addMediaItem(mediaItem)
@@ -298,14 +300,14 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun setVideoName(index: Int) {
-        var name = videoList[index].name
+        var name = listVideo[index].name
 
         if (name.length > MAX_LENGTH) {
             name = name.subSequence(0, MAX_LENGTH).toString() + "..."
         }
         binding.tvVideoNamePva.text = name
 
-        val videoId = videoList[index].id
+        val videoId = listVideo[index].id
         binding.linLayoutCommentPva.setOnClickListener {
             showBottomSheet(videoId)
         }
@@ -345,15 +347,15 @@ class PlayVideoActivity : AppCompatActivity() {
     private fun getCommentList(videoId: Int) {
         dbRefComment.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                commentList.clear()
+                listComment.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
                     val comment = data.getValue(Comment::class.java)
                     if (comment != null && comment.videoId == videoId) {
-                        commentList.add(comment)
+                        listComment.add(comment)
                     }
                 }
-                if (commentList.isNotEmpty()) {
-                    commentAdapter.submit(commentList)
+                if (listComment.isNotEmpty()) {
+                    commentAdapter.submit(listComment)
                 }
 
             }

@@ -17,8 +17,7 @@ import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_PLAY_LIST
 import com.kt_media.domain.constant.CHILD_SONG
 import com.kt_media.domain.constant.CHILD_SONG_IN_PLAY_LIST
-import com.kt_media.domain.entities.Comment
-import com.kt_media.domain.entities.PlayList
+import com.kt_media.domain.entities.Playlist
 import com.kt_media.domain.entities.Song
 import com.mymusic.ui.adapters.SongSelectAdapter
 
@@ -28,8 +27,8 @@ class AddPlayListActivity : AppCompatActivity() {
     private lateinit var dbRefPlayList: DatabaseReference
     private lateinit var adapter:SongSelectAdapter
     private lateinit var userId:String
-    private var songList = arrayListOf<Song>()
-    private var songIdList = arrayListOf<Int>()
+    private var listSong = arrayListOf<Song>()
+    private var listSongId = arrayListOf<Int>()
     private var idStart=1
     private var songCount=0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,13 +59,13 @@ class AddPlayListActivity : AppCompatActivity() {
             val namePlayList=binding.etNamePlayListApla.text.toString()
             if(namePlayList.isEmpty()){
                 Toast.makeText(this,R.string.noty_name_play_list,Toast.LENGTH_SHORT).show()
-            }else if(songIdList.size<3){
+            }else if(listSongId.size<3){
                 Toast.makeText(this,R.string.noty_count_play_list,Toast.LENGTH_SHORT).show()
             }else{
                 val id = dbRefPlayList.push().key.toString()
-                val playlist = PlayList(id, userId, "",namePlayList)
+                val playlist = Playlist(id, userId, "",namePlayList)
                 dbRefPlayList.child(id).setValue(playlist)
-                dbRefPlayList.child(id).child(CHILD_SONG_IN_PLAY_LIST).setValue(songIdList)
+                dbRefPlayList.child(id).child(CHILD_SONG_IN_PLAY_LIST).setValue(listSongId)
                 finish()
             }
         }
@@ -100,13 +99,13 @@ class AddPlayListActivity : AppCompatActivity() {
         }
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                songList.clear()
+                listSong.clear()
                 for (data in dataSnapshot.children) {
                     val song = data.getValue(Song::class.java)
-                    song?.let { songList.add(it) }
+                    song?.let { listSong.add(it) }
                 }
-                if (songList.isNotEmpty()) {
-                    adapter.submit(songList,songIdList)
+                if (listSong.isNotEmpty()) {
+                    adapter.submit(listSong,listSongId)
                 }
             }
 
@@ -125,11 +124,11 @@ class AddPlayListActivity : AppCompatActivity() {
     }
 
     private fun updateSongIdList(songId: Int) {
-        if (songIdList.contains(songId)) {
-            songIdList.remove(songId)
+        if (listSongId.contains(songId)) {
+            listSongId.remove(songId)
         } else {
-            songIdList.add(songId)
-            songIdList.sort()
+            listSongId.add(songId)
+            listSongId.sort()
         }
     }
 }

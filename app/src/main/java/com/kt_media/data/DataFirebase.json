@@ -1,5 +1,5 @@
 {
-  "Artists": {
+  "Artist": {
     "01 Alan Walker": {
       "id": 1,
       "image": "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/b/a/6/b/ba6b56ca02dd06f37693d945acfcdad9.jpg",
@@ -161,7 +161,7 @@
       "name": "T-ara"
     }
   },
-  "CategoryImages": {
+  "Album": {
     "01 League of Legends Items Part 1": {
       "id": 1,
       "listImage": {
@@ -419,7 +419,99 @@
       "name": "Image Random Part 2"
     }
   },
-  "Genres": {
+  "Comment": {
+    "-Nhr21kJrvsXz4e03Qm_": {
+      "content": "chào bạn",
+      "id": "-Nhr21kJrvsXz4e03Qm_",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 3
+    },
+    "-Nhr26agO8UUYgHZTwkP": {
+      "content": "hello everyone",
+      "id": "-Nhr26agO8UUYgHZTwkP",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 3
+    },
+    "-Nhr8Rez3eCZYo0E1K-w": {
+      "content": "hay quá",
+      "id": "-Nhr8Rez3eCZYo0E1K-w",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 4
+    },
+    "-Nhr8VmcoD-BQ62KzO9U": {
+      "content": "Thật là tuyệt vời",
+      "id": "-Nhr8VmcoD-BQ62KzO9U",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 4
+    },
+    "-NhrCf4Os72zKcfmdYxM": {
+      "content": "bài hát này rất hay",
+      "id": "-NhrCf4Os72zKcfmdYxM",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 2
+    },
+    "-NhrCls3_pDFcSU16aAF": {
+      "content": "tôi cũng nghĩ thế",
+      "id": "-NhrCls3_pDFcSU16aAF",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 2
+    },
+    "-NhrCr8n9X5Rosx3OKav": {
+      "content": "nó thật tuyệt vời với người như tôi",
+      "id": "-NhrCr8n9X5Rosx3OKav",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 2
+    },
+    "-NhwB273dAe749EfIZZX": {
+      "content": "tác giả bài hát này là ai vậy?",
+      "id": "-NhwB273dAe749EfIZZX",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 10
+    },
+    "-Ni4Ty89QofLQN3REqmv": {
+      "content": "nhớ kỷ niệm ngày xưa quá",
+      "id": "-Ni4Ty89QofLQN3REqmv",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 1
+    },
+    "-Ni5mnKAxvEk7bm_Kg6h": {
+      "content": "Bài hát hot nhất tik tok hiện tại",
+      "id": "-Ni5mnKAxvEk7bm_Kg6h",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 12
+    },
+    "-Ni5n4IT_R4wOiyHeryi": {
+      "content": "Tôi ước có thể cùng đi với người yêu dưới ánh hoàng hôn",
+      "id": "-Ni5n4IT_R4wOiyHeryi",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 3
+    },
+    "-Ni5nBg5XOXusg0ioe8N": {
+      "content": "7 8 năm rồi dài quá",
+      "id": "-Ni5nBg5XOXusg0ioe8N",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 4
+    },
+    "-NiFVhnpcyEx4ihynOBD": {
+      "content": "Tôi cũng mong muốn vậy",
+      "id": "-NiFVhnpcyEx4ihynOBD",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 3
+    },
+    "-NiFVvHB2VrrRVfU7_j6": {
+      "content": "Tôi chưa từng nghe bài hát này trước đây",
+      "id": "-NiFVvHB2VrrRVfU7_j6",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 5
+    },
+    "-NiFW0pj9IRCt8S7O6Gn": {
+      "content": "Bộ phim này rất hay",
+      "id": "-NiFW0pj9IRCt8S7O6Gn",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 6
+    }
+  },
+  "Genre": {
     "01 Nhạc Việt": {
       "id": 1,
       "image": "https://avatar-ex-swe.nixcdn.com/topic/mobile/2023/06/13/9/0/a/5/1686638604841_org.jpg",
@@ -496,7 +588,102 @@
       "name": "Nhạc Wedding"
     }
   },
-  "Songs": {
+  "ImageOther": {
+    "imageSongFav": "https://avatar-ex-swe.nixcdn.com/topic/share/2022/08/08/b/6/7/a/1659944071647.jpg"
+  },
+  "Playlist": {
+    "-NiF1qGt-G3DubmUBwMm": {
+      "id": "-NiF1qGt-G3DubmUBwMm",
+      "image": "",
+      "name": "Nhạc Việt",
+      "listSongId": [
+        1,
+        5,
+        6,
+        19,
+        20,
+        40
+      ],
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "-NiFOifLlMI_XdvSKuSB": {
+      "id": "-NiFOifLlMI_XdvSKuSB",
+      "image": "",
+      "name": "Nhạc Buồn",
+      "listSongId": [
+        47,
+        49,
+        54,
+        57,
+        59,
+        69
+      ],
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    }
+  },
+  "SongFav": {
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+1": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+1",
+      "songId": 1,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+29": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+29",
+      "songId": 29,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+42": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+42",
+      "songId": 42,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+44": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+44",
+      "songId": 44,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+45": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+45",
+      "songId": 45,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+46": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+46",
+      "songId": 46,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+52": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+52",
+      "songId": 52,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+67": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+67",
+      "songId": 67,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+69": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+69",
+      "songId": 69,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+77": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+77",
+      "songId": 77,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+82": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+82",
+      "songId": 82,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+9": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+9",
+      "songId": 9,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    }
+  },
+  "Song": {
     "01 1 Phút": {
       "artistId": 2,
       "genreId": 8,
@@ -1154,7 +1341,7 @@
       "name": "Yume To Hazakura"
     }
   },
-  "Users": {
+  "User": {
     "AqX1zsrifDaQedNGuUYDgjZnKzj1": {
       "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
       "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fa5d42689-d7e4-4114-88ce-d82d838732dd?alt=media&token=972a2f56-b57b-4264-a088-24b24f85a9ac",
@@ -1166,7 +1353,49 @@
       "name": "Thanh Tâm"
     }
   },
-  "Videos": {
+  "VideoFav": {
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+12": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+12",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 12
+    },
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+3": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+3",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 3
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+1": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+1",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 1
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+10": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+10",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 10
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+2": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+2",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 2
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+4": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+4",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 4
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+6": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+6",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 6
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1+7": {
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+7",
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
+      "videoId": 7
+    }
+  },
+  "Video": {
     "01 (Nightcore) Love The Way You Lie Club Remix": {
       "id": 1,
       "image": "https://i.ytimg.com/vi/HZC9FoYkmM8/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLCFxvzZa8DWfuKXEsnHu5D9aW-Sbw",

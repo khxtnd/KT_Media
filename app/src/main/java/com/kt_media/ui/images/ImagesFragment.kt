@@ -17,19 +17,19 @@ import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_LIST_IMAGE
 import com.kt_media.domain.constant.CHILD_NAME
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_IMAGE_ID
-import com.kt_media.domain.entities.CategoryImage
+import com.kt_media.domain.entities.Album
 import com.kt_media.ui.images.show_image.ShowImageActivity
-import com.mymusic.ui.adapters.CategoryImageAdapter
+import com.mymusic.ui.adapters.AlbumAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
 
 class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.fragment_images)  {
-    private lateinit var categoryImage: CategoryImageAdapter
-    private var categoryImageList = arrayListOf<CategoryImage>()
+    private lateinit var categoryImage: AlbumAdapter
+    private var albumList = arrayListOf<Album>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding=FragmentImagesBinding.bind(view)
-        categoryImage=CategoryImageAdapter(onItemCategoryImageClick)
+        categoryImage=AlbumAdapter(onItemCategoryImageClick)
         getAllCategoryImageItem()
         binding?.recCategoryImageIf?.adapter=categoryImage
         binding?.recCategoryImageIf?.layoutManager =
@@ -41,16 +41,16 @@ class ImagesFragment : BaseViewBindingFragment<FragmentImagesBinding>(R.layout.f
             FirebaseDatabase.getInstance().getReference(CHILD_CATEGORY_IMAGE)
         dbRefCategoryImage.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                categoryImageList.clear()
+                albumList.clear()
                 for (data: DataSnapshot in dataSnapshot.children) {
                     val id= (data.child(CHILD_ID).value as Long).toInt()
                     val name = data.child(CHILD_NAME).value.toString()
                     val image = data.child(CHILD_LIST_IMAGE).children.firstOrNull()?.value.toString()
-                    val categoryImage=CategoryImage(id,image,name)
-                    categoryImageList.add(categoryImage)
+                    val album=Album(id,image,name)
+                    albumList.add(album)
                 }
-                if (categoryImageList.isNotEmpty()) {
-                    categoryImage.submit(categoryImageList)
+                if (albumList.isNotEmpty()) {
+                    categoryImage.submit(albumList)
                 }
 
             }

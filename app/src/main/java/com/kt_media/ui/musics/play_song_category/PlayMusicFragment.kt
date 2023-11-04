@@ -1,14 +1,9 @@
 package com.kt_media.ui.musics.play_song_category
 
-import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.ComponentName
-import android.content.Context
+
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.ServiceConnection
+
 import android.os.Bundle
-import android.os.IBinder
 import android.view.View
 import android.widget.SeekBar
 import com.bumptech.glide.Glide
@@ -24,9 +19,6 @@ import com.kt_media.domain.constant.CHILD_SONG_FAV
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
-import com.kt_media.domain.constant.INTENT_ACTION_SEEK_BAR_UPDATE
-import com.kt_media.domain.constant.NAME_INTENT_DURATION_SEEK_BAR
-import com.kt_media.domain.constant.NAME_INTENT_PROGRESS_SEEK_BAR
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
 import com.kt_media.domain.entities.Song
 import com.kt_media.domain.entities.SongFav
@@ -39,29 +31,16 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.concurrent.TimeUnit
 
 class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.layout.fragment_play_music) {
-    private var musicService: MusicService? = null
-    private var isBound = false
     private lateinit var dbRefSongFav: DatabaseReference
     private lateinit var userId:String
     private var isLike = false
 
-    private val seekBarReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val progress = intent?.getIntExtra(NAME_INTENT_PROGRESS_SEEK_BAR, 0) ?: 0
-            val duration = intent?.getIntExtra(NAME_INTENT_DURATION_SEEK_BAR, 0) ?: 0
-            updateSeekBar(progress, duration)
-        }
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentPlayMusicBinding.bind(view)
 
         dbRefSongFav = FirebaseDatabase.getInstance().getReference(CHILD_SONG_FAV)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
-        val serviceIntent = Intent(requireContext(), MusicService::class.java)
-        requireContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
-
 
         binding?.ivPlayPmf?.setOnClickListener {
             val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
@@ -83,13 +62,11 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                musicService?.pauseSeekBarUpdate()
+
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                val progress = seekBar?.progress ?: 0
-                musicService?.seekTo(progress)
-                musicService?.resumeSeekBarUpdate()
+
             }
         })
 
@@ -158,30 +135,20 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this)
     }
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    override fun onResume() {
-        super.onResume()
-        requireContext().registerReceiver(seekBarReceiver, IntentFilter(
-            INTENT_ACTION_SEEK_BAR_UPDATE))
-    }
 
-    override fun onPause() {
-        super.onPause()
-        requireContext().unregisterReceiver(seekBarReceiver)
-    }
 
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
 
-    private fun updateSeekBar(progress: Int, duration: Int) {
-        binding?.seekBarPmf?.progress = progress
-        binding?.seekBarPmf?.max = duration
-
-        binding?.tvProgressPmf?.text = formatTime(progress)
-        binding?.tvDurationPmf?.text = formatTime(duration)
-    }
+//    private fun updateSeekBar(progress: Int, duration: Int) {
+//        binding?.seekBarPmf?.progress = progress
+//        binding?.seekBarPmf?.max = duration
+//
+//        binding?.tvProgressPmf?.text = formatTime(progress)
+//        binding?.tvDurationPmf?.text = formatTime(duration)
+//    }
 
     private fun formatTime(milliseconds: Int): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds.toLong())
@@ -190,29 +157,7 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
         return String.format("%02d:%02d", minutes, seconds)
     }
 
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as MusicService.LocalBinder
-            musicService = binder.getService()
-            isBound = true
 
-            musicService?.setSeekBarUpdateListener(object : MusicService.SeekBarUpdateListener {
-                override fun onSeekBarUpdate(progress: Int, duration: Int) {
-                    val intent = Intent(INTENT_ACTION_SEEK_BAR_UPDATE).apply {
-                        putExtra(NAME_INTENT_PROGRESS_SEEK_BAR, progress)
-                        putExtra(NAME_INTENT_DURATION_SEEK_BAR, duration)
-                    }
-                    requireContext().sendBroadcast(intent)
-                }
-
-            })
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            isBound = false
-            musicService = null
-        }
-    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onValueEvent(event: SongEvent) {
         val song: Song = event.song

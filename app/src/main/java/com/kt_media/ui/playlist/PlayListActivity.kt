@@ -16,18 +16,12 @@ import com.kt_media.R
 import com.kt_media.databinding.ActivityPlayListBinding
 import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_IMAGE
-import com.kt_media.domain.constant.CHILD_LIST_IMAGE
 import com.kt_media.domain.constant.CHILD_NAME
 import com.kt_media.domain.constant.CHILD_PLAY_LIST
-import com.kt_media.domain.constant.CHILD_SONG_FAV
 import com.kt_media.domain.constant.CHILD_USER_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_PLAY_LIST_ID
-import com.kt_media.domain.entities.Artist
-import com.kt_media.domain.entities.CategoryImage
-import com.kt_media.domain.entities.PlayList
-import com.kt_media.domain.entities.SongFav
-import com.kt_media.ui.login.LoginActivity
+import com.kt_media.domain.entities.Playlist
 import com.kt_media.ui.musics.play_song_category.PlaySongActivity
 import com.mymusic.ui.adapters.PlayListAdapter
 
@@ -36,7 +30,7 @@ class PlayListActivity : AppCompatActivity() {
     private lateinit var dbRefPlayList: DatabaseReference
     private lateinit var adapter: PlayListAdapter
     private lateinit var userId: String
-    private var list = arrayListOf<PlayList>()
+    private var list = arrayListOf<Playlist>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayListBinding.inflate(layoutInflater)
@@ -66,7 +60,7 @@ class PlayListActivity : AppCompatActivity() {
                     val userId= data.child(CHILD_USER_ID).value.toString()
                     val name = data.child(CHILD_NAME).value.toString()
                     val image = data.child(CHILD_IMAGE).value.toString()
-                    val playList= PlayList(id,userId,image,name)
+                    val playList= Playlist(id,userId,image,name)
                     list.add(playList)
                 }
                 if (list.isNotEmpty()) {

@@ -55,21 +55,21 @@ import org.greenrobot.eventbus.ThreadMode
 class SongListFragment :
     BaseViewBindingFragment<FragmentSongListBinding>(R.layout.fragment_song_list) {
     private lateinit var songAdapter: SongAdapter
-    private lateinit var dbRefSongList: DatabaseReference
+    private lateinit var dbRefSong: DatabaseReference
     private lateinit var dbRefSongFav: DatabaseReference
     private lateinit var dbRefCategory: DatabaseReference
-    private lateinit var dbRefPlayList: DatabaseReference
+    private lateinit var dbRefPlaylist: DatabaseReference
     private lateinit var userId: String
-    private var songList = arrayListOf<Song>()
+    private var listSong = arrayListOf<Song>()
     private var idArtistOrGenre = 0
-    private var idPlayList = ""
+    private var idPlaylist = ""
     private var checkCategory = ""
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSongListBinding.bind(view)
         dbRefSongFav = FirebaseDatabase.getInstance().getReference(CHILD_SONG_FAV)
-        dbRefSongList = FirebaseDatabase.getInstance().getReference(CHILD_SONG)
-        dbRefPlayList = FirebaseDatabase.getInstance().getReference(CHILD_PLAY_LIST)
+        dbRefSong = FirebaseDatabase.getInstance().getReference(CHILD_SONG)
+        dbRefPlaylist = FirebaseDatabase.getInstance().getReference(CHILD_PLAY_LIST)
 
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
         activity?.let {
@@ -82,13 +82,13 @@ class SongListFragment :
                 }
 
                 CHILD_PLAY_LIST -> {
-                    idPlayList = intent.getStringExtra(NAME_INTENT_PLAY_LIST_ID).toString()
+                    idPlaylist = intent.getStringExtra(NAME_INTENT_PLAY_LIST_ID).toString()
                     getSongIdPlayList()
                 }
 
                 else -> {
                     idArtistOrGenre = intent.getIntExtra(NAME_INTENT_CATEGORY_ID, 0)
-                    getSongInArtistOrGenre()
+                    getSongByArtistOrGenre()
                 }
             }
             setupImageTitle()
@@ -96,7 +96,7 @@ class SongListFragment :
     }
 
     private fun getSongIdPlayList() {
-        val query = dbRefPlayList.child(idPlayList).child(CHILD_SONG_IN_PLAY_LIST)
+        val query = dbRefPlaylist.child(idPlaylist).child(CHILD_SONG_IN_PLAY_LIST)
         val songIdFavList = arrayListOf<Int>()
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -115,7 +115,7 @@ class SongListFragment :
     }
 
 
-    private fun getSongInArtistOrGenre() {
+    private fun getSongByArtistOrGenre() {
         var child = ""
         if (checkCategory == CHILD_GENRE) {
             child = CHILD_GENRE_ID
@@ -123,16 +123,16 @@ class SongListFragment :
             child = CHILD_ARTIST_ID
         }
         val query =
-            dbRefSongList.orderByChild(child).equalTo(idArtistOrGenre.toDouble())
+            dbRefSong.orderByChild(child).equalTo(idArtistOrGenre.toDouble())
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                songList.clear()
+                listSong.clear()
                 for (data in dataSnapshot.children) {
                     val song = data.getValue(Song::class.java)
-                    song?.let { songList.add(it) }
+                    song?.let { listSong.add(it) }
                 }
-                if (songList.isNotEmpty()) {
+                if (listSong.isNotEmpty()) {
                     startService()
                 }
             }
@@ -164,16 +164,16 @@ class SongListFragment :
 
     private fun getSongListById(songIdList: ArrayList<Int>) {
         var count=0
-        dbRefSongList.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbRefSong.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                songList.clear()
+                listSong.clear()
 
                 for (data: DataSnapshot in dataSnapshot.children) {
                     val song = data.getValue(Song::class.java)
                     song?.let {
                         for (i in songIdList) {
                             if (i == song.id) {
-                                songList.add(it)
+                                listSong.add(it)
                                 count++
                                 break
                             }
@@ -183,7 +183,7 @@ class SongListFragment :
                         break
                     }
                 }
-                if (songList.isNotEmpty()) {
+                if (listSong.isNotEmpty()) {
                     startService()
                 }
             }
@@ -195,9 +195,9 @@ class SongListFragment :
     private fun startService() {
         val intentStartService = Intent(requireContext(), MusicService::class.java)
         intentStartService.action = INTENT_ACTION_START_SERVICE
-        intentStartService.putExtra(NAME_INTENT_SONG_LIST, songList)
+        intentStartService.putExtra(NAME_INTENT_SONG_LIST, listSong)
         requireContext().startService(intentStartService)
-        songAdapter.submit(songList)
+        songAdapter.submit(listSong)
         setupActionButton()
     }
 
@@ -216,8 +216,9 @@ class SongListFragment :
 
     override fun onStart() {
         super.onStart()
-        if (!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this)
+        }
     }
 
     override fun onStop() {
@@ -260,7 +261,7 @@ class SongListFragment :
             })
 
         }else if(checkCategory== CHILD_PLAY_LIST){
-            val query=dbRefPlayList.child(idPlayList)
+            val query=dbRefPlaylist.child(idPlaylist)
             query.addListenerForSingleValueEvent(object : ValueEventListener{
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if(dataSnapshot.exists()) {
