@@ -8,13 +8,8 @@ import android.content.Intent
 import android.content.IntentFilter
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -25,10 +20,15 @@ import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentPlayMusicBinding
 import com.kt_media.domain.constant.CHILD_SONG_FAV
+import com.kt_media.domain.constant.INTENT_ACTION_MODE
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
+import com.kt_media.domain.constant.INTENT_ACTION_SEEK_TO
+import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PROGRESS
+import com.kt_media.domain.constant.NAME_INTENT_PROGRESS
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
+import com.kt_media.domain.constant.VAL_MODE_REPEAT_0NE
 import com.kt_media.domain.entities.Song
 import com.kt_media.domain.entities.SongFav
 import com.kt_media.service.MusicService
@@ -37,13 +37,14 @@ import com.mymusic.ui.base.BaseViewBindingFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 
 class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.layout.fragment_play_music) {
     private lateinit var dbRefSongFav: DatabaseReference
+    private lateinit var musicService: MusicService
     private lateinit var userId:String
     private var isLike = false
+    private var mode= 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,19 +68,36 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
             previousIntent.action = INTENT_ACTION_PREVIOUS
             requireContext().startService(previousIntent)
         }
+        musicService= MusicService()
         binding?.seekBarPmf?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
+                requireActivity().unregisterReceiver(receiver)
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
+                val seekToIntent = Intent(requireContext(), MusicService::class.java)
+                seekToIntent.action = INTENT_ACTION_SEEK_TO
+                seekToIntent.putExtra(NAME_INTENT_PROGRESS,seekBar?.progress)
+                requireContext().startService(seekToIntent)
+                val filter = IntentFilter(INTENT_ACTION_UPDATE_PROGRESS)
+                requireActivity().registerReceiver(receiver, filter)
             }
         })
-
+        binding?.ivRepeatPmf?.setOnClickListener {
+            mode = if(mode==0){
+                binding?.ivRepeatPmf?.setImageResource(R.drawable.ic_repeat_on_50)
+                1
+            }else{
+                binding?.ivRepeatPmf?.setImageResource(R.drawable.ic_repeat_one_on_50)
+                0
+            }
+            val modeIntent=Intent(requireContext(), MusicService::class.java)
+            modeIntent.action= INTENT_ACTION_MODE
+            requireContext().startService(modeIntent)
+        }
     }
 
     private fun setupStatus(song: Song, isPlaying: Boolean, duration:Int) {
@@ -151,7 +169,7 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onResume() {
         super.onResume()
-        val filter = IntentFilter("ACTION_UPDATE_PROGRESS")
+        val filter = IntentFilter(INTENT_ACTION_UPDATE_PROGRESS)
         requireActivity().registerReceiver(receiver, filter)
     }
 
@@ -186,8 +204,8 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
     }
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "ACTION_UPDATE_PROGRESS") {
-                val progress = intent.getIntExtra("progress", 0)
+            if (intent?.action == INTENT_ACTION_UPDATE_PROGRESS) {
+                val progress = intent.getIntExtra(NAME_INTENT_PROGRESS, 0)
                 binding?.seekBarPmf?.progress = progress
                 binding?.tvProgressPmf?.text = formatTime(progress)
             }

@@ -1,7 +1,11 @@
 package com.kt_media.ui.musics.play_song_category
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,11 +32,15 @@ class PlaySongActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlaySongBinding
     private lateinit var viewPagerAdapter: ViewPagerPSCAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlaySongBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val checkCategory=intent.getStringExtra(NAME_INTENT_CHECK_CATEGORY)
+
+        val startServiceIntent = Intent(this, MusicService::class.java)
+        startService(startServiceIntent)
 
         binding.ivBackPsca.setOnClickListener {
             finish()

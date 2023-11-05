@@ -32,13 +32,14 @@ import com.kt_media.domain.constant.CHILD_USER_ID
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_SONG_INDEX
-import com.kt_media.domain.constant.INTENT_ACTION_START_SERVICE
+import com.kt_media.domain.constant.INTENT_ACTION_SEND_SONG_LIST
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_PLAY_LIST_ID
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
+import com.kt_media.domain.constant.VAL_MODE_REPEAT_0NE
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
 import com.kt_media.domain.entities.Song
@@ -193,10 +194,10 @@ class SongListFragment :
     }
 
     private fun startService() {
-        val intentStartService = Intent(requireContext(), MusicService::class.java)
-        intentStartService.action = INTENT_ACTION_START_SERVICE
-        intentStartService.putExtra(NAME_INTENT_SONG_LIST, listSong)
-        requireContext().startService(intentStartService)
+        val sendSongListIntent = Intent(requireContext(), MusicService::class.java)
+        sendSongListIntent.action = INTENT_ACTION_SEND_SONG_LIST
+        sendSongListIntent.putExtra(NAME_INTENT_SONG_LIST, listSong)
+        requireContext().startService(sendSongListIntent)
         songAdapter.submit(listSong)
         setupActionButton()
     }
