@@ -1,20 +1,19 @@
 package com.kt_media.service
 
+import android.R
+import android.R.id.input
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.core.app.NotificationCompat
-import com.kt_media.R
 import com.kt_media.domain.constant.INTENT_ACTION_MODE
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
@@ -29,6 +28,7 @@ import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
 import com.kt_media.domain.entities.Song
 import com.kt_media.ui.main.MainActivity
 import org.greenrobot.eventbus.EventBus
+
 
 class MusicService : Service() {
     private lateinit var mediaPlayer: MediaPlayer
@@ -143,7 +143,19 @@ class MusicService : Service() {
     }
 
     private fun showNoty() {
-
+        createNotificationChannel()
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0, notificationIntent, PendingIntent.FLAG_MUTABLE
+        )
+        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Foreground Service")
+            .setContentText("adadads")
+            .setSmallIcon(R.drawable.ic_notification_clear_all)
+            .setContentIntent(pendingIntent)
+            .build()
+        startForeground(1, notification)
     }
 
     private fun playSongIndex() {
@@ -187,6 +199,18 @@ class MusicService : Service() {
         mediaPlayer.seekTo(position)
         mediaPlayer.start()
     }
-
-
+    val CHANNEL_ID = "ForegroundServiceChannel"
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceChannel = NotificationChannel(
+                CHANNEL_ID,
+                "Foreground Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val manager = getSystemService(
+                NotificationManager::class.java
+            )
+            manager.createNotificationChannel(serviceChannel)
+        }
+    }
 }

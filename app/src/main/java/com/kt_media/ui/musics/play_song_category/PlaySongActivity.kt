@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -40,7 +41,7 @@ class PlaySongActivity : AppCompatActivity() {
         val checkCategory=intent.getStringExtra(NAME_INTENT_CHECK_CATEGORY)
 
         val startServiceIntent = Intent(this, MusicService::class.java)
-        startService(startServiceIntent)
+        ContextCompat.startForegroundService(this, startServiceIntent)
 
         binding.ivBackPsca.setOnClickListener {
             finish()
