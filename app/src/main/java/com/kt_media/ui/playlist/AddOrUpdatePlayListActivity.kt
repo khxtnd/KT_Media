@@ -1,8 +1,8 @@
 package com.kt_media.ui.playlist
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -14,40 +14,54 @@ import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityAddPlayListBinding
 import com.kt_media.domain.constant.CHILD_ID
+import com.kt_media.domain.constant.CHILD_NAME
 import com.kt_media.domain.constant.CHILD_PLAY_LIST
 import com.kt_media.domain.constant.CHILD_SONG
 import com.kt_media.domain.constant.CHILD_SONG_IN_PLAY_LIST
+import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PLAY_LIST
+import com.kt_media.domain.constant.NAME_INTENT_PLAY_LIST_ID
+import com.kt_media.domain.constant.TITLE_UPDATE_PLAY_LIST
 import com.kt_media.domain.entities.Playlist
 import com.kt_media.domain.entities.Song
 import com.mymusic.ui.adapters.SongSelectAdapter
 
-class AddPlayListActivity : AppCompatActivity() {
+class AddOrUpdatePlayListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlayListBinding
     private lateinit var dbRefSongList: DatabaseReference
-    private lateinit var dbRefPlayList: DatabaseReference
+    private lateinit var dbRefPlaylist: DatabaseReference
     private lateinit var adapter:SongSelectAdapter
     private lateinit var userId:String
     private var listSong = arrayListOf<Song>()
     private var listSongId = arrayListOf<Int>()
     private var idStart=1
-    private var songCount=0
+    private var songCount = 0
+    private var checkAddOrUpdate = 0
+    private var idPlaylist=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddPlayListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         dbRefSongList = FirebaseDatabase.getInstance().getReference(CHILD_SONG)
-        dbRefPlayList = FirebaseDatabase.getInstance().getReference(CHILD_PLAY_LIST)
+        dbRefPlaylist = FirebaseDatabase.getInstance().getReference(CHILD_PLAY_LIST)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        if (intent.action == INTENT_ACTION_UPDATE_PLAY_LIST) {
+            idPlaylist= intent.getStringExtra(NAME_INTENT_PLAY_LIST_ID).toString()
+            checkAddOrUpdate=1
+            getSongIdList()
+            setTitle()
+        }else{
+            getCountSongList()
+        }
 
         binding.ivBackApla.setOnClickListener {
             finish()
         }
-        binding.ivPrevRecApla.isEnabled=false
+        binding.ivPrevRecApla.isEnabled = false
         setRecycleView()
-        getCountSongList()
 
         binding.ivNextRecApla.setOnClickListener {
-            idStart+=10
+            idStart += 10
             getSongList()
         }
         binding.ivPrevRecApla.setOnClickListener {
@@ -62,13 +76,47 @@ class AddPlayListActivity : AppCompatActivity() {
             }else if(listSongId.size<3){
                 Toast.makeText(this,R.string.noty_count_play_list,Toast.LENGTH_SHORT).show()
             }else{
-                val id = dbRefPlayList.push().key.toString()
-                val playlist = Playlist(id, userId, "",namePlayList)
-                dbRefPlayList.child(id).setValue(playlist)
-                dbRefPlayList.child(id).child(CHILD_SONG_IN_PLAY_LIST).setValue(listSongId)
+                if(checkAddOrUpdate==0){
+                    idPlaylist = dbRefPlaylist.push().key.toString()
+                }
+                val playlist = Playlist(idPlaylist, userId, "",namePlayList)
+                dbRefPlaylist.child(idPlaylist).setValue(playlist)
+                dbRefPlaylist.child(idPlaylist).child(CHILD_SONG_IN_PLAY_LIST).setValue(listSongId)
                 finish()
             }
         }
+    }
+
+    private fun setTitle() {
+        val query=dbRefPlaylist.child(idPlaylist)
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.exists()){
+                    val name = dataSnapshot.child(CHILD_NAME).value.toString()
+                    binding.etNamePlayListApla.setText(name)
+                }
+                binding.tvTitleApla.text= TITLE_UPDATE_PLAY_LIST
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
+    }
+
+    private fun getSongIdList() {
+        val query = dbRefPlaylist.child(idPlaylist).child(CHILD_SONG_IN_PLAY_LIST)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                listSongId.clear()
+                for (data in dataSnapshot.children) {
+                    val songId = (data.value as Long).toInt()
+                    listSongId.add(songId)
+                }
+                getCountSongList()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
     private fun getCountSongList() {

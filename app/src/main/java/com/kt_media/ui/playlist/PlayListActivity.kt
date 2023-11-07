@@ -19,6 +19,8 @@ import com.kt_media.domain.constant.CHILD_IMAGE
 import com.kt_media.domain.constant.CHILD_NAME
 import com.kt_media.domain.constant.CHILD_PLAY_LIST
 import com.kt_media.domain.constant.CHILD_USER_ID
+import com.kt_media.domain.constant.INTENT_ACTION_ADD_PLAY_LIST
+import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PLAY_LIST
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_PLAY_LIST_ID
 import com.kt_media.domain.entities.Playlist
@@ -27,7 +29,7 @@ import com.mymusic.ui.adapters.PlayListAdapter
 
 class PlayListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayListBinding
-    private lateinit var dbRefPlayList: DatabaseReference
+    private lateinit var dbRefPlaylist: DatabaseReference
     private lateinit var adapter: PlayListAdapter
     private lateinit var userId: String
     private var list = arrayListOf<Playlist>()
@@ -36,7 +38,7 @@ class PlayListActivity : AppCompatActivity() {
         binding = ActivityPlayListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        dbRefPlayList = FirebaseDatabase.getInstance().getReference(CHILD_PLAY_LIST)
+        dbRefPlaylist = FirebaseDatabase.getInstance().getReference(CHILD_PLAY_LIST)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
         setRecycleView()
         getPlayList()
@@ -45,13 +47,14 @@ class PlayListActivity : AppCompatActivity() {
         }
 
         binding.ivAddPlaylistPla.setOnClickListener {
-            val intent = Intent(this@PlayListActivity, AddPlayListActivity::class.java)
+            val intent = Intent(this@PlayListActivity, AddOrUpdatePlayListActivity::class.java)
+            intent.action= INTENT_ACTION_ADD_PLAY_LIST
             startActivity(intent)
         }
     }
 
     private fun getPlayList() {
-        val query=dbRefPlayList.orderByChild(CHILD_USER_ID).equalTo(userId)
+        val query=dbRefPlaylist.orderByChild(CHILD_USER_ID).equalTo(userId)
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 list.clear()
@@ -90,6 +93,10 @@ class PlayListActivity : AppCompatActivity() {
         showDialogDelete(it)
     }
     private val updateClick: (String) -> Unit = {
+        val intent = Intent(this@PlayListActivity, AddOrUpdatePlayListActivity::class.java)
+        intent.action= INTENT_ACTION_UPDATE_PLAY_LIST
+        intent.putExtra(NAME_INTENT_PLAY_LIST_ID,it)
+        startActivity(intent)
     }
 
     private fun showDialogDelete(playListId: String){
@@ -99,7 +106,7 @@ class PlayListActivity : AppCompatActivity() {
             .setIcon(R.drawable.ic_delete_outline_30)
             .setMessage(R.string.confirm_delete)
             .setPositiveButton(R.string.delete) { _, _ ->
-                dbRefPlayList.child(playListId).removeValue()
+                dbRefPlaylist.child(playListId).removeValue()
             }
             .setNegativeButton(R.string.back) { dialog, _ ->
                 dialog.cancel()

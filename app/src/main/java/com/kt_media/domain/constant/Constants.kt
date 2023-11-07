@@ -36,6 +36,7 @@ const val TITLE_IMAGE="Ảnh"
 const val TITLE_SONG_FAV="Bài hát yêu thích"
 const val TITLE_DOWNLOAD_SUCCESS="Tải thành công"
 const val TITLE_PLAY_LIST="Danh sách phát"
+const val TITLE_UPDATE_PLAY_LIST="Cập nhật Playlist"
 
 const val INTENT_ACTION_PLAY_OR_PAUSE = "1"
 const val INTENT_ACTION_PREVIOUS = "2"
@@ -45,6 +46,8 @@ const val INTENT_ACTION_SEND_SONG_LIST="6"
 const val INTENT_ACTION_UPDATE_PROGRESS="7"
 const val INTENT_ACTION_SEEK_TO="9"
 const val INTENT_ACTION_MODE="10"
+const val INTENT_ACTION_ADD_PLAY_LIST="11"
+const val INTENT_ACTION_UPDATE_PLAY_LIST="12"
 
 
 
@@ -65,8 +68,7 @@ const val VAL_INTENT_LOGIN_EMAIL="61"
 const val VAL_INTENT_ALL_VIDEO="62"
 const val VAL_INTENT_VIDEO_FAV="63"
 
-const val VAL_MODE_REPEAT_0NE="64"
-const val VAL_MODE_SEQUENCE_PLAYBACK="65"
+const val VAL_CHANNEL_ID="81"
 
 const val VAL_REQUEST_CODE=23032001
 

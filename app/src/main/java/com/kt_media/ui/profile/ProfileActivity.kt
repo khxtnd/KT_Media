@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -89,7 +90,7 @@ class ProfileActivity : AppCompatActivity() {
                 binding.cirIvAvatarPa.setImageBitmap(bitmap)
                 binding.btSavePa.visibility = View.VISIBLE
             } catch (e: IOException) {
-
+                Log.e("ProfileActivity",e.toString())
             }
         }
     }
@@ -112,7 +113,7 @@ class ProfileActivity : AppCompatActivity() {
                         val downloadUri = task.result
                         val imageUrl = downloadUri.toString()
 
-                        var hashMap: HashMap<String, String> = HashMap()
+                        val hashMap: HashMap<String, String> = HashMap()
                         hashMap[CHILD_NAME] = binding.etUsernamePa.text.toString()
                         hashMap[CHILD_IMAGE] = imageUrl
 

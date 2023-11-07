@@ -39,7 +39,6 @@ import com.kt_media.domain.constant.NAME_INTENT_PLAY_LIST_ID
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
-import com.kt_media.domain.constant.VAL_MODE_REPEAT_0NE
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
 import com.kt_media.domain.entities.Song
@@ -98,16 +97,16 @@ class SongListFragment :
 
     private fun getSongIdPlayList() {
         val query = dbRefPlaylist.child(idPlaylist).child(CHILD_SONG_IN_PLAY_LIST)
-        val songIdFavList = arrayListOf<Int>()
+        val songIdInPlaylist = arrayListOf<Int>()
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                songIdFavList.clear()
+                songIdInPlaylist.clear()
                 for (data in dataSnapshot.children) {
                     val songId = (data.value as Long).toInt()
-                    songIdFavList.add(songId)
+                    songIdInPlaylist.add(songId)
                 }
-                if (songIdFavList.isNotEmpty()) {
-                    getSongListById(songIdFavList)
+                if (songIdInPlaylist.isNotEmpty()) {
+                    getSongListById(songIdInPlaylist)
                 }
             }
 

@@ -30,7 +30,7 @@
             android:name=".ui.playlist.UpdatePlayListActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.playlist.AddPlayListActivity"
+            android:name=".ui.playlist.AddOrUpdatePlayListActivity"
             android:exported="false" />
         <activity
             android:name=".ui.playlist.PlayListActivity"

@@ -1,19 +1,20 @@
 package com.kt_media.service
 
-import android.R
-import android.R.id.input
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
+import com.kt_media.R
 import com.kt_media.domain.constant.INTENT_ACTION_MODE
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
@@ -25,11 +26,8 @@ import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PROGRESS
 import com.kt_media.domain.constant.NAME_INTENT_PROGRESS
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
+import com.kt_media.domain.constant.VAL_CHANNEL_ID
 import com.kt_media.domain.entities.Song
-import com.kt_media.ui.main.MainActivity
-import com.kt_media.ui.musics.play_song_category.PlayMusicFragment
-import com.kt_media.ui.musics.play_song_category.PlaySongActivity
-import com.kt_media.ui.musics.play_song_category.SongListFragment
 import org.greenrobot.eventbus.EventBus
 import java.io.Serializable
 
@@ -152,19 +150,41 @@ class MusicService : Service() {
 
     private fun showNoty() {
         createNotificationChannel()
-        val notificationIntent = Intent(this, SongListFragment::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0, notificationIntent, PendingIntent.FLAG_MUTABLE
-        )
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Foreground Service")
-            .setContentText("adadads")
-            .setSmallIcon(R.drawable.ic_notification_clear_all)
-            .setContentIntent(pendingIntent)
+        val prevIntent = Intent(this, MusicService::class.java)
+        prevIntent.action = INTENT_ACTION_PREVIOUS
+        val prevPendingIntent = PendingIntent.getService(this, 0, prevIntent,
+            PendingIntent.FLAG_MUTABLE)
+
+        val playPauseIcon = if (mediaPlayer.isPlaying) R.drawable.ic_pause_circle_outline_40
+        else R.drawable.ic_play_circle_outline_40
+        val playOrPauseIntent = Intent(this, MusicService::class.java)
+        playOrPauseIntent.action = INTENT_ACTION_PLAY_OR_PAUSE
+        val playOrPausePendingIntent = PendingIntent.getService(this, 0, playOrPauseIntent,
+            PendingIntent.FLAG_MUTABLE)
+
+        val nextIntent = Intent(this, MusicService::class.java)
+        nextIntent.action = INTENT_ACTION_NEXT
+        val nextPendingIntent = PendingIntent.getService(this, 0, nextIntent,
+            PendingIntent.FLAG_MUTABLE)
+
+
+        val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.logo_app_40)
+
+        val mediaSession=MediaSessionCompat(this,"tag")
+        val notification: Notification= NotificationCompat.Builder(this, VAL_CHANNEL_ID)
+            .setContentTitle(listSong[songIndex].name)
+            .setSmallIcon(R.drawable.ic_music_40)
+            .addAction(R.drawable.ic_skip_previous_40, "Previous", prevPendingIntent)
+            .addAction(playPauseIcon, "Play_Pause", playOrPausePendingIntent)
+            .addAction(R.drawable.ic_skip_next_40, "Next", nextPendingIntent)
+            .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
+                .setMediaSession(mediaSession.sessionToken))
+            .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.bg_noty))
+            .setSound(null)
             .build()
         startForeground(1, notification)
     }
+
 
     private fun playSongIndex() {
         if (mediaPlayer.isPlaying) {
@@ -207,11 +227,10 @@ class MusicService : Service() {
         mediaPlayer.seekTo(position)
         mediaPlayer.start()
     }
-    val CHANNEL_ID = "ForegroundServiceChannel"
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
-                CHANNEL_ID,
+                VAL_CHANNEL_ID,
                 "Foreground Service Channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
