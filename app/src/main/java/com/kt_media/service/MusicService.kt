@@ -27,7 +27,11 @@ import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
 import com.kt_media.domain.entities.Song
 import com.kt_media.ui.main.MainActivity
+import com.kt_media.ui.musics.play_song_category.PlayMusicFragment
+import com.kt_media.ui.musics.play_song_category.PlaySongActivity
+import com.kt_media.ui.musics.play_song_category.SongListFragment
 import org.greenrobot.eventbus.EventBus
+import java.io.Serializable
 
 
 class MusicService : Service() {
@@ -53,7 +57,7 @@ class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             if (intent.action == INTENT_ACTION_SEND_SONG_LIST) {
-                listSong = intent.getSerializableExtra(NAME_INTENT_SONG_LIST) as ArrayList<Song>
+                listSong = intent.serializable(NAME_INTENT_SONG_LIST)!!
                 if (listSong.isNotEmpty()) {
                     setSeekBarProgress()
                     preparePlaySong()
@@ -89,6 +93,10 @@ class MusicService : Service() {
         return START_NOT_STICKY
     }
 
+    inline fun <reified T : Serializable> Intent.serializable(key: String): T? = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getSerializableExtra(key, T::class.java)
+        else -> @Suppress("DEPRECATION") getSerializableExtra(key) as? T
+    }
     private fun preparePlaySong() {
         mediaPlayer.setDataSource(listSong[songIndex].link)
         mediaPlayer.prepare()
@@ -144,7 +152,7 @@ class MusicService : Service() {
 
     private fun showNoty() {
         createNotificationChannel()
-        val notificationIntent = Intent(this, MainActivity::class.java)
+        val notificationIntent = Intent(this, SongListFragment::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
             0, notificationIntent, PendingIntent.FLAG_MUTABLE
