@@ -1,12 +1,14 @@
 package com.kt_media.ui.main
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -14,40 +16,61 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
 import com.kt_media.domain.constant.CHILD_SONG_FAV
+import com.kt_media.domain.constant.CHILD_SONG_IN_PLAY_LIST
+import com.kt_media.domain.constant.CHILD_USED_MINUTE
 import com.kt_media.domain.constant.CHILD_USER
+import com.kt_media.domain.constant.CHILD_USING_TIME
+import com.kt_media.domain.constant.KEY_USING_TIME_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_LOGIN_WITH
 import com.kt_media.domain.constant.TITLE_IMAGE
 import com.kt_media.domain.constant.TITLE_MUSIC
+import com.kt_media.domain.constant.TITLE_SHARED_PREFERENCES
 import com.kt_media.domain.constant.TITLE_VIDEO
 import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
 import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.User
+import com.kt_media.domain.entities.UsingTime
 import com.kt_media.ui.login.LoginActivity
 import com.kt_media.ui.musics.play_song_category.PlaySongActivity
 import com.kt_media.ui.playlist.PlayListActivity
 import com.kt_media.ui.profile.ProfileActivity
+import com.kt_media.ui.statistical.StatisticalActivity
 import com.kt_media.ui.videos.play_video.PlayVideoActivity
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var dbRefUsingTime: DatabaseReference
     private lateinit var ivAvatarNav: ImageView
     private lateinit var tvUsernameNav: TextView
+    private var idUsingTime = ""
+    private var time = ""
+    private var userId = ""
 
-    private var loginWith= VAL_INTENT_LOGIN_EMAIL
+    private var loginWith = VAL_INTENT_LOGIN_EMAIL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        loginWith= intent.getStringExtra(NAME_INTENT_LOGIN_WITH).toString()
+
+        loginWith = intent.getStringExtra(NAME_INTENT_LOGIN_WITH).toString()
+        dbRefUsingTime = FirebaseDatabase.getInstance().getReference(CHILD_USING_TIME)
+        userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        startUsingTime()
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_ma) as NavHostFragment
         val navController = navHostFragment.navController
@@ -73,25 +96,57 @@ class MainActivity : AppCompatActivity() {
 
         binding.navMa.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.mVideoFav->{
+                R.id.mAccount -> {
+                    updateProfile()
+                }
+
+                R.id.mVideoFav -> {
                     playVideoFav()
                 }
-                R.id.mSongFav->{
+
+                R.id.mSongFav -> {
                     playSongFav()
                 }
-                R.id.mPlayList->{
+
+                R.id.mPlayList -> {
                     navPlayList()
                 }
+
                 R.id.mLogout -> {
                     logOut()
                 }
-                R.id.mAccount ->{
-                    updateProfile()
+
+                R.id.mStatistical -> {
+                    navStatistical()
                 }
             }
             return@setNavigationItemSelectedListener true
         }
         setNav(loginWith)
+
+    }
+
+    private fun startUsingTime() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val formattedDate= String.format("%02d-%02d-%04d", day, month, year)
+
+        time=getTime()
+        idUsingTime = "$userId $formattedDate $time"
+        val usingTime = UsingTime(idUsingTime, userId, formattedDate, 0, 0)
+        dbRefUsingTime.child(idUsingTime).setValue(usingTime)
+        val sharedPreferences = getSharedPreferences(TITLE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_USING_TIME_ID, idUsingTime)
+        editor.apply()
+    }
+
+    private fun navStatistical() {
+        val intent = Intent(this@MainActivity, StatisticalActivity::class.java)
+        startActivity(intent)
     }
 
     private fun navPlayList() {
@@ -117,11 +172,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setNav(loginWith: String) {
         val headerView: View = binding.navMa.getHeaderView(0)
-        ivAvatarNav=headerView.findViewById(R.id.cir_iv_avatar_nav)
-        tvUsernameNav=headerView.findViewById(R.id.tv_username_nav)
+        ivAvatarNav = headerView.findViewById(R.id.cir_iv_avatar_nav)
+        tvUsernameNav = headerView.findViewById(R.id.tv_username_nav)
 
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val reference = FirebaseDatabase.getInstance().getReference(CHILD_USER).child(firebaseUser!!.uid)
+        val reference = FirebaseDatabase.getInstance().getReference(CHILD_USER).child(userId)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
@@ -131,6 +185,7 @@ class MainActivity : AppCompatActivity() {
                     Glide.with(this@MainActivity).load(user.image).into(ivAvatarNav)
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {}
         })
     }
@@ -154,5 +209,26 @@ class MainActivity : AppCompatActivity() {
             }
         val dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    private fun getTime(): String {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        return String.format("%02d:%02d", hour, minute)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val query=dbRefUsingTime.child(idUsingTime).child(CHILD_USED_MINUTE)
+        query.setValue(calculateTime(time,getTime()))
+    }
+
+    private fun calculateTime(start: String, end: String): Long {
+        val format = SimpleDateFormat("HH:mm")
+        val startTime = format.parse(start)
+        val endTime = format.parse(end)
+        val diff = (endTime?.time ?: 0) - (startTime?.time ?: 0)
+        return TimeUnit.MILLISECONDS.toMinutes(diff)
     }
 }

@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
-import com.kt_media.databinding.ActivityAddPlayListBinding
+import com.kt_media.databinding.ActivityAddOrUpdatePlayListBinding
 import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_NAME
 import com.kt_media.domain.constant.CHILD_PLAY_LIST
@@ -26,7 +26,7 @@ import com.kt_media.domain.entities.Song
 import com.mymusic.ui.adapters.SongSelectAdapter
 
 class AddOrUpdatePlayListActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAddPlayListBinding
+    private lateinit var binding: ActivityAddOrUpdatePlayListBinding
     private lateinit var dbRefSongList: DatabaseReference
     private lateinit var dbRefPlaylist: DatabaseReference
     private lateinit var adapter:SongSelectAdapter
@@ -39,7 +39,7 @@ class AddOrUpdatePlayListActivity : AppCompatActivity() {
     private var idPlaylist=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddPlayListBinding.inflate(layoutInflater)
+        binding = ActivityAddOrUpdatePlayListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         dbRefSongList = FirebaseDatabase.getInstance().getReference(CHILD_SONG)
         dbRefPlaylist = FirebaseDatabase.getInstance().getReference(CHILD_PLAY_LIST)
@@ -54,23 +54,23 @@ class AddOrUpdatePlayListActivity : AppCompatActivity() {
             getCountSongList()
         }
 
-        binding.ivBackApla.setOnClickListener {
+        binding.ivBackAoupla.setOnClickListener {
             finish()
         }
-        binding.ivPrevRecApla.isEnabled = false
+        binding.ivPrevRecAoupla.isEnabled = false
         setRecycleView()
 
-        binding.ivNextRecApla.setOnClickListener {
+        binding.ivNextRecAoupla.setOnClickListener {
             idStart += 10
             getSongList()
         }
-        binding.ivPrevRecApla.setOnClickListener {
+        binding.ivPrevRecAoupla.setOnClickListener {
             idStart-=10
             getSongList()
         }
         
-        binding.ivSaveApla.setOnClickListener{
-            val namePlayList=binding.etNamePlayListApla.text.toString()
+        binding.ivSaveAoupla.setOnClickListener{
+            val namePlayList=binding.etNamePlayListAoupla.text.toString()
             if(namePlayList.isEmpty()){
                 Toast.makeText(this,R.string.noty_name_play_list,Toast.LENGTH_SHORT).show()
             }else if(listSongId.size<3){
@@ -93,9 +93,9 @@ class AddOrUpdatePlayListActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if(dataSnapshot.exists()){
                     val name = dataSnapshot.child(CHILD_NAME).value.toString()
-                    binding.etNamePlayListApla.setText(name)
+                    binding.etNamePlayListAoupla.setText(name)
                 }
-                binding.tvTitleApla.text= TITLE_UPDATE_PLAY_LIST
+                binding.tvTitleAoupla.text= TITLE_UPDATE_PLAY_LIST
             }
 
             override fun onCancelled(error: DatabaseError) {}
@@ -132,18 +132,18 @@ class AddOrUpdatePlayListActivity : AppCompatActivity() {
         var query = dbRefSongList.orderByChild(CHILD_ID)
         if(idStart+9>songCount){
             query=query.startAt(idStart.toDouble()).endAt((songCount+1).toDouble())
-            binding.ivNextRecApla.setImageResource(R.drawable.ic_arrow_forward_ios_35_gray)
-            binding.ivNextRecApla.isEnabled=false
+            binding.ivNextRecAoupla.setImageResource(R.drawable.ic_arrow_forward_ios_35_gray)
+            binding.ivNextRecAoupla.isEnabled=false
         } else if(idStart<=1){
             query=query.startAt(1.0).endAt((idStart+10).toDouble())
-            binding.ivPrevRecApla.setImageResource(R.drawable.ic_arrow_back_ios_new_35_gray)
-            binding.ivPrevRecApla.isEnabled=false
+            binding.ivPrevRecAoupla.setImageResource(R.drawable.ic_arrow_back_ios_new_35_gray)
+            binding.ivPrevRecAoupla.isEnabled=false
         }else{
             query=query.startAt(idStart.toDouble()).endAt((idStart+9).toDouble())
-            binding.ivPrevRecApla.setImageResource(R.drawable.ic_arrow_back_ios_new_35)
-            binding.ivPrevRecApla.isEnabled=true
-            binding.ivNextRecApla.setImageResource(R.drawable.ic_arrow_forward_ios_35)
-            binding.ivNextRecApla.isEnabled=true
+            binding.ivPrevRecAoupla.setImageResource(R.drawable.ic_arrow_back_ios_new_35)
+            binding.ivPrevRecAoupla.isEnabled=true
+            binding.ivNextRecAoupla.setImageResource(R.drawable.ic_arrow_forward_ios_35)
+            binding.ivNextRecAoupla.isEnabled=true
         }
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -163,8 +163,8 @@ class AddOrUpdatePlayListActivity : AppCompatActivity() {
 
     private fun setRecycleView() {
         adapter = SongSelectAdapter(onItemSongSelectClick)
-        binding.recSongApla.adapter = adapter
-        binding.recSongApla.layoutManager =
+        binding.recSongAoupla.adapter = adapter
+        binding.recSongAoupla.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     }
     private val onItemSongSelectClick: (Int) -> Unit = {

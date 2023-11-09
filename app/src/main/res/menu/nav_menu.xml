@@ -25,6 +25,11 @@
         android:title="@string/video_fav"
         />
     <item
+        android:id="@+id/mStatistical"
+        android:icon="@drawable/ic_statistical_40"
+        android:title="@string/statistical"
+        />
+    <item
         android:id="@+id/mLogout"
         android:icon="@drawable/ic_logout_40"
         android:title="@string/logout" />

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Style_MonthYearPickerDialog" >
+        <item name="headerBackgroundColor" >@color/geek_blue_4</item>
+        <item name="headerTextColor" >@color/white</item>
+        <item name="headerTextColorSelected">@color/black</item>
+
+        <item name="monthBackgroundColorSelected">@color/white</item>
+        <item name="monthTextColor">@color/gray_7</item>
+        <item name="monthTextColorDisabled">@color/gray_7</item>
+        <item name="monthTextColorSelected">@color/geek_blue_6</item>
+
+        <item name="yearTextColor">@color/gray_7</item>
+        <item name="yearTextColorSelected">@color/geek_blue_6</item>
+    </style>
+</resources>

@@ -67,7 +67,6 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
             previousIntent.action = INTENT_ACTION_PREVIOUS
             requireContext().startService(previousIntent)
         }
-        musicService= MusicService()
         binding?.seekBarPmf?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             }
@@ -183,16 +182,12 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
     }
 
 
-
     private fun formatTime(milliseconds: Int): String {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds.toLong())
         val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds.toLong()) -
                 TimeUnit.MINUTES.toSeconds(minutes)
         return String.format("%02d:%02d", minutes, seconds)
     }
-
-
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onValueEvent(event: SongEvent) {

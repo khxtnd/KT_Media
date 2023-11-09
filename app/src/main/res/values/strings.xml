@@ -42,4 +42,10 @@
     <string name="noty_delete">Thông báo xóa!!!</string>
     <string name="confirm_delete">Bạn có chắc chắn muốn xóa?</string>
     <string name="delete">Xóa</string>
+    <string name="statistical">Thống kê</string>
+    <string name="date">Ngày</string>
+    <string name="month">Tháng</string>
+    <string name="start">Bắt đầu</string>
+    <string name="end">Kết thúc</string>
+
 </resources>

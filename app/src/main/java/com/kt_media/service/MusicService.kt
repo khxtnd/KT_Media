@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
@@ -14,7 +15,11 @@ import android.os.IBinder
 import android.os.Looper
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.kt_media.R
+import com.kt_media.domain.constant.CHILD_PLAY_SONG_TIME
+import com.kt_media.domain.constant.CHILD_USING_TIME
 import com.kt_media.domain.constant.INTENT_ACTION_MODE
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
@@ -23,9 +28,11 @@ import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
 import com.kt_media.domain.constant.INTENT_ACTION_SEEK_TO
 import com.kt_media.domain.constant.INTENT_ACTION_SEND_SONG_LIST
 import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PROGRESS
+import com.kt_media.domain.constant.KEY_USING_TIME_ID
 import com.kt_media.domain.constant.NAME_INTENT_PROGRESS
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
+import com.kt_media.domain.constant.TITLE_SHARED_PREFERENCES
 import com.kt_media.domain.constant.VAL_CHANNEL_ID
 import com.kt_media.domain.entities.Song
 import org.greenrobot.eventbus.EventBus
@@ -39,6 +46,7 @@ class MusicService : Service() {
     private var mode = 0
     private var listSong = arrayListOf<Song>()
     private var songIndex: Int = 0
+    private var idUsingTime: String=""
 
     override fun onCreate() {
         super.onCreate()
@@ -50,6 +58,8 @@ class MusicService : Service() {
                 playNext()
             }
         }
+        val sharedPreferences = getSharedPreferences(TITLE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        idUsingTime= sharedPreferences.getString(KEY_USING_TIME_ID,"").toString()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -100,11 +110,15 @@ class MusicService : Service() {
         mediaPlayer.prepare()
         mediaPlayer.start()
         sendSongInfo()
+        val query = FirebaseDatabase.getInstance().getReference("$CHILD_USING_TIME/$idUsingTime/$CHILD_PLAY_SONG_TIME")
+        query.setValue(ServerValue.increment(1))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(updateProgressAction)
+        if(::handler.isInitialized){
+            handler.removeCallbacks(updateProgressAction)
+        }
         if (mediaPlayer.isPlaying) {
             mediaPlayer.stop()
         }
@@ -166,9 +180,6 @@ class MusicService : Service() {
         nextIntent.action = INTENT_ACTION_NEXT
         val nextPendingIntent = PendingIntent.getService(this, 0, nextIntent,
             PendingIntent.FLAG_MUTABLE)
-
-
-        val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.logo_app_40)
 
         val mediaSession=MediaSessionCompat(this,"tag")
         val notification: Notification= NotificationCompat.Builder(this, VAL_CHANNEL_ID)
