@@ -27,6 +27,7 @@ import com.kt_media.domain.constant.INTENT_ACTION_PLAY_SONG_INDEX
 import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
 import com.kt_media.domain.constant.INTENT_ACTION_SEEK_TO
 import com.kt_media.domain.constant.INTENT_ACTION_SEND_SONG_LIST
+import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_FRAGMENT_PLAY
 import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PROGRESS
 import com.kt_media.domain.constant.KEY_USING_TIME_ID
 import com.kt_media.domain.constant.NAME_INTENT_PROGRESS
@@ -92,6 +93,17 @@ class MusicService : Service() {
                         } else {
                             0
                         }
+                    }
+
+                    INTENT_ACTION_UPDATE_FRAGMENT_PLAY -> {
+                        EventBus.getDefault()
+                            .post(
+                                SongEvent(
+                                    listSong[songIndex],
+                                    mediaPlayer.isPlaying,
+                                    mediaPlayer.duration
+                                )
+                            )
                     }
                 }
             }

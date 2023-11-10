@@ -25,6 +25,7 @@ import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
 import com.kt_media.domain.constant.INTENT_ACTION_PREVIOUS
 import com.kt_media.domain.constant.INTENT_ACTION_SEEK_TO
+import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_FRAGMENT_PLAY
 import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PROGRESS
 import com.kt_media.domain.constant.NAME_INTENT_PROGRESS
 import com.kt_media.domain.constant.TITLE_NO_IMAGE
@@ -52,6 +53,10 @@ class PlayMusicFragment : BaseViewBindingFragment<FragmentPlayMusicBinding>(R.la
         dbRefSongFav = FirebaseDatabase.getInstance().getReference(CHILD_SONG_FAV)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
+
+        val updateIntent = Intent(requireContext(), MusicService::class.java)
+        updateIntent.action = INTENT_ACTION_UPDATE_FRAGMENT_PLAY
+        requireContext().startService(updateIntent)
         binding?.ivPlayPmf?.setOnClickListener {
             val playOrPauseMainIntent = Intent(requireContext(), MusicService::class.java)
             playOrPauseMainIntent.action = INTENT_ACTION_PLAY_OR_PAUSE

@@ -420,54 +420,6 @@
     }
   },
   "Comment": {
-    "-Nhr21kJrvsXz4e03Qm_": {
-      "content": "chào bạn",
-      "id": "-Nhr21kJrvsXz4e03Qm_",
-      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "videoId": 3
-    },
-    "-Nhr26agO8UUYgHZTwkP": {
-      "content": "hello everyone",
-      "id": "-Nhr26agO8UUYgHZTwkP",
-      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "videoId": 3
-    },
-    "-Nhr8Rez3eCZYo0E1K-w": {
-      "content": "hay quá",
-      "id": "-Nhr8Rez3eCZYo0E1K-w",
-      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "videoId": 4
-    },
-    "-Nhr8VmcoD-BQ62KzO9U": {
-      "content": "Thật là tuyệt vời",
-      "id": "-Nhr8VmcoD-BQ62KzO9U",
-      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "videoId": 4
-    },
-    "-NhrCf4Os72zKcfmdYxM": {
-      "content": "bài hát này rất hay",
-      "id": "-NhrCf4Os72zKcfmdYxM",
-      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "videoId": 2
-    },
-    "-NhrCls3_pDFcSU16aAF": {
-      "content": "tôi cũng nghĩ thế",
-      "id": "-NhrCls3_pDFcSU16aAF",
-      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
-      "videoId": 2
-    },
-    "-NhrCr8n9X5Rosx3OKav": {
-      "content": "nó thật tuyệt vời với người như tôi",
-      "id": "-NhrCr8n9X5Rosx3OKav",
-      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
-      "videoId": 2
-    },
-    "-NhwB273dAe749EfIZZX": {
-      "content": "tác giả bài hát này là ai vậy?",
-      "id": "-NhwB273dAe749EfIZZX",
-      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "videoId": 10
-    },
     "-Ni4Ty89QofLQN3REqmv": {
       "content": "nhớ kỷ niệm ngày xưa quá",
       "id": "-Ni4Ty89QofLQN3REqmv",
@@ -480,24 +432,6 @@
       "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
       "videoId": 12
     },
-    "-Ni5n4IT_R4wOiyHeryi": {
-      "content": "Tôi ước có thể cùng đi với người yêu dưới ánh hoàng hôn",
-      "id": "-Ni5n4IT_R4wOiyHeryi",
-      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
-      "videoId": 3
-    },
-    "-Ni5nBg5XOXusg0ioe8N": {
-      "content": "7 8 năm rồi dài quá",
-      "id": "-Ni5nBg5XOXusg0ioe8N",
-      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
-      "videoId": 4
-    },
-    "-NiFVhnpcyEx4ihynOBD": {
-      "content": "Tôi cũng mong muốn vậy",
-      "id": "-NiFVhnpcyEx4ihynOBD",
-      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "videoId": 3
-    },
     "-NiFVvHB2VrrRVfU7_j6": {
       "content": "Tôi chưa từng nghe bài hát này trước đây",
       "id": "-NiFVvHB2VrrRVfU7_j6",
@@ -509,6 +443,24 @@
       "id": "-NiFW0pj9IRCt8S7O6Gn",
       "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
       "videoId": 6
+    },
+    "-NitmYwktcFaaDT4ryEm": {
+      "content": "video rất hay",
+      "id": "-NitmYwktcFaaDT4ryEm",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 3
+    },
+    "-NitwK4kHRsmJz6ctY4F": {
+      "content": "tuyệt vời",
+      "id": "-NitwK4kHRsmJz6ctY4F",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 3
+    },
+    "-NitwP6tC6cdmWX6wERn": {
+      "content": "hi mn",
+      "id": "-NitwP6tC6cdmWX6wERn",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 4
     }
   },
   "Genre": {
@@ -601,9 +553,11 @@
         6,
         19,
         20,
-        40
+        40,
+        42,
+        47
       ],
-      "name": "Nhạc Việt",
+      "name": "Nhạc V-Pop",
       "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
     },
     "-NiFOifLlMI_XdvSKuSB": {
@@ -619,6 +573,19 @@
       ],
       "name": "Nhạc Buồn",
       "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "-NitmwY0gvjEqDpm7z1o": {
+      "id": "-NitmwY0gvjEqDpm7z1o",
+      "image": "",
+      "listSongId": [
+        6,
+        12,
+        14,
+        25,
+        27
+      ],
+      "name": "Playlist2",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1"
     }
   },
   "Song": {
@@ -1280,6 +1247,31 @@
     }
   },
   "SongFav": {
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+1": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+1",
+      "songId": 1,
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1"
+    },
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+10": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+10",
+      "songId": 10,
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1"
+    },
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+40": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+40",
+      "songId": 40,
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1"
+    },
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+42": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+42",
+      "songId": 42,
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1"
+    },
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+43": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+43",
+      "songId": 43,
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1"
+    },
     "l9pYN7pBQeNeuY2DNocmwOCm49L2+11": {
       "id": "l9pYN7pBQeNeuY2DNocmwOCm49L2+11",
       "songId": 11,
@@ -1349,8 +1341,8 @@
   "User": {
     "AqX1zsrifDaQedNGuUYDgjZnKzj1": {
       "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
-      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fa5d42689-d7e4-4114-88ce-d82d838732dd?alt=media&token=972a2f56-b57b-4264-a088-24b24f85a9ac",
-      "name": "Phạm Khánh"
+      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2F33cb4bae-2923-4ec9-9a07-72c64a7433ee?alt=media&token=efb8d673-df17-47c8-99e6-397e508dd19d",
+      "name": "Phạm Quốc Khánh"
     },
     "l9pYN7pBQeNeuY2DNocmwOCm49L2": {
       "id": "l9pYN7pBQeNeuY2DNocmwOCm49L2",
@@ -1359,7 +1351,7 @@
     },
     "sFDYHLVi43NcauoQpVPyp8x0KQn1": {
       "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1",
-      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fc4332aba-bca6-40af-b3a5-ce62f54abf57?alt=media&token=196862f0-e1dd-4803-a9f2-9c64272b3f68",
+      "image": "https://firebasestorage.googleapis.com/v0/b/kt-media-5bc04.appspot.com/o/image%2Fa30e1943-2dd5-4e94-b96c-89b3679c7d59?alt=media&token=46afbca2-4871-43f7-8153-8f1d8dbcdc60",
       "name": "Thanh Tâm"
     }
   },
@@ -1549,6 +1541,16 @@
       "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+3",
       "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
       "videoId": 3
+    },
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+4": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+4",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 4
+    },
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1+5": {
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1+5",
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1",
+      "videoId": 5
     },
     "sFDYHLVi43NcauoQpVPyp8x0KQn1+1": {
       "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1+1",
