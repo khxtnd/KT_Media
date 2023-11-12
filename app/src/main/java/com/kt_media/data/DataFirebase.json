@@ -463,6 +463,99 @@
       "videoId": 4
     }
   },
+  "DayOfUse": {
+    "AqX1zsrifDaQedNGuUYDgjZnKzj1 12-11-2023": {
+      "date": "12-11-2023",
+      "id": "AqX1zsrifDaQedNGuUYDgjZnKzj1 12-11-2023",
+      "playSongTime": 0,
+      "usedMinute": 0,
+      "userId": "AqX1zsrifDaQedNGuUYDgjZnKzj1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 01-11-2023": {
+      "date": "01-11-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 01-11-2023",
+      "playSongTime": 4,
+      "usedMinute": 16,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 05-11-2023": {
+      "date": "05-11-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 05-11-2023",
+      "playSongTime": 8,
+      "usedMinute": 74,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 08-11-2023": {
+      "date": "08-11-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 08-11-2023",
+      "playSongTime": 3,
+      "usedMinute": 14,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 10-10-2023": {
+      "date": "10-10-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 10-10-2023",
+      "playSongTime": 8,
+      "usedMinute": 50,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 10-11-2023": {
+      "date": "10-11-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 10-11-2023",
+      "playSongTime": 12,
+      "usedMinute": 102,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 12-10-2023": {
+      "date": "12-10-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 12-10-2023",
+      "playSongTime": 12,
+      "usedMinute": 70,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 12-11-2023": {
+      "date": "12-11-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 12-11-2023",
+      "playSongTime": 0,
+      "usedMinute": 0,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 15-10-2023": {
+      "date": "15-10-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 15-10-2023",
+      "playSongTime": 12,
+      "usedMinute": 70,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 16-10-2023": {
+      "date": "16-10-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 16-10-2023",
+      "playSongTime": 5,
+      "usedMinute": 30,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 20-10-2023": {
+      "date": "20-10-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 20-10-2023 08:30",
+      "playSongTime": 8,
+      "usedMinute": 50,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 25-10-2023": {
+      "date": "25-10-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 25-10-2023",
+      "playSongTime": 5,
+      "usedMinute": 20,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    },
+    "sFDYHLVi43NcauoQpVPyp8x0KQn1 31-10-2023": {
+      "date": "31-10-2023",
+      "id": "sFDYHLVi43NcauoQpVPyp8x0KQn1 31-10-2023",
+      "playSongTime": 6,
+      "usedMinute": 50,
+      "userId": "sFDYHLVi43NcauoQpVPyp8x0KQn1"
+    }
+  },
   "Genre": {
     "01 Nhạc Việt": {
       "id": 1,

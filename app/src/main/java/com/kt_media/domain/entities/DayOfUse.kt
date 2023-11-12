@@ -1,6 +1,6 @@
 package com.kt_media.domain.entities
 
-data class UsingTime(
+data class DayOfUse(
     val id: String = "",
     val userId: String="",
     val date: String="",

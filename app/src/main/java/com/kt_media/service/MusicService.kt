@@ -18,8 +18,9 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.kt_media.R
+import com.kt_media.domain.constant.CHILD_DAY_OF_USE
 import com.kt_media.domain.constant.CHILD_PLAY_SONG_TIME
-import com.kt_media.domain.constant.CHILD_USING_TIME
+
 import com.kt_media.domain.constant.INTENT_ACTION_MODE
 import com.kt_media.domain.constant.INTENT_ACTION_NEXT
 import com.kt_media.domain.constant.INTENT_ACTION_PLAY_OR_PAUSE
@@ -29,7 +30,7 @@ import com.kt_media.domain.constant.INTENT_ACTION_SEEK_TO
 import com.kt_media.domain.constant.INTENT_ACTION_SEND_SONG_LIST
 import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_FRAGMENT_PLAY
 import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PROGRESS
-import com.kt_media.domain.constant.KEY_USING_TIME_ID
+import com.kt_media.domain.constant.KEY_DAY_OF_USE_ID
 import com.kt_media.domain.constant.NAME_INTENT_PROGRESS
 import com.kt_media.domain.constant.NAME_INTENT_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_SONG_LIST
@@ -45,9 +46,9 @@ class MusicService : Service() {
     private lateinit var handler: Handler
     private lateinit var updateProgressAction: Runnable
     private var mode = 0
-    private var listSong = arrayListOf<Song>()
+    private var songList = arrayListOf<Song>()
     private var songIndex: Int = 0
-    private var idUsingTime: String=""
+    private var dayOfUseId: String=""
 
     override fun onCreate() {
         super.onCreate()
@@ -60,19 +61,19 @@ class MusicService : Service() {
             }
         }
         val sharedPreferences = getSharedPreferences(TITLE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        idUsingTime= sharedPreferences.getString(KEY_USING_TIME_ID,"").toString()
+        dayOfUseId= sharedPreferences.getString(KEY_DAY_OF_USE_ID,"").toString()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             if (intent.action == INTENT_ACTION_SEND_SONG_LIST) {
-                listSong = intent.serializable(NAME_INTENT_SONG_LIST)!!
-                if (listSong.isNotEmpty()) {
+                songList = intent.serializable(NAME_INTENT_SONG_LIST)!!
+                if (songList.isNotEmpty()) {
                     setSeekBarProgress()
                     preparePlaySong()
                 }
             }
-            if (listSong.isNotEmpty()) {
+            if (songList.isNotEmpty()) {
                 when (intent.action) {
                     INTENT_ACTION_PLAY_OR_PAUSE -> playOrPauseSong()
                     INTENT_ACTION_NEXT -> playNext()
@@ -99,7 +100,7 @@ class MusicService : Service() {
                         EventBus.getDefault()
                             .post(
                                 SongEvent(
-                                    listSong[songIndex],
+                                    songList[songIndex],
                                     mediaPlayer.isPlaying,
                                     mediaPlayer.duration
                                 )
@@ -118,11 +119,11 @@ class MusicService : Service() {
         else -> @Suppress("DEPRECATION") getSerializableExtra(key) as? T
     }
     private fun preparePlaySong() {
-        mediaPlayer.setDataSource(listSong[songIndex].link)
+        mediaPlayer.setDataSource(songList[songIndex].link)
         mediaPlayer.prepare()
         mediaPlayer.start()
         sendSongInfo()
-        val query = FirebaseDatabase.getInstance().getReference("$CHILD_USING_TIME/$idUsingTime/$CHILD_PLAY_SONG_TIME")
+        val query = FirebaseDatabase.getInstance().getReference("$CHILD_DAY_OF_USE/$dayOfUseId/$CHILD_PLAY_SONG_TIME")
         query.setValue(ServerValue.increment(1))
     }
 
@@ -157,7 +158,7 @@ class MusicService : Service() {
 
     private fun playNext() {
         songIndex++
-        if (songIndex >= listSong.size) {
+        if (songIndex >= songList.size) {
             songIndex = 0
         }
         if (mediaPlayer.isPlaying) {
@@ -170,7 +171,7 @@ class MusicService : Service() {
 
     private fun sendSongInfo() {
         EventBus.getDefault()
-            .post(SongEvent(listSong[songIndex], mediaPlayer.isPlaying, mediaPlayer.duration))
+            .post(SongEvent(songList[songIndex], mediaPlayer.isPlaying, mediaPlayer.duration))
         showNoty()
     }
 
@@ -195,7 +196,7 @@ class MusicService : Service() {
 
         val mediaSession=MediaSessionCompat(this,"tag")
         val notification: Notification= NotificationCompat.Builder(this, VAL_CHANNEL_ID)
-            .setContentTitle(listSong[songIndex].name)
+            .setContentTitle(songList[songIndex].name)
             .setSmallIcon(R.drawable.ic_music_40)
             .addAction(R.drawable.ic_skip_previous_40, "Previous", prevPendingIntent)
             .addAction(playPauseIcon, "Play_Pause", playOrPausePendingIntent)
@@ -220,7 +221,7 @@ class MusicService : Service() {
     private fun playPrevious() {
         songIndex--
         if (songIndex < 0) {
-            songIndex = listSong.size - 1
+            songIndex = songList.size - 1
         }
         if (mediaPlayer.isPlaying) {
             mediaPlayer.stop()

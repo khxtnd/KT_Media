@@ -11,7 +11,7 @@ const val CHILD_SONG_FAV="SongFav"
 const val CHILD_USER="User"
 const val CHILD_VIDEO="Video"
 const val CHILD_VIDEO_FAV="VideoFav"
-const val CHILD_USING_TIME="UsingTime"
+const val CHILD_DAY_OF_USE="DayOfUse"
 
 const val CHILD_ID = "id"
 const val CHILD_NAME="name"
@@ -75,7 +75,7 @@ const val VAL_INTENT_ALL_VIDEO="62"
 const val VAL_INTENT_VIDEO_FAV="63"
 
 const val VAL_CHANNEL_ID="81"
-const val KEY_USING_TIME_ID="82"
+const val KEY_DAY_OF_USE_ID="82"
 const val VAL_REQUEST_CODE=23032001
 
 

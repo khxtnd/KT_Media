@@ -47,5 +47,6 @@
     <string name="month">Tháng</string>
     <string name="start">Bắt đầu</string>
     <string name="end">Kết thúc</string>
-
+    <string name="used_minute">Thời gian sử dụng:</string>
+    <string name="play_song_time">Số lượt nghe:</string>
 </resources>

@@ -3,7 +3,6 @@ package com.kt_media.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,12 +20,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
+import com.kt_media.domain.constant.CHILD_DAY_OF_USE
 import com.kt_media.domain.constant.CHILD_SONG_FAV
-import com.kt_media.domain.constant.CHILD_SONG_IN_PLAY_LIST
 import com.kt_media.domain.constant.CHILD_USED_MINUTE
 import com.kt_media.domain.constant.CHILD_USER
-import com.kt_media.domain.constant.CHILD_USING_TIME
-import com.kt_media.domain.constant.KEY_USING_TIME_ID
+import com.kt_media.domain.constant.KEY_DAY_OF_USE_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_LOGIN_WITH
@@ -37,7 +35,7 @@ import com.kt_media.domain.constant.TITLE_VIDEO
 import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
 import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.User
-import com.kt_media.domain.entities.UsingTime
+import com.kt_media.domain.entities.DayOfUse
 import com.kt_media.ui.login.LoginActivity
 import com.kt_media.ui.musics.play_song_category.PlaySongActivity
 import com.kt_media.ui.playlist.PlayListActivity
@@ -46,13 +44,12 @@ import com.kt_media.ui.statistical.StatisticalActivity
 import com.kt_media.ui.videos.play_video.PlayVideoActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var dbRefUsingTime: DatabaseReference
+    private lateinit var dbRefDayOfUse: DatabaseReference
     private lateinit var ivAvatarNav: ImageView
     private lateinit var tvUsernameNav: TextView
     private var idUsingTime = ""
@@ -67,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loginWith = intent.getStringExtra(NAME_INTENT_LOGIN_WITH).toString()
-        dbRefUsingTime = FirebaseDatabase.getInstance().getReference(CHILD_USING_TIME)
+        dbRefDayOfUse = FirebaseDatabase.getInstance().getReference(CHILD_DAY_OF_USE)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
         startUsingTime()
 
@@ -135,12 +132,12 @@ class MainActivity : AppCompatActivity() {
         val formattedDate= String.format("%02d-%02d-%04d", day, month, year)
 
         time=getTime()
-        idUsingTime = "$userId $formattedDate $time"
-        val usingTime = UsingTime(idUsingTime, userId, formattedDate, 0, 0)
-        dbRefUsingTime.child(idUsingTime).setValue(usingTime)
+        idUsingTime = "$userId $formattedDate"
+        val dayOfUse = DayOfUse(idUsingTime, userId, formattedDate, 0, 0)
+        dbRefDayOfUse.child(idUsingTime).setValue(dayOfUse)
         val sharedPreferences = getSharedPreferences(TITLE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString(KEY_USING_TIME_ID, idUsingTime)
+        editor.putString(KEY_DAY_OF_USE_ID, idUsingTime)
         editor.apply()
     }
 
@@ -220,7 +217,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        val query=dbRefUsingTime.child(idUsingTime).child(CHILD_USED_MINUTE)
+        val query=dbRefDayOfUse.child(idUsingTime).child(CHILD_USED_MINUTE)
         query.setValue(calculateTime(time,getTime()))
     }
 
