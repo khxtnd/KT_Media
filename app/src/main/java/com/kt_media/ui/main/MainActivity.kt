@@ -3,6 +3,7 @@ package com.kt_media.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,10 +18,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
 import com.kt_media.domain.constant.CHILD_DAY_OF_USE
+import com.kt_media.domain.constant.CHILD_PLAY_SONG_TIME
 import com.kt_media.domain.constant.CHILD_SONG_FAV
 import com.kt_media.domain.constant.CHILD_USED_MINUTE
 import com.kt_media.domain.constant.CHILD_USER
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dbRefDayOfUse: DatabaseReference
     private lateinit var ivAvatarNav: ImageView
     private lateinit var tvUsernameNav: TextView
-    private var idUsingTime = ""
+    private var dayOfUseId = ""
     private var time = ""
     private var userId = ""
 
@@ -132,12 +135,23 @@ class MainActivity : AppCompatActivity() {
         val formattedDate= String.format("%02d-%02d-%04d", day, month, year)
 
         time=getTime()
-        idUsingTime = "$userId $formattedDate"
-        val dayOfUse = DayOfUse(idUsingTime, userId, formattedDate, 0, 0)
-        dbRefDayOfUse.child(idUsingTime).setValue(dayOfUse)
+        dayOfUseId = "$userId $formattedDate"
+
+        val query= dbRefDayOfUse.child(dayOfUseId)
+        query.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    val dayOfUse = DayOfUse(dayOfUseId, userId, formattedDate, 0, 0)
+                    query.setValue(dayOfUse)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
         val sharedPreferences = getSharedPreferences(TITLE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putString(KEY_DAY_OF_USE_ID, idUsingTime)
+        editor.putString(KEY_DAY_OF_USE_ID, dayOfUseId)
         editor.apply()
     }
 
@@ -215,10 +229,12 @@ class MainActivity : AppCompatActivity() {
         return String.format("%02d:%02d", hour, minute)
     }
 
-    override fun onPause() {
-        super.onPause()
-        val query=dbRefDayOfUse.child(idUsingTime).child(CHILD_USED_MINUTE)
-        query.setValue(calculateTime(time,getTime()))
+
+    override fun onResume() {
+        super.onResume()
+        val query = FirebaseDatabase.getInstance().getReference("$CHILD_DAY_OF_USE/$dayOfUseId/$CHILD_USED_MINUTE")
+        query.setValue(ServerValue.increment(calculateTime(time,getTime())))
+        time=getTime()
     }
 
     private fun calculateTime(start: String, end: String): Long {
@@ -226,6 +242,11 @@ class MainActivity : AppCompatActivity() {
         val startTime = format.parse(start)
         val endTime = format.parse(end)
         val diff = (endTime?.time ?: 0) - (startTime?.time ?: 0)
+        Log.e("diff",TimeUnit.MILLISECONDS.toMinutes(diff).toString())
+        Log.e("start",start)
+
+        Log.e("end", end)
+
         return TimeUnit.MILLISECONDS.toMinutes(diff)
     }
 }

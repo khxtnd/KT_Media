@@ -41,6 +41,7 @@ const val TITLE_DOWNLOAD_SUCCESS="Tải thành công"
 const val TITLE_PLAY_LIST="Danh sách phát"
 const val TITLE_UPDATE_PLAY_LIST="Cập nhật Playlist"
 const val TITLE_SHARED_PREFERENCES="Using Time"
+const val TITLE_SELECT_MONTH="Chọn tháng"
 
 const val INTENT_ACTION_PLAY_OR_PAUSE = "1"
 const val INTENT_ACTION_PREVIOUS = "2"

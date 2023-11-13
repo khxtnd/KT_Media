@@ -43,7 +43,7 @@ class PlayVideoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayVideoBinding
     private lateinit var videoAdapter: VideoSuggestAdapter
     private lateinit var commentAdapter: CommentAdapter
-    private lateinit var player: ExoPlayer
+    private lateinit var exoPlayer: ExoPlayer
 
     private lateinit var ivPlayPauseCustomExo: ImageView
     private lateinit var ivFullScreenCustomExo: ImageView
@@ -180,6 +180,12 @@ class PlayVideoActivity : AppCompatActivity() {
                 }
                 if (videoIdFavList.isNotEmpty()) {
                     getVideoListById(videoIdFavList)
+                }else{
+                    binding.lin1LayoutPva.visibility=View.VISIBLE
+                    binding.consLayoutPva.visibility=View.GONE
+                    binding.ivBackPva.setOnClickListener {
+                        finish()
+                    }
                 }
             }
 
@@ -217,12 +223,12 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun setExoPlayer() {
-        player = ExoPlayer.Builder(this).build()
-        binding.playerViewPva.player = player
+        exoPlayer = ExoPlayer.Builder(this).build()
+        binding.playerViewPva.player = exoPlayer
         for (video in listVideo) {
             val linkVideo = video.link
             val mediaItem = MediaItem.fromUri(linkVideo)
-            player.addMediaItem(mediaItem)
+            exoPlayer.addMediaItem(mediaItem)
         }
         setSeekBarProgress()
         setActionCustomExo()
@@ -234,8 +240,8 @@ class PlayVideoActivity : AppCompatActivity() {
 
         val updateProgressAction: Runnable = object : Runnable {
             override fun run() {
-                val currentPosition: Long = player.currentPosition
-                val duration: Long = player.duration
+                val currentPosition: Long = exoPlayer.currentPosition
+                val duration: Long = exoPlayer.duration
                 val progress = (100 * currentPosition / duration).toInt()
                 sbProgressCustomExo.progress = progress
                 handler.postDelayed(this, 1000)
@@ -263,8 +269,8 @@ class PlayVideoActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(p0: SeekBar?) {}
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
-                val newPosition = (sbProgressCustomExo.progress) * player.duration / 100
-                player.seekTo(newPosition)
+                val newPosition = (sbProgressCustomExo.progress) * exoPlayer.duration / 100
+                exoPlayer.seekTo(newPosition)
             }
 
         })
@@ -272,44 +278,44 @@ class PlayVideoActivity : AppCompatActivity() {
             finish()
         }
         ivPlayPauseCustomExo.setOnClickListener {
-            if (player.isPlaying) {
-                player.pause()
+            if (exoPlayer.isPlaying) {
+                exoPlayer.pause()
                 ivPlayPauseCustomExo.setImageResource(R.drawable.ic_play_circle_outline_65_white)
             } else {
-                player.play()
+                exoPlayer.play()
                 ivPlayPauseCustomExo.setImageResource(R.drawable.ic_pause_circle_outline_65_white)
             }
         }
         ivNextCustomExo.setOnClickListener {
-            playExoMediaItemIndex(player.nextMediaItemIndex)
-            setShowVideoSelectedOnTop(player.currentMediaItemIndex)
+            playExoMediaItemIndex(exoPlayer.nextMediaItemIndex)
+            setShowVideoSelectedOnTop(exoPlayer.currentMediaItemIndex)
         }
         ivPrevCustomExo.setOnClickListener {
-            playExoMediaItemIndex(player.previousMediaItemIndex)
-            setShowVideoSelectedOnTop(player.currentMediaItemIndex)
+            playExoMediaItemIndex(exoPlayer.previousMediaItemIndex)
+            setShowVideoSelectedOnTop(exoPlayer.currentMediaItemIndex)
         }
     }
 
     private fun playExoMediaItemIndex(mediaItemIndex: Int) {
-        if (player.isPlaying) {
-            player.stop()
+        if (exoPlayer.isPlaying) {
+            exoPlayer.stop()
         }
-        player.seekTo(mediaItemIndex, 0)
-        player.prepare()
-        player.play()
-        if (player.currentMediaItemIndex == 0) {
+        exoPlayer.seekTo(mediaItemIndex, 0)
+        exoPlayer.prepare()
+        exoPlayer.play()
+        if (exoPlayer.currentMediaItemIndex == 0) {
             turnOffBtPrev()
         } else {
             turnOnBtPrev()
         }
-        if (player.currentMediaItemIndex == player.mediaItemCount - 1) {
+        if (exoPlayer.currentMediaItemIndex == exoPlayer.mediaItemCount - 1) {
             turnOffBtNext()
         } else {
             turnOnBtNext()
         }
         ivPlayPauseCustomExo.setImageResource(R.drawable.ic_pause_circle_outline_65_white)
-        setVideoName(player.currentMediaItemIndex)
-        videoAdapter.setBackgroundItem(player.currentMediaItemIndex)
+        setVideoName(exoPlayer.currentMediaItemIndex)
+        videoAdapter.setBackgroundItem(exoPlayer.currentMediaItemIndex)
     }
 
     private fun turnOnBtNext() {
@@ -465,9 +471,11 @@ class PlayVideoActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (player.isPlaying) {
-            player.stop()
+        if(::exoPlayer.isInitialized){
+            if (exoPlayer.isPlaying) {
+                exoPlayer.stop()
+            }
+            exoPlayer.release()
         }
-        player.release()
     }
 }

@@ -2,7 +2,6 @@ package com.kt_media.ui.statistical
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +16,9 @@ import com.kt_media.R
 import com.kt_media.databinding.ActivityStatisticalBinding
 import com.kt_media.domain.constant.CHILD_DAY_OF_USE
 import com.kt_media.domain.constant.CHILD_USER_ID
-import com.kt_media.domain.entities.MonthOfUse
 import com.kt_media.domain.entities.DayOfUse
+import com.kt_media.domain.entities.MonthOfUse
+import com.kt_media.ui.dialog.MonthYearPickerDialog
 import com.mymusic.ui.adapters.DayOfUseAdapter
 import com.mymusic.ui.adapters.MonthOfUseAdapter
 import java.text.SimpleDateFormat
@@ -45,7 +45,6 @@ class StatisticalActivity : AppCompatActivity() {
         binding.ivBackSa.setOnClickListener {
             finish()
         }
-
         binding.btMonthSa.setOnClickListener {
             mode = 0
             binding.btMonthSa.setBackgroundResource(R.drawable.bg_btn_filter)
@@ -127,29 +126,21 @@ class StatisticalActivity : AppCompatActivity() {
     }
 
     private fun showMonthPickerDialog(check: Int) {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _, selectedYear, selectedMonth, selectedDay ->
-                val selectedDate = Calendar.getInstance()
-                selectedDate.set(selectedYear, selectedMonth, selectedDay)
-
-                val formattedDate =
-                    SimpleDateFormat("MM-yyyy", Locale.getDefault()).format(selectedDate.time)
-                if (check == 0) {
-                    binding.tvStartSa.text = formattedDate
+        MonthYearPickerDialog().apply {
+            setListener { view, year, month, dayOfMonth ->
+                val monthString = if (month < 9) {
+                    "0" + (month + 1).toString()
                 } else {
-                    binding.tvEndSa.text = formattedDate
+                    (month + 1).toString()
                 }
-            },
-            year, month, day
-        )
-
-        datePickerDialog.show()
+                if (check == 0) {
+                    binding.tvStartSa.text = "$monthString-$year"
+                } else {
+                    binding.tvEndSa.text = "$monthString-$year"
+                }
+            }
+            show(supportFragmentManager, "MonthYearPickerDialog")
+        }
     }
 
     private fun getDayOfUse(startDate: String, endDate: String) {
@@ -189,7 +180,7 @@ class StatisticalActivity : AppCompatActivity() {
         val monthMap = mutableMapOf<String, MonthOfUse>()
 
         for (dayOfUse in this) {
-            val monthKey = dayOfUse.date.substring(3, 10) // Lấy chuỗi "mm-yyyy"
+            val monthKey = dayOfUse.date.substring(3, 10)
             val existingMonth = monthMap[monthKey]
 
             if (existingMonth == null) {
