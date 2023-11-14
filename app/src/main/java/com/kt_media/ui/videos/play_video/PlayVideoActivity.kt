@@ -1,8 +1,14 @@
 package com.kt_media.ui.videos.play_video
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
@@ -29,8 +35,12 @@ import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_USER_ID
 import com.kt_media.domain.constant.CHILD_VIDEO
 import com.kt_media.domain.constant.CHILD_VIDEO_FAV
+import com.kt_media.domain.constant.KEY_DAY_OF_USE_ID
+import com.kt_media.domain.constant.KEY_POSITION_MS
+import com.kt_media.domain.constant.KEY_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
+import com.kt_media.domain.constant.TITLE_SHARED_PREFERENCES
 import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.Comment
 import com.kt_media.domain.entities.Video
@@ -62,14 +72,22 @@ class PlayVideoActivity : AppCompatActivity() {
     private lateinit var dbRefComment: DatabaseReference
 
     private lateinit var userId: String
+
+    private lateinit var sharedPreferences: SharedPreferences
     private var idVideo = 0
     private var videoCount = 0
 
     private val MAX_LENGTH = 60
 
+    private var positionMs: Long = -1
+    private var songIndex = -1
+
     private var listVideo = arrayListOf<Video>()
     private var listComment = arrayListOf<Comment>()
     private var isLike = false
+    private var mode=0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayVideoBinding.inflate(layoutInflater)
@@ -82,6 +100,10 @@ class PlayVideoActivity : AppCompatActivity() {
         dbRefVideoList = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
         dbRefComment = FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        sharedPreferences = getSharedPreferences(TITLE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        songIndex= sharedPreferences.getInt(KEY_SONG_INDEX,0)
+        positionMs=sharedPreferences.getLong(KEY_POSITION_MS,0)
 
         if (checkVideo == VAL_INTENT_VIDEO_FAV) {
             getVideoIdFavList()
@@ -232,7 +254,7 @@ class PlayVideoActivity : AppCompatActivity() {
         }
         setSeekBarProgress()
         setActionCustomExo()
-        playExoMediaItemIndex(0)
+        playExoMediaItemIndex(songIndex)
     }
 
     private fun setSeekBarProgress() {
@@ -253,7 +275,7 @@ class PlayVideoActivity : AppCompatActivity() {
 
     private fun initCustomExo() {
         ivPlayPauseCustomExo = findViewById(R.id.iv_play_pause_custom_exo)
-        ivFullScreenCustomExo = findViewById(R.id.iv_fullScreen_da)
+        ivFullScreenCustomExo = findViewById(R.id.iv_full_screen_custom_exo)
         ivBackCustomExo = findViewById(R.id.iv_back_custom_exo)
         ivPrevCustomExo = findViewById(R.id.iv_prev_custom_exo)
         ivPrevCustomExo.isEnabled = false
@@ -263,7 +285,27 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun setActionCustomExo() {
-        sbProgressCustomExo.setOnSeekBarChangeListener(object : OnSeekBarChangeListener{
+        val orientation = this.resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ivFullScreenCustomExo.setImageResource(R.drawable.ic_fullscreen_35)
+            tvTitleCustomExo.visibility = View.INVISIBLE
+        } else {
+            ivFullScreenCustomExo.setImageResource(R.drawable.ic_fullscreen_exit_35)
+            tvTitleCustomExo.visibility = View.VISIBLE
+        }
+        ivFullScreenCustomExo.setOnClickListener {
+            requestedOrientation = if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else {
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+            songIndex = exoPlayer.currentMediaItemIndex
+            positionMs = exoPlayer.currentPosition
+            mode=1
+            saveStatusExo()
+
+        }
+        sbProgressCustomExo.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {}
 
             override fun onStartTrackingTouch(p0: SeekBar?) {}
@@ -296,11 +338,19 @@ class PlayVideoActivity : AppCompatActivity() {
         }
     }
 
+    private fun saveStatusExo() {
+        val editor = sharedPreferences.edit()
+        editor.putInt(KEY_SONG_INDEX, songIndex)
+        editor.putLong(KEY_POSITION_MS, positionMs)
+        editor.apply()
+    }
+
     private fun playExoMediaItemIndex(mediaItemIndex: Int) {
         if (exoPlayer.isPlaying) {
             exoPlayer.stop()
         }
-        exoPlayer.seekTo(mediaItemIndex, 0)
+        exoPlayer.seekTo(mediaItemIndex, positionMs)
+        positionMs = 0
         exoPlayer.prepare()
         exoPlayer.play()
         if (exoPlayer.currentMediaItemIndex == 0) {
@@ -345,10 +395,18 @@ class PlayVideoActivity : AppCompatActivity() {
             name = name.subSequence(0, MAX_LENGTH).toString() + "..."
         }
         binding.tvVideoNamePva.text = name
-
+        tvTitleCustomExo.text = name
         val videoId = listVideo[index].id
         binding.linLayoutCommentPva.setOnClickListener {
             showBottomSheet(videoId)
+        }
+
+        binding.linLayoutSharePva.setOnClickListener {
+            val intent=Intent(Intent.ACTION_SEND)
+            intent.type="text/plain"
+            intent.putExtra(Intent.EXTRA_TEXT,listVideo[index].link)
+            val shareIntent = Intent.createChooser(intent, null)
+            startActivity(shareIntent)
         }
         checkIsLike(videoId)
 
@@ -471,6 +529,11 @@ class PlayVideoActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if(mode==0){
+            songIndex=0
+            positionMs=0
+            saveStatusExo()
+        }
         if(::exoPlayer.isInitialized){
             if (exoPlayer.isPlaying) {
                 exoPlayer.stop()

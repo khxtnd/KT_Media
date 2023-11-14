@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         loginWith = intent.getStringExtra(NAME_INTENT_LOGIN_WITH).toString()
         dbRefDayOfUse = FirebaseDatabase.getInstance().getReference(CHILD_DAY_OF_USE)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        firebaseAuth = FirebaseAuth.getInstance()
         startUsingTime()
 
         val navHostFragment =
@@ -92,7 +93,6 @@ class MainActivity : AppCompatActivity() {
         binding.ivToggleMa.setOnClickListener {
             binding.layoutMa.openDrawer(GravityCompat.START)
         }
-        firebaseAuth = FirebaseAuth.getInstance()
 
         binding.navMa.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -229,7 +229,6 @@ class MainActivity : AppCompatActivity() {
         return String.format("%02d:%02d", hour, minute)
     }
 
-
     override fun onResume() {
         super.onResume()
         val query = FirebaseDatabase.getInstance().getReference("$CHILD_DAY_OF_USE/$dayOfUseId/$CHILD_USED_MINUTE")
@@ -242,11 +241,6 @@ class MainActivity : AppCompatActivity() {
         val startTime = format.parse(start)
         val endTime = format.parse(end)
         val diff = (endTime?.time ?: 0) - (startTime?.time ?: 0)
-        Log.e("diff",TimeUnit.MILLISECONDS.toMinutes(diff).toString())
-        Log.e("start",start)
-
-        Log.e("end", end)
-
         return TimeUnit.MILLISECONDS.toMinutes(diff)
     }
 }

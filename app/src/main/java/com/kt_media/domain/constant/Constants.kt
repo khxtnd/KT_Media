@@ -77,7 +77,10 @@ const val VAL_INTENT_VIDEO_FAV="63"
 
 const val VAL_CHANNEL_ID="81"
 const val KEY_DAY_OF_USE_ID="82"
+const val KEY_SONG_INDEX="83"
+const val KEY_POSITION_MS="84"
 const val VAL_REQUEST_CODE=23032001
+
 
 
 

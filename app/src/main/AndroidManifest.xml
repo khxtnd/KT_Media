@@ -42,7 +42,14 @@
             android:theme="@style/Theme.KTMedia" />
         <activity
             android:name=".ui.videos.play_video.PlayVideoActivity"
-            android:exported="false" />
+            android:configChanges="orientation"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.musics.play_song_category.PlaySongActivity"
             android:exported="false" />
