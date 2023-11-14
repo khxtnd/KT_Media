@@ -3,8 +3,8 @@ package com.kt_media.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.kt_media.ui.musics.play_song_category.PlayMusicFragment
-import com.kt_media.ui.musics.play_song_category.SongListFragment
+import com.kt_media.ui.musics.play_music.PlayMusicFragment
+import com.kt_media.ui.musics.play_music.SongListFragment
 
 class ViewPagerPSCAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {

@@ -20,7 +20,7 @@ import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.entities.Artist
 import com.kt_media.domain.entities.Genre
-import com.kt_media.ui.musics.play_song_category.PlaySongActivity
+import com.kt_media.ui.musics.play_music.PlaySongActivity
 import com.mymusic.ui.adapters.ArtistAdapter
 import com.mymusic.ui.adapters.GenreAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment

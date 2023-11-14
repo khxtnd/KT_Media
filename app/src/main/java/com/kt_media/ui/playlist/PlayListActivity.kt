@@ -24,7 +24,7 @@ import com.kt_media.domain.constant.INTENT_ACTION_UPDATE_PLAY_LIST
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_PLAY_LIST_ID
 import com.kt_media.domain.entities.Playlist
-import com.kt_media.ui.musics.play_song_category.PlaySongActivity
+import com.kt_media.ui.musics.play_music.PlaySongActivity
 import com.mymusic.ui.adapters.PlayListAdapter
 
 class PlayListActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.kt_media.ui.musics.play_song_category
+package com.kt_media.ui.musics.play_music
 
 
 import android.annotation.SuppressLint

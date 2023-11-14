@@ -51,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.musics.play_song_category.PlaySongActivity"
+            android:name=".ui.musics.play_music.PlaySongActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.ProfileActivity"

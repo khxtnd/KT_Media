@@ -3,7 +3,6 @@ package com.kt_media.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,7 +22,6 @@ import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityMainBinding
 import com.kt_media.domain.constant.CHILD_DAY_OF_USE
-import com.kt_media.domain.constant.CHILD_PLAY_SONG_TIME
 import com.kt_media.domain.constant.CHILD_SONG_FAV
 import com.kt_media.domain.constant.CHILD_USED_MINUTE
 import com.kt_media.domain.constant.CHILD_USER
@@ -40,7 +38,7 @@ import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
 import com.kt_media.domain.entities.User
 import com.kt_media.domain.entities.DayOfUse
 import com.kt_media.ui.login.LoginActivity
-import com.kt_media.ui.musics.play_song_category.PlaySongActivity
+import com.kt_media.ui.musics.play_music.PlaySongActivity
 import com.kt_media.ui.playlist.PlayListActivity
 import com.kt_media.ui.profile.ProfileActivity
 import com.kt_media.ui.statistical.StatisticalActivity
