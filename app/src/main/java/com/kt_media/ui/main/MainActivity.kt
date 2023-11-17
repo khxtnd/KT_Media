@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
@@ -24,7 +25,6 @@ import com.kt_media.databinding.ActivityMainBinding
 import com.kt_media.domain.constant.CHILD_DAY_OF_USE
 import com.kt_media.domain.constant.CHILD_SONG_FAV
 import com.kt_media.domain.constant.CHILD_USED_MINUTE
-import com.kt_media.domain.constant.CHILD_USER
 import com.kt_media.domain.constant.KEY_DAY_OF_USE_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
@@ -35,7 +35,6 @@ import com.kt_media.domain.constant.TITLE_SHARED_PREFERENCES
 import com.kt_media.domain.constant.TITLE_VIDEO
 import com.kt_media.domain.constant.VAL_INTENT_LOGIN_EMAIL
 import com.kt_media.domain.constant.VAL_INTENT_VIDEO_FAV
-import com.kt_media.domain.entities.User
 import com.kt_media.domain.entities.DayOfUse
 import com.kt_media.ui.login.LoginActivity
 import com.kt_media.ui.musics.play_music.PlaySongActivity
@@ -43,6 +42,7 @@ import com.kt_media.ui.playlist.PlayListActivity
 import com.kt_media.ui.profile.ProfileActivity
 import com.kt_media.ui.statistical.StatisticalActivity
 import com.kt_media.ui.videos.play_video.PlayVideoActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity() {
     private var userId = ""
 
     private var loginWith = VAL_INTENT_LOGIN_EMAIL
+
+    private val userViewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -184,20 +186,19 @@ class MainActivity : AppCompatActivity() {
         ivAvatarNav = headerView.findViewById(R.id.cir_iv_avatar_nav)
         tvUsernameNav = headerView.findViewById(R.id.tv_username_nav)
 
-        val reference = FirebaseDatabase.getInstance().getReference(CHILD_USER).child(userId)
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user = snapshot.getValue(User::class.java)
-                tvUsernameNav.text = user!!.name
-
+        userViewModel.getUser()
+        userViewModel.user.observe(this, Observer { user ->
+            user?.let {
+                tvUsernameNav.text = it.name
                 if (user.image != "") {
-                    Glide.with(this@MainActivity).load(user.image).into(ivAvatarNav)
+                    Glide.with(this@MainActivity).load(it.image).into(ivAvatarNav)
                 }
-            }
+            } ?: run {
 
-            override fun onCancelled(error: DatabaseError) {}
+            }
         })
     }
+
 
     private fun logOut(){
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)

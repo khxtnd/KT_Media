@@ -10,23 +10,16 @@ import android.os.Environment
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import androidx.lifecycle.Observer
 import com.kt_media.databinding.ActivityShowImageBinding
-import com.kt_media.domain.constant.CHILD_CATEGORY_IMAGE
-import com.kt_media.domain.constant.CHILD_ID
-import com.kt_media.domain.constant.CHILD_LIST_IMAGE
-import com.kt_media.domain.constant.CHILD_NAME
-import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_IMAGE_ID
+import com.kt_media.domain.constant.NAME_INTENT_ALBUM_ID
 import com.kt_media.domain.constant.TITLE_DOWNLOAD_SUCCESS
 import com.mymusic.ui.adapters.ImageAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -37,8 +30,9 @@ import java.util.UUID
 
 class ShowImageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowImageBinding
-    private lateinit var adapter: ImageAdapter
-    private var imageList = arrayListOf<String>()
+    private lateinit var imageAdapter: ImageAdapter
+
+    private val showImageViewModel: ShowImageViewModel by viewModel()
 
     private val REQUEST_EXTERNAL_STORAGE = 1
     private val PERMISSIONS_STORAGE = arrayOf(
@@ -62,7 +56,7 @@ class ShowImageActivity : AppCompatActivity() {
 
     }
 
-    fun downloadImage(url: String) {
+    private fun downloadImage(url: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val bitmap = withContext(Dispatchers.IO) {
@@ -90,7 +84,7 @@ class ShowImageActivity : AppCompatActivity() {
             }
         }
     }
-    fun saveImageToDownload(bitmap: Bitmap) {
+    private fun saveImageToDownload(bitmap: Bitmap) {
         val randomFileName = UUID.randomUUID().toString() + ".jpg"
 
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -108,43 +102,31 @@ class ShowImageActivity : AppCompatActivity() {
         binding = ActivityShowImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val idCategoryImage=intent.getIntExtra(NAME_INTENT_CATEGORY_IMAGE_ID, 0)
-        adapter = ImageAdapter()
-        getImageInCatgory(idCategoryImage)
-        binding.viewPager2Sia.adapter = adapter
+        val albumId=intent.getIntExtra(NAME_INTENT_ALBUM_ID, 0)
+        imageAdapter = ImageAdapter()
+        getNameAlbumAndImageList(albumId)
+        binding.viewPager2Sia.adapter = imageAdapter
         binding.ivBackSia.setOnClickListener {
             finish()
         }
         binding.ivDownloadSia.setOnClickListener {
             val position=binding.viewPager2Sia.currentItem
-            val link=imageList[position]
-            verifyStoragePermissions(this,link)
+            val link= showImageViewModel.imageList.value?.get(position)
+            if (link != null) {
+                verifyStoragePermissions(this,link)
+            }
         }
     }
 
-    private fun getImageInCatgory(idCategoryImage:Int) {
-        val dbRefCategoryImage: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(CHILD_CATEGORY_IMAGE)
-        val query =
-            dbRefCategoryImage.orderByChild(CHILD_ID).equalTo(idCategoryImage.toDouble())
-
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                imageList.clear()
-                for (data in dataSnapshot.children) {
-                    val listImage = data.child(CHILD_LIST_IMAGE).children
-                    for (image in listImage) {
-                        val imageUrl = image.value as String
-                        imageList.add(imageUrl)
-                    }
-                    if(imageList.isNotEmpty()){
-                        adapter.submit(imageList)
-                    }
-                    val categoryName = data.child(CHILD_NAME).value as String
-                    binding.tvCategoryImageSia.text=categoryName
-                }
+    private fun getNameAlbumAndImageList(albumId:Int) {
+        showImageViewModel.getNameAlbumAndImageList(albumId)
+        showImageViewModel.imageList.observe(this, Observer { imageList ->
+            if (imageList?.isNotEmpty() == true) {
+                imageAdapter.submit(imageList)
             }
-            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+        showImageViewModel.nameAlbum.observe(this,Observer{nameAlbum->
+            binding.tvNameAlbumSia.text=nameAlbum
         })
     }
 

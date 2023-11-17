@@ -3,29 +3,25 @@ package com.kt_media.ui.videos
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.FragmentVideosBinding
-import com.kt_media.domain.constant.CHILD_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
 import com.kt_media.domain.constant.NAME_INTENT_VIDEO_ID
 import com.kt_media.domain.constant.VAL_INTENT_ALL_VIDEO
-import com.kt_media.domain.entities.Video
 import com.kt_media.ui.videos.play_video.PlayVideoActivity
 import com.mymusic.ui.adapters.VideoAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
+import com.mymusic.utils.extention.autoCleared
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class VideosFragment : BaseViewBindingFragment<FragmentVideosBinding>(R.layout.fragment_videos) {
-    private lateinit var videoAdapter: VideoAdapter
+    private var videoAdapter by autoCleared<VideoAdapter>()
 
-    private var videoList = arrayListOf<Video>()
+    private val videoViewModel: VideoViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,22 +34,11 @@ class VideosFragment : BaseViewBindingFragment<FragmentVideosBinding>(R.layout.f
     }
 
     private fun getAllVideo() {
-        val dbRefVideoList: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
-        dbRefVideoList.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                videoList.clear()
-                for (data: DataSnapshot in dataSnapshot.children) {
-                    val video = data.getValue(Video::class.java)
-                    video?.let { videoList.add(it) }
-                }
-                if (videoList.isNotEmpty()) {
-                    videoAdapter.submit(videoList)
-                }
-
+        videoViewModel.getAllVideoList()
+        videoViewModel.allVideoList.observe(viewLifecycleOwner, Observer { allVideoList ->
+            if (allVideoList.isNotEmpty()) {
+                videoAdapter?.submit(allVideoList)
             }
-
-            override fun onCancelled(error: DatabaseError) {}
         })
     }
 

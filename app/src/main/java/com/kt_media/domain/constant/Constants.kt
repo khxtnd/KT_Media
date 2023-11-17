@@ -1,6 +1,6 @@
 package com.kt_media.domain.constant
 
-const val CHILD_CATEGORY_IMAGE="Album"
+const val CHILD_ALBUM="Album"
 const val CHILD_ARTIST = "Artist"
 const val CHILD_COMMENT="Comment"
 const val CHILD_GENRE = "Genre"
@@ -63,7 +63,7 @@ const val NAME_INTENT_LOGIN_WITH="36"
 
 const val NAME_INTENT_SONG_INDEX="39"
 const val NAME_INTENT_VIDEO_ID = "40"
-const val NAME_INTENT_CATEGORY_IMAGE_ID = "41"
+const val NAME_INTENT_ALBUM_ID = "41"
 const val NAME_INTENT_CHECK_VIDEO="42"
 const val NAME_INTENT_SONG_LIST="43"
 const val NAME_INTENT_PLAY_LIST_ID="44"

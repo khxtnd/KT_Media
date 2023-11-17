@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,21 +20,20 @@ import com.kt_media.domain.constant.CHILD_GENRE
 import com.kt_media.domain.constant.NAME_INTENT_CATEGORY_ID
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_CATEGORY
 import com.kt_media.domain.entities.Artist
-import com.kt_media.domain.entities.Genre
 import com.kt_media.ui.musics.play_music.PlaySongActivity
 import com.mymusic.ui.adapters.ArtistAdapter
 import com.mymusic.ui.adapters.GenreAdapter
 import com.mymusic.ui.base.BaseViewBindingFragment
+import com.mymusic.utils.extention.autoCleared
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.fragment_musics) {
 
-    private lateinit var genreAdapter: GenreAdapter
+    private var genreAdapter by autoCleared<GenreAdapter>()
 
-    private var genreList = arrayListOf<Genre>()
+    private var artistAdapter by autoCleared<ArtistAdapter>()
 
-    private lateinit var artistAdapter: ArtistAdapter
-
-    private var artistList = arrayListOf<Artist>()
+    private val musicViewModel: MusicViewModel by viewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding=FragmentMusicsBinding.bind(view)
@@ -62,22 +62,11 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
     }
 
     private fun getGenreList() {
-        val dbRefGenre: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(CHILD_GENRE)
-        dbRefGenre.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                genreList.clear()
-
-                for (data: DataSnapshot in dataSnapshot.children) {
-                    val genre = data.getValue(Genre::class.java)
-                    genre?.let { genreList.add(it) }
-                }
-                if (genreList.isNotEmpty()) {
-                    genreAdapter.submit(genreList)
-                }
+        musicViewModel.getGenreList()
+        musicViewModel.genreList.observe(viewLifecycleOwner, Observer { genreList ->
+            if (genreList.isNotEmpty()) {
+                genreAdapter?.submit(genreList)
             }
-
-            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
@@ -95,22 +84,11 @@ class MusicsFragment : BaseViewBindingFragment<FragmentMusicsBinding>(R.layout.f
 
     }
     private fun getArtistList() {
-        val dbRefArtist: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference(CHILD_ARTIST)
-        dbRefArtist.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                artistList.clear()
-
-                for (data: DataSnapshot in dataSnapshot.children) {
-                    val artist= data.getValue(Artist::class.java)
-                    artist?.let { artistList.add(it) }
-                }
-                if (artistList.isNotEmpty()) {
-                    artistAdapter.submit(artistList)
-                }
+        musicViewModel.getArtistList()
+        musicViewModel.artistList.observe(viewLifecycleOwner, Observer { artistList ->
+            if (artistList.isNotEmpty()) {
+                artistAdapter?.submit(artistList)
             }
-
-            override fun onCancelled(error: DatabaseError) {}
         })
     }
 

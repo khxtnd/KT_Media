@@ -78,4 +78,8 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-common-java8:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
+
+    implementation ("io.insert-koin:koin-core:3.4.1")
+    implementation ("io.insert-koin:koin-android:3.4.1")
+
 }

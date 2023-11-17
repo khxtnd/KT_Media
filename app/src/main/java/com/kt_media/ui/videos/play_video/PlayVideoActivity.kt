@@ -17,6 +17,7 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,11 +32,9 @@ import com.google.firebase.database.ValueEventListener
 import com.kt_media.R
 import com.kt_media.databinding.ActivityPlayVideoBinding
 import com.kt_media.domain.constant.CHILD_COMMENT
-import com.kt_media.domain.constant.CHILD_ID
 import com.kt_media.domain.constant.CHILD_USER_ID
 import com.kt_media.domain.constant.CHILD_VIDEO
 import com.kt_media.domain.constant.CHILD_VIDEO_FAV
-import com.kt_media.domain.constant.KEY_DAY_OF_USE_ID
 import com.kt_media.domain.constant.KEY_POSITION_MS
 import com.kt_media.domain.constant.KEY_SONG_INDEX
 import com.kt_media.domain.constant.NAME_INTENT_CHECK_VIDEO
@@ -47,6 +46,7 @@ import com.kt_media.domain.entities.Video
 import com.kt_media.domain.entities.VideoFav
 import com.mymusic.ui.adapters.CommentAdapter
 import com.mymusic.ui.adapters.VideoSuggestAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PlayVideoActivity : AppCompatActivity() {
@@ -75,18 +75,18 @@ class PlayVideoActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private var idVideo = 0
-    private var videoCount = 0
 
     private val MAX_LENGTH = 60
 
     private var positionMs: Long = -1
     private var songIndex = -1
 
-    private var listVideo = arrayListOf<Video>()
+    private var videoList = listOf<Video>()
     private var listComment = arrayListOf<Comment>()
     private var isLike = false
     private var mode=0
 
+    private val playVideoViewModel: PlayVideoViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,11 +106,24 @@ class PlayVideoActivity : AppCompatActivity() {
         positionMs=sharedPreferences.getLong(KEY_POSITION_MS,0)
 
         if (checkVideo == VAL_INTENT_VIDEO_FAV) {
-            getVideoIdFavList()
+            playVideoViewModel.getFavVideoList()
         } else {
             idVideo = intent.getIntExtra(NAME_INTENT_VIDEO_ID, 0)
-            getCountVideo()
+            playVideoViewModel.getTenVideoList(idVideo)
         }
+
+        playVideoViewModel.videoList.observe(this, Observer { list ->
+            if (list.isNotEmpty()) {
+                videoList=list
+                videoListIsNotEmpty()
+            }else{
+                binding.lin1LayoutPva.visibility=View.VISIBLE
+                binding.consLayoutPva.visibility=View.GONE
+                binding.ivBackPva.setOnClickListener {
+                    finish()
+                }
+            }
+        })
         binding.recVideoPva.adapter = videoAdapter
         binding.recVideoPva.layoutManager =
             LinearLayoutManager(this, RecyclerView.VERTICAL, false)
@@ -119,135 +132,16 @@ class PlayVideoActivity : AppCompatActivity() {
     private val onItemVideoClick: (Int) -> Unit = {
         playExoMediaItemIndex(it)
     }
-
-    private fun getCountVideo() {
-        dbRefVideoList.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                videoCount = dataSnapshot.childrenCount.toInt()
-                getVideoList()
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
-    private fun getVideoList() {
-        if (videoCount >= idVideo + 9) {
-            val query = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
-                .endAt((idVideo + 9).toDouble())
-            query.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    listVideo.clear()
-                    for (data: DataSnapshot in dataSnapshot.children) {
-                        val video = data.getValue(Video::class.java)
-                        video?.let { listVideo.add(it) }
-                    }
-                    if (listVideo.isNotEmpty()) {
-                        videoListIsNotEmpty()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
-        } else {
-            val query1 = dbRefVideoList.orderByChild(CHILD_ID).startAt(idVideo.toDouble())
-                .endAt((videoCount + 1).toDouble())
-            val query2 = dbRefVideoList.orderByChild(CHILD_ID).startAt(1.0)
-                .endAt((8 - videoCount + idVideo).toDouble())
-            query1.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot1: DataSnapshot) {
-                    listVideo.clear()
-                    for (data: DataSnapshot in dataSnapshot1.children) {
-                        val video = data.getValue(Video::class.java)
-                        video?.let { listVideo.add(it) }
-                    }
-
-                    query2.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot2: DataSnapshot) {
-                            for (data: DataSnapshot in dataSnapshot2.children) {
-                                val video = data.getValue(Video::class.java)
-                                video?.let { listVideo.add(it) }
-                            }
-                            if (listVideo.isNotEmpty()) {
-                                videoListIsNotEmpty()
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {}
-                    })
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
-        }
-    }
-
     private fun videoListIsNotEmpty() {
-        videoAdapter.submit(listVideo)
+        videoAdapter.submit(videoList)
         initCustomExo()
         setExoPlayer()
-    }
-
-    private fun getVideoIdFavList() {
-        val videoIdFavList = arrayListOf<Int>()
-        val query = dbRefVideoFav.orderByChild(CHILD_USER_ID).equalTo(userId)
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                videoIdFavList.clear()
-                for (snapshot in dataSnapshot.children) {
-                    val videoFav = snapshot.getValue(VideoFav::class.java)
-                    if (videoFav != null) {
-                        videoIdFavList.add(videoFav.videoId)
-                    }
-                }
-                if (videoIdFavList.isNotEmpty()) {
-                    getVideoListById(videoIdFavList)
-                }else{
-                    binding.lin1LayoutPva.visibility=View.VISIBLE
-                    binding.consLayoutPva.visibility=View.GONE
-                    binding.ivBackPva.setOnClickListener {
-                        finish()
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
-    }
-
-    private fun getVideoListById(videoIdFavList: ArrayList<Int>) {
-        var count = 0
-        dbRefVideoList.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                listVideo.clear()
-                for (data: DataSnapshot in dataSnapshot.children) {
-                    val video = data.getValue(Video::class.java)
-                    video?.let {
-                        for (i in videoIdFavList) {
-                            if (i == video.id) {
-                                listVideo.add(it)
-                                count++
-                                break
-                            }
-                        }
-                    }
-                    if (videoIdFavList.size == count) {
-                        break
-                    }
-                }
-                if (listVideo.isNotEmpty()) {
-                    videoListIsNotEmpty()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
     }
 
     private fun setExoPlayer() {
         exoPlayer = ExoPlayer.Builder(this).build()
         binding.playerViewPva.player = exoPlayer
-        for (video in listVideo) {
+        for (video in videoList) {
             val linkVideo = video.link
             val mediaItem = MediaItem.fromUri(linkVideo)
             exoPlayer.addMediaItem(mediaItem)
@@ -389,14 +283,14 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun setVideoName(index: Int) {
-        var name = listVideo[index].name
+        var name = videoList[index].name
 
         if (name.length > MAX_LENGTH) {
             name = name.subSequence(0, MAX_LENGTH).toString() + "..."
         }
         binding.tvVideoNamePva.text = name
         tvTitleCustomExo.text = name
-        val videoId = listVideo[index].id
+        val videoId = videoList[index].id
         binding.linLayoutCommentPva.setOnClickListener {
             showBottomSheet(videoId)
         }
@@ -404,7 +298,7 @@ class PlayVideoActivity : AppCompatActivity() {
         binding.linLayoutSharePva.setOnClickListener {
             val intent=Intent(Intent.ACTION_SEND)
             intent.type="text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT,listVideo[index].link)
+            intent.putExtra(Intent.EXTRA_TEXT,videoList[index].link)
             val shareIntent = Intent.createChooser(intent, null)
             startActivity(shareIntent)
         }
@@ -442,24 +336,13 @@ class PlayVideoActivity : AppCompatActivity() {
     }
 
     private fun getCommentList(videoId: Int) {
-        dbRefComment.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                listComment.clear()
-                for (data: DataSnapshot in dataSnapshot.children) {
-                    val comment = data.getValue(Comment::class.java)
-                    if (comment != null && comment.videoId == videoId) {
-                        listComment.add(comment)
-                    }
-                }
-                if (listComment.isNotEmpty()) {
-                    commentAdapter.submit(listComment)
-                }
+        playVideoViewModel.getCommentList(videoId)
+        playVideoViewModel.commentList.observe(this, Observer { commentList ->
+            if (commentList.isNotEmpty()) {
+                Log.e("activity",commentList.size.toString())
 
+                commentAdapter.submit(commentList)
             }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
         })
     }
 
