@@ -63,9 +63,9 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     val media3_version = "1.1.1"
-    implementation("androidx.media3:media3-exoplayer:$media3_version")
-    implementation("androidx.media3:media3-exoplayer-dash:$media3_version")
-    implementation("androidx.media3:media3-ui:$media3_version")
+    implementation("androidx.media3:media3-exoplayer:1.1.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.1.1")
+    implementation("androidx.media3:media3-ui:1.1.1")
 
     implementation ("androidx.media:media:1.6.0")
 

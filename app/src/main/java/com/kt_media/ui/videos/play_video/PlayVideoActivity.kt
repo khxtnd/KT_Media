@@ -67,24 +67,18 @@ class PlayVideoActivity : AppCompatActivity() {
     private lateinit var etCommentDf: EditText
     private lateinit var ivSendDf: ImageView
 
-    private lateinit var dbRefVideoList: DatabaseReference
     private lateinit var dbRefVideoFav: DatabaseReference
     private lateinit var dbRefComment: DatabaseReference
-
     private lateinit var userId: String
-
-    private lateinit var sharedPreferences: SharedPreferences
     private var idVideo = 0
 
     private val MAX_LENGTH = 60
 
-    private var positionMs: Long = -1
-    private var songIndex = -1
+    private var positionMs: Long = 0
+    private var songIndex = 0
 
-    private var videoList = listOf<Video>()
-    private var listComment = arrayListOf<Comment>()
+    private var videoList = arrayListOf<Video>()
     private var isLike = false
-    private var mode=0
 
     private val playVideoViewModel: PlayVideoViewModel by viewModel()
 
@@ -96,14 +90,15 @@ class PlayVideoActivity : AppCompatActivity() {
         videoAdapter = VideoSuggestAdapter(onItemVideoClick)
         val checkVideo = intent.getStringExtra(NAME_INTENT_CHECK_VIDEO)
 
+        positionMs=playVideoViewModel.getStatus().first
+        songIndex=playVideoViewModel.getStatus().second
+
+        Log.e("give",positionMs.toString())
+        Log.e("give",songIndex.toString())
+
         dbRefVideoFav = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO_FAV)
-        dbRefVideoList = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO)
         dbRefComment = FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
-        sharedPreferences = getSharedPreferences(TITLE_SHARED_PREFERENCES, Context.MODE_PRIVATE)
-        songIndex= sharedPreferences.getInt(KEY_SONG_INDEX,0)
-        positionMs=sharedPreferences.getLong(KEY_POSITION_MS,0)
 
         if (checkVideo == VAL_INTENT_VIDEO_FAV) {
             playVideoViewModel.getFavVideoList()
@@ -114,7 +109,7 @@ class PlayVideoActivity : AppCompatActivity() {
 
         playVideoViewModel.videoList.observe(this, Observer { list ->
             if (list.isNotEmpty()) {
-                videoList=list
+                videoList=ArrayList(list)
                 videoListIsNotEmpty()
             }else{
                 binding.lin1LayoutPva.visibility=View.VISIBLE
@@ -195,9 +190,7 @@ class PlayVideoActivity : AppCompatActivity() {
             }
             songIndex = exoPlayer.currentMediaItemIndex
             positionMs = exoPlayer.currentPosition
-            mode=1
-            saveStatusExo()
-
+            playVideoViewModel.setStatus(positionMs,songIndex)
         }
         sbProgressCustomExo.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {}
@@ -232,19 +225,14 @@ class PlayVideoActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveStatusExo() {
-        val editor = sharedPreferences.edit()
-        editor.putInt(KEY_SONG_INDEX, songIndex)
-        editor.putLong(KEY_POSITION_MS, positionMs)
-        editor.apply()
-    }
 
     private fun playExoMediaItemIndex(mediaItemIndex: Int) {
         if (exoPlayer.isPlaying) {
-            exoPlayer.stop()
+            exoPlayer.pause()
         }
         exoPlayer.seekTo(mediaItemIndex, positionMs)
-        positionMs = 0
+        Log.e("link",mediaItemIndex.toString())
+
         exoPlayer.prepare()
         exoPlayer.play()
         if (exoPlayer.currentMediaItemIndex == 0) {
@@ -339,8 +327,6 @@ class PlayVideoActivity : AppCompatActivity() {
         playVideoViewModel.getCommentList(videoId)
         playVideoViewModel.commentList.observe(this, Observer { commentList ->
             if (commentList.isNotEmpty()) {
-                Log.e("activity",commentList.size.toString())
-
                 commentAdapter.submit(commentList)
             }
         })
@@ -412,11 +398,6 @@ class PlayVideoActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(mode==0){
-            songIndex=0
-            positionMs=0
-            saveStatusExo()
-        }
         if(::exoPlayer.isInitialized){
             if (exoPlayer.isPlaying) {
                 exoPlayer.stop()

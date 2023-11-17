@@ -22,6 +22,8 @@ class PlayVideoViewModel(
     val videoList: LiveData<List<Video>> get() = _videoList
     private val _commentList = MutableLiveData<List<Comment>>()
     val commentList: LiveData<List<Comment>> get() = _commentList
+    private var positionMs: Long = 0
+    private var songIndex = 0
 
     fun getTenVideoList(videoIdStart: Int) {
         viewModelScope.launch {
@@ -42,5 +44,13 @@ class PlayVideoViewModel(
                     _commentList.value = comments
                 }
         }
+    }
+    fun setStatus(position: Long, index: Int){
+        positionMs=position
+        songIndex=index
+    }
+
+    fun getStatus():Pair<Long,Int>{
+        return Pair(positionMs,songIndex)
     }
 }
