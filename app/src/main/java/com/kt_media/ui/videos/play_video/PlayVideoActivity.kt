@@ -1,8 +1,6 @@
 package com.kt_media.ui.videos.play_video
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
@@ -74,10 +72,10 @@ class PlayVideoActivity : AppCompatActivity() {
 
     private val MAX_LENGTH = 60
 
-    private var positionMs: Long = 0
-    private var songIndex = 0
+    private var positionMs: Long = -1
+    private var songIndex = -1
 
-    private var videoList = arrayListOf<Video>()
+    private var videoList = listOf<Video>()
     private var isLike = false
 
     private val playVideoViewModel: PlayVideoViewModel by viewModel()
@@ -93,9 +91,6 @@ class PlayVideoActivity : AppCompatActivity() {
         positionMs=playVideoViewModel.getStatus().first
         songIndex=playVideoViewModel.getStatus().second
 
-        Log.e("give",positionMs.toString())
-        Log.e("give",songIndex.toString())
-
         dbRefVideoFav = FirebaseDatabase.getInstance().getReference(CHILD_VIDEO_FAV)
         dbRefComment = FirebaseDatabase.getInstance().getReference(CHILD_COMMENT)
         userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -109,7 +104,7 @@ class PlayVideoActivity : AppCompatActivity() {
 
         playVideoViewModel.videoList.observe(this, Observer { list ->
             if (list.isNotEmpty()) {
-                videoList=ArrayList(list)
+                videoList=list
                 videoListIsNotEmpty()
             }else{
                 binding.lin1LayoutPva.visibility=View.VISIBLE
@@ -231,8 +226,7 @@ class PlayVideoActivity : AppCompatActivity() {
             exoPlayer.pause()
         }
         exoPlayer.seekTo(mediaItemIndex, positionMs)
-        Log.e("link",mediaItemIndex.toString())
-
+        positionMs=0
         exoPlayer.prepare()
         exoPlayer.play()
         if (exoPlayer.currentMediaItemIndex == 0) {
